@@ -2,6 +2,9 @@
 #ifndef dragonpoop_dpvertexes_h
 #define dragonpoop_dpvertexes_h
 
+#include "dprgb_f.h"
+#include "dprgba_f.h"
+#include "dprgba.h"
 #include "dpst.h"
 #include "dpst_f.h"
 #include "dpxyz_f.h"

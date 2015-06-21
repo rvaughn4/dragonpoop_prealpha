@@ -90,6 +90,10 @@
 		7909E4131B37606600E62EFA /* renderer_task.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7909E3BF1B37606600E62EFA /* renderer_task.cpp */; };
 		7909E4141B37606600E62EFA /* renderer_writelock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7909E3C11B37606600E62EFA /* renderer_writelock.cpp */; };
 		7909E4161B37610D00E62EFA /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7909E4151B37610D00E62EFA /* OpenGL.framework */; };
+		7909E4211B3769AE00E62EFA /* model_material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7909E4181B3769AE00E62EFA /* model_material.cpp */; };
+		7909E4221B3769AE00E62EFA /* model_material_readlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7909E41A1B3769AE00E62EFA /* model_material_readlock.cpp */; };
+		7909E4231B3769AE00E62EFA /* model_material_ref.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7909E41C1B3769AE00E62EFA /* model_material_ref.cpp */; };
+		7909E4241B3769AE00E62EFA /* model_material_writelock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7909E41E1B3769AE00E62EFA /* model_material_writelock.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -309,6 +313,18 @@
 		7909E3C21B37606600E62EFA /* renderer_writelock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = renderer_writelock.h; sourceTree = "<group>"; };
 		7909E3C31B37606600E62EFA /* renderers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = renderers.h; sourceTree = "<group>"; };
 		7909E4151B37610D00E62EFA /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = dragonpoop_prealpha/OpenGL.framework; sourceTree = "<group>"; };
+		7909E4181B3769AE00E62EFA /* model_material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_material.cpp; sourceTree = "<group>"; };
+		7909E4191B3769AE00E62EFA /* model_material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_material.h; sourceTree = "<group>"; };
+		7909E41A1B3769AE00E62EFA /* model_material_readlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_material_readlock.cpp; sourceTree = "<group>"; };
+		7909E41B1B3769AE00E62EFA /* model_material_readlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_material_readlock.h; sourceTree = "<group>"; };
+		7909E41C1B3769AE00E62EFA /* model_material_ref.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_material_ref.cpp; sourceTree = "<group>"; };
+		7909E41D1B3769AE00E62EFA /* model_material_ref.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_material_ref.h; sourceTree = "<group>"; };
+		7909E41E1B3769AE00E62EFA /* model_material_writelock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_material_writelock.cpp; sourceTree = "<group>"; };
+		7909E41F1B3769AE00E62EFA /* model_material_writelock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_material_writelock.h; sourceTree = "<group>"; };
+		7909E4201B3769AE00E62EFA /* model_materials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_materials.h; sourceTree = "<group>"; };
+		7909E4251B376A9400E62EFA /* dprgb_f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dprgb_f.h; sourceTree = "<group>"; };
+		7909E4261B376A9400E62EFA /* dprgba_f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dprgba_f.h; sourceTree = "<group>"; };
+		7909E4271B376A9400E62EFA /* dprgba.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dprgba.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -541,6 +557,9 @@
 		7909E3401B37606600E62EFA /* dpvertex */ = {
 			isa = PBXGroup;
 			children = (
+				7909E4251B376A9400E62EFA /* dprgb_f.h */,
+				7909E4261B376A9400E62EFA /* dprgba_f.h */,
+				7909E4271B376A9400E62EFA /* dprgba.h */,
 				7909E3411B37606600E62EFA /* dpindex.h */,
 				7909E3421B37606600E62EFA /* dpindex_buffer.cpp */,
 				7909E3431B37606600E62EFA /* dpindex_buffer.h */,
@@ -564,6 +583,7 @@
 		7909E35C1B37606600E62EFA /* model */ = {
 			isa = PBXGroup;
 			children = (
+				7909E4171B3769AE00E62EFA /* model_material */,
 				7909E35D1B37606600E62EFA /* model.cpp */,
 				7909E35E1B37606600E62EFA /* model.h */,
 				7909E35F1B37606600E62EFA /* model_component */,
@@ -725,6 +745,22 @@
 			path = openglx_1o5_renderer;
 			sourceTree = "<group>";
 		};
+		7909E4171B3769AE00E62EFA /* model_material */ = {
+			isa = PBXGroup;
+			children = (
+				7909E4181B3769AE00E62EFA /* model_material.cpp */,
+				7909E4191B3769AE00E62EFA /* model_material.h */,
+				7909E41A1B3769AE00E62EFA /* model_material_readlock.cpp */,
+				7909E41B1B3769AE00E62EFA /* model_material_readlock.h */,
+				7909E41C1B3769AE00E62EFA /* model_material_ref.cpp */,
+				7909E41D1B3769AE00E62EFA /* model_material_ref.h */,
+				7909E41E1B3769AE00E62EFA /* model_material_writelock.cpp */,
+				7909E41F1B3769AE00E62EFA /* model_material_writelock.h */,
+				7909E4201B3769AE00E62EFA /* model_materials.h */,
+			);
+			path = model_material;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -803,6 +839,7 @@
 				7909E3FF1B37606600E62EFA /* model_triangle_readlock.cpp in Sources */,
 				7909E4121B37606600E62EFA /* renderer_ref.cpp in Sources */,
 				7909E4031B37606600E62EFA /* model_triangle_vertex_readlock.cpp in Sources */,
+				7909E4211B3769AE00E62EFA /* model_material.cpp in Sources */,
 				7909E3D01B37606600E62EFA /* dptask.cpp in Sources */,
 				7909E3F91B37606600E62EFA /* model_group_readlock.cpp in Sources */,
 				7909E3D61B37606600E62EFA /* dptaskpool_readlock.cpp in Sources */,
@@ -811,6 +848,7 @@
 				7909E40A1B37606600E62EFA /* model_writelock.cpp in Sources */,
 				7909E3EE1B37606600E62EFA /* model.cpp in Sources */,
 				7909E3DB1B37606600E62EFA /* dpthread_lock.cpp in Sources */,
+				7909E4241B3769AE00E62EFA /* model_material_writelock.cpp in Sources */,
 				7909E4091B37606600E62EFA /* model_vertex_writelock.cpp in Sources */,
 				7909E3F61B37606600E62EFA /* model_component_tree_bytype.cpp in Sources */,
 				7909E3CB1B37606600E62EFA /* dpmutex_lock.cpp in Sources */,
@@ -855,9 +893,11 @@
 				7909E3D11B37606600E62EFA /* dptask_owner.cpp in Sources */,
 				7909E3EA1B37606600E62EFA /* gfx_readlock.cpp in Sources */,
 				7909E3C51B37606600E62EFA /* dpid_bytetree.cpp in Sources */,
+				7909E4221B3769AE00E62EFA /* model_material_readlock.cpp in Sources */,
 				7909E3D21B37606600E62EFA /* dptask_readlock.cpp in Sources */,
 				7909E4131B37606600E62EFA /* renderer_task.cpp in Sources */,
 				7909E3DE1B37606600E62EFA /* shared_obj_interface.cpp in Sources */,
+				7909E4231B3769AE00E62EFA /* model_material_ref.cpp in Sources */,
 				7909E4111B37606600E62EFA /* renderer_readlock.cpp in Sources */,
 				7909E40D1B37606600E62EFA /* openglx_1o5_renderer_readlock.cpp in Sources */,
 				7909E4001B37606600E62EFA /* model_triangle_ref.cpp in Sources */,
