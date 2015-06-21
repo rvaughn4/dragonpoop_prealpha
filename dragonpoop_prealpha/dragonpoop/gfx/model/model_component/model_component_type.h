@@ -6,5 +6,6 @@
 #define model_component_type_triangle 2
 #define model_component_type_triangle_vertex 3
 #define model_component_type_group 4
+#define model_component_type_material 5
 
 #endif

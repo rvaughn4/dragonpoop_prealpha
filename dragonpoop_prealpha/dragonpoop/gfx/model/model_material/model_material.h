@@ -4,6 +4,7 @@
 
 #include "../model_component/model_component_type.h"
 #include "../model_component/model_component.h"
+#include "../../dpvertex/dpvertexes.h"
 #include <string>
 
 namespace dragonpoop
@@ -20,7 +21,7 @@ namespace dragonpoop
 
         std::string sname;
         dprgba diffuse, ambient, emmissive, specular;
-        float shine, opacity;
+        float shine, opacity, glow;
 
     protected:
 
@@ -48,6 +49,22 @@ namespace dragonpoop
         void setShine( float f );
         //set opacity
         void setOpacity( float f );
+        //set glow
+        void setGlow( float f );
+        //get diffuse color
+        void getDiffuse( dprgba *p );
+        //get ambient color
+        void getAmbient( dprgba *p );
+        //get emmissive color
+        void getEmmissive( dprgba *p );
+        //get specular color
+        void getSpecular( dprgba *p );
+        //get shine
+        float getShine( void );
+        //get opacity
+        float getOpacity( void );
+        //get glow
+        float getGlow( void );
 
     public:
 
