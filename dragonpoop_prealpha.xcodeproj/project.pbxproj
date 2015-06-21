@@ -583,21 +583,21 @@
 		7909E35C1B37606600E62EFA /* model */ = {
 			isa = PBXGroup;
 			children = (
-				7909E4171B3769AE00E62EFA /* model_material */,
 				7909E35D1B37606600E62EFA /* model.cpp */,
 				7909E35E1B37606600E62EFA /* model.h */,
-				7909E35F1B37606600E62EFA /* model_component */,
-				7909E3741B37606600E62EFA /* model_group */,
 				7909E37E1B37606600E62EFA /* model_readlock.cpp */,
 				7909E37F1B37606600E62EFA /* model_readlock.h */,
 				7909E3801B37606600E62EFA /* model_ref.cpp */,
 				7909E3811B37606600E62EFA /* model_ref.h */,
-				7909E3821B37606600E62EFA /* model_triangle */,
-				7909E38C1B37606600E62EFA /* model_triangle_vertex */,
-				7909E3961B37606600E62EFA /* model_vertex */,
 				7909E3A01B37606600E62EFA /* model_writelock.cpp */,
 				7909E3A11B37606600E62EFA /* model_writelock.h */,
 				7909E3A21B37606600E62EFA /* models.h */,
+				7909E4171B3769AE00E62EFA /* model_material */,
+				7909E35F1B37606600E62EFA /* model_component */,
+				7909E3741B37606600E62EFA /* model_group */,
+				7909E3821B37606600E62EFA /* model_triangle */,
+				7909E38C1B37606600E62EFA /* model_triangle_vertex */,
+				7909E3961B37606600E62EFA /* model_vertex */,
 				7909E3A31B37606600E62EFA /* ms3d_model_loader */,
 			);
 			path = model;
@@ -1046,6 +1046,7 @@
 				7909E2E41B375FBE00E62EFA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

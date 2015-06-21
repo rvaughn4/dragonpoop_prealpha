@@ -15,6 +15,7 @@ namespace dragonpoop
     class model_group_ref;
     class model_triangle_ref;
     class model_triangle_vertex_ref;
+    class model_material_ref;
 
     class model_readlock : public shared_obj_readlock
     {
@@ -72,6 +73,12 @@ namespace dragonpoop
         unsigned int getTriangleVertexesByVertex( std::list<model_triangle_vertex_ref *> *l, dpid vertex_id );
         //release list returned by getTriangleVertexes()
         void releaseGetTriangleVertexes( std::list<model_triangle_vertex_ref *> *l );
+        //find a material by id
+        model_material_ref *findMaterial( dpid id );
+        //get all materials
+        unsigned int getMateriales( std::list<model_material_ref *> *l );
+        //release list returned by getMateriales()
+        void releaseGetMateriales( std::list<model_material_ref *> *l );
 
         friend class model;
     };

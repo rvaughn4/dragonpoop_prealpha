@@ -13,6 +13,7 @@
 #include "model_group/model_groups.h"
 #include "model_triangle/model_triangles.h"
 #include "model_triangle_vertex/model_triangle_vertexes.h"
+#include "model_material/model_materials.h"
 
 namespace dragonpoop
 {
@@ -496,6 +497,42 @@ namespace dragonpoop
     void model::clear( void )
     {
         this->deleteComps();
+    }
+
+    //create a material
+    model_material_ref *model::createMaterial( dpthread_lock *thd, model_writelock *m )
+    {
+        model_material *o;
+        dpid id;
+        shared_obj_guard g;
+        model_material_writelock *ol;
+
+        id = thd->genId();
+        o = new model_material( m, id );
+        this->addComp( o, id, model_component_type_material );
+
+        ol = (model_material_writelock *)g.writeLock( o );
+        if( !ol )
+            return 0;
+        return (model_material_ref *)ol->getRef();
+    }
+
+    //find a material by id
+    model_material_ref *model::findMaterial( dpid id )
+    {
+        return (model_material_ref *)this->find( id, model_component_type_material );
+    }
+
+    //get all materials
+    unsigned int model::getMateriales( std::list<model_material_ref *> *l )
+    {
+        return this->getComponentsByType( (std::list<model_component_ref *> *)l, model_component_type_material );
+    }
+
+    //release list returned by getMateriales()
+    void model::releaseGetMateriales( std::list<model_material_ref *> *l )
+    {
+        model::releaseGetComponents( (std::list<model_component_ref *> *)l );
     }
 
 };

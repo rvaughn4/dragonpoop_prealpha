@@ -137,4 +137,22 @@ namespace dragonpoop
         model::releaseGetTriangleVertexes( l );
     }
 
+    //find a material by id
+    model_material_ref *model_readlock::findMaterial( dpid id )
+    {
+        return this->t->findMaterial( id );
+    }
+
+    //get all materials
+    unsigned int model_readlock::getMateriales( std::list<model_material_ref *> *l )
+    {
+        return this->t->getMateriales( l );
+    }
+
+    //release list returned by getMateriales()
+    void model_readlock::releaseGetMateriales( std::list<model_material_ref *> *l )
+    {
+        model::releaseGetMateriales( l );
+    }
+
 };

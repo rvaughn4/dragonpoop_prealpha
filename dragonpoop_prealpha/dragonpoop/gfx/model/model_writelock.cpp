@@ -203,4 +203,28 @@ namespace dragonpoop
         this->t->clear();
     }
 
+    //create a material
+    model_material_ref *model_writelock::createMaterial( dpthread_lock *thd )
+    {
+        return this->t->createMaterial( thd, this );
+    }
+
+    //find a material by id
+    model_material_ref *model_writelock::findMaterial( dpid id )
+    {
+        return this->t->findMaterial( id );
+    }
+
+    //get all materials
+    unsigned int model_writelock::getMateriales( std::list<model_material_ref *> *l )
+    {
+        return this->t->getMateriales( l );
+    }
+
+    //release list returned by getMateriales()
+    void model_writelock::releaseGetMateriales( std::list<model_material_ref *> *l )
+    {
+        model::releaseGetMateriales( l );
+    }
+
 };

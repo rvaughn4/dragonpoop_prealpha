@@ -29,6 +29,8 @@ namespace dragonpoop
     class model_triangle;
     class model_triangle_vertex_ref;
     class model_triangle_vertex;
+    class model_material_ref;
+    class model_material;
 
     class model : public shared_obj
     {
@@ -83,6 +85,8 @@ namespace dragonpoop
         void addComp( model_component *c, dpid id, uint16_t ctype, dpid parent_0 );
         //add new comp
         void addComp( model_component *c, dpid id, uint16_t ctype, dpid parent_0, dpid parent_1 );
+        //clear all components from model
+        void clear( void );
         //find model component by id
         model_component_ref *find( dpid id );
         //find model component by id and type
@@ -139,8 +143,15 @@ namespace dragonpoop
         unsigned int getTriangleVertexesByVertex( std::list<model_triangle_vertex_ref *> *l, dpid vertex_id );
         //release list returned by getTriangleVertexes()
         static void releaseGetTriangleVertexes( std::list<model_triangle_vertex_ref *> *l );
-        //clear all components from model
-        void clear( void );
+        //create a material
+        model_material_ref *createMaterial( dpthread_lock *thd, model_writelock *m );
+        //find a material by id
+        model_material_ref *findMaterial( dpid id );
+        //get all materials
+        unsigned int getMateriales( std::list<model_material_ref *> *l );
+        //release list returned by getMateriales()
+        static void releaseGetMateriales( std::list<model_material_ref *> *l );
+
 
     public:
 
