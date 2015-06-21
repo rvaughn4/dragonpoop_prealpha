@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>3B6295E9-DACC-4AA0-A1AB-ADDAB8E98430</string>
+	<key>IDESourceControlProjectName</key>
+	<string>dragonpoop_prealpha</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>C2A9B455CC7FFE2FBB9F60DE9E9E348CB8D04B27</key>
+		<string>https://github.com/rvaughn4/dragonpoop_prealpha.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>dragonpoop_prealpha.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>C2A9B455CC7FFE2FBB9F60DE9E9E348CB8D04B27</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/rvaughn4/dragonpoop_prealpha.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>C2A9B455CC7FFE2FBB9F60DE9E9E348CB8D04B27</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>C2A9B455CC7FFE2FBB9F60DE9E9E348CB8D04B27</string>
+			<key>IDESourceControlWCCName</key>
+			<string>dragonpoop_prealpha</string>
+		</dict>
+	</array>
+</dict>
+</plist>
