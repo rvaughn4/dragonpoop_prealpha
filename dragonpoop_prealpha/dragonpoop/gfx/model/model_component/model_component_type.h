@@ -7,5 +7,6 @@
 #define model_component_type_triangle_vertex 3
 #define model_component_type_group 4
 #define model_component_type_material 5
+#define model_component_type_animation 6
 
 #endif

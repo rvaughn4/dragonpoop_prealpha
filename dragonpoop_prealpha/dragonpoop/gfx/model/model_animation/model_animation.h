@@ -4,7 +4,6 @@
 
 #include "../model_component/model_component_type.h"
 #include "../model_component/model_component.h"
-#include "../../dpvertex/dpvertexes.h"
 #include <string>
 
 namespace dragonpoop
@@ -20,8 +19,9 @@ namespace dragonpoop
     private:
 
         std::string sname;
-        dprgba diffuse, ambient, emmissive, specular;
-        float shine, opacity, glow;
+        float speed;
+        bool bIsAutoPlay, bIsRepeat;
+        unsigned int repeat_delay_ms;
 
     protected:
 
@@ -37,6 +37,22 @@ namespace dragonpoop
         void getName( std::string *s );
         //set name
         void setName( std::string *s );
+        //get speed
+        float getSpeed( void );
+        //set speed
+        void setSpeed( float s );
+        //returns true if autoplay
+        bool isAutoPlay( void );
+        //sets autoplay mode
+        void setAutoPlay( bool b );
+        //returns true if repeats
+        bool isRepeated( void );
+        //set repeat mode
+        void setRepeated( bool b );
+        //returns time between last frame and first frame when repeated
+        unsigned int getRepeatDelay( void );
+        //sets repeat delay in ms
+        void setRepeatDelay( unsigned int ms );
 
     public:
 
