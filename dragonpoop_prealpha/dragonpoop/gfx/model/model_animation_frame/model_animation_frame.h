@@ -4,7 +4,6 @@
 
 #include "../model_component/model_component_type.h"
 #include "../model_component/model_component.h"
-#include <string>
 
 namespace dragonpoop
 {

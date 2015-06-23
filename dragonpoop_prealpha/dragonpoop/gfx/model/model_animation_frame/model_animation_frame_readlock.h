@@ -3,7 +3,6 @@
 #define dragonpoop_model_animation_frame_readlock_h
 
 #include "../model_component/model_component_readlock.h"
-#include <string>
 
 namespace dragonpoop
 {

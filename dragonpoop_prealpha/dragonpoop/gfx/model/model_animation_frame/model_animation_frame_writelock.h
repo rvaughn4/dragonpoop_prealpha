@@ -3,7 +3,6 @@
 #define dragonpoop_model_animation_frame_writelock_h
 
 #include "../model_component/model_component_writelock.h"
-#include <string>
 
 namespace dragonpoop
 {
