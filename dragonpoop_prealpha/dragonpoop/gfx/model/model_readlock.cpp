@@ -173,4 +173,22 @@ namespace dragonpoop
         model::releaseGetAnimations( l );
     }
 
+    //find a frame by id
+    model_frame_ref *model_readlock::findFrame( dpid id )
+    {
+        return this->t->findFrame( id );
+    }
+
+    //get all frames
+    unsigned int model_readlock::getFrames( std::list<model_frame_ref *> *l )
+    {
+        return this->t->getFrames( l );
+    }
+
+    //release list returned by getframees()
+    void model_readlock::releaseGetFrames( std::list<model_frame_ref *> *l )
+    {
+        model::releaseGetFrames( l );
+    }
+
 };

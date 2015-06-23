@@ -33,6 +33,8 @@ namespace dragonpoop
     class model_material;
     class model_animation_ref;
     class model_animation;
+    class model_frame_ref;
+    class model_frame;
 
     class model : public shared_obj
     {
@@ -153,7 +155,6 @@ namespace dragonpoop
         unsigned int getMaterials( std::list<model_material_ref *> *l );
         //release list returned by getMateriales()
         static void releaseGetMaterials( std::list<model_material_ref *> *l );
-
         //create a animation
         model_animation_ref *createAnimation( dpthread_lock *thd, model_writelock *m );
         //find a animation by id
@@ -162,6 +163,14 @@ namespace dragonpoop
         unsigned int getAnimations( std::list<model_animation_ref *> *l );
         //release list returned by getAnimations()
         static void releaseGetAnimations( std::list<model_animation_ref *> *l );
+        //create a Frame
+        model_frame_ref *createFrame( dpthread_lock *thd, model_writelock *m );
+        //find a Frame by id
+        model_frame_ref *findFrame( dpid id );
+        //get all Frames
+        unsigned int getFrames( std::list<model_frame_ref *> *l );
+        //release list returned by getFrames()
+        static void releaseGetFrames( std::list<model_frame_ref *> *l );
 
     public:
 

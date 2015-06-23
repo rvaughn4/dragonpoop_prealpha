@@ -15,6 +15,7 @@
 #include "model_triangle_vertex/model_triangle_vertexes.h"
 #include "model_material/model_materials.h"
 #include "model_animation/model_animations.h"
+#include "model_frame/model_frames.h"
 
 namespace dragonpoop
 {
@@ -568,6 +569,42 @@ namespace dragonpoop
 
     //release list returned by getAnimations()
     void model::releaseGetAnimations( std::list<model_animation_ref *> *l )
+    {
+        model::releaseGetComponents( (std::list<model_component_ref *> *)l );
+    }
+
+    //create a frame
+    model_frame_ref *model::createFrame( dpthread_lock *thd, model_writelock *m )
+    {
+        model_frame *o;
+        dpid id;
+        shared_obj_guard g;
+        model_frame_writelock *ol;
+
+        id = thd->genId();
+        o = new model_frame( m, id );
+        this->addComp( o, id, model_component_type_frame );
+
+        ol = (model_frame_writelock *)g.writeLock( o );
+        if( !ol )
+            return 0;
+        return (model_frame_ref *)ol->getRef();
+    }
+
+    //find a frame by id
+    model_frame_ref *model::findFrame( dpid id )
+    {
+        return (model_frame_ref *)this->find( id, model_component_type_frame );
+    }
+
+    //get all frames
+    unsigned int model::getFrames( std::list<model_frame_ref *> *l )
+    {
+        return this->getComponentsByType( (std::list<model_component_ref *> *)l, model_component_type_frame );
+    }
+
+    //release list returned by getframes()
+    void model::releaseGetFrames( std::list<model_frame_ref *> *l )
     {
         model::releaseGetComponents( (std::list<model_component_ref *> *)l );
     }
