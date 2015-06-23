@@ -8,5 +8,10 @@
 #define model_component_type_group 4
 #define model_component_type_material 5
 #define model_component_type_animation 6
+#define model_component_type_frame 7
+#define model_component_type_joint 8
+#define model_component_type_animation_frame 9
+#define model_component_type_frame_joint 10
+#define model_component_type_vertex_joint 11
 
 #endif
