@@ -275,4 +275,28 @@ namespace dragonpoop
         model::releaseGetFrames( l );
     }
 
+    //create a animation_frame
+    model_animation_frame_ref *model_writelock::createAnimationFrame( dpthread_lock *thd, dpid animation_id, dpid frame_id, float ftime )
+    {
+        return this->t->createAnimationFrame( thd, this, animation_id, frame_id, ftime );
+    }
+
+    //find a animation_frame by id
+    model_animation_frame_ref *model_writelock::findAnimationFrame( dpid id )
+    {
+        return this->t->findAnimationFrame( id );
+    }
+
+    //get all animation_frames
+    unsigned int model_writelock::getAnimationFrames( std::list<model_animation_frame_ref *> *l )
+    {
+        return this->t->getAnimationFrames( l );
+    }
+
+    //release list returned by getanimation_framees()
+    void model_writelock::releaseGetAnimationFrames( std::list<model_animation_frame_ref *> *l )
+    {
+        model::releaseGetAnimationFrames( l );
+    }
+
 };

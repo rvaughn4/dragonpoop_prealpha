@@ -16,6 +16,7 @@
 #include "model_material/model_materials.h"
 #include "model_animation/model_animations.h"
 #include "model_frame/model_frames.h"
+#include "model_animation_frame/model_animation_frames.h"
 
 namespace dragonpoop
 {
@@ -605,6 +606,42 @@ namespace dragonpoop
 
     //release list returned by getframes()
     void model::releaseGetFrames( std::list<model_frame_ref *> *l )
+    {
+        model::releaseGetComponents( (std::list<model_component_ref *> *)l );
+    }
+
+    //create a animation_frame
+    model_animation_frame_ref *model::createAnimationFrame( dpthread_lock *thd, model_writelock *m, dpid animation_id, dpid frame_id, float ftime )
+    {
+        model_animation_frame *o;
+        dpid id;
+        shared_obj_guard g;
+        model_animation_frame_writelock *ol;
+
+        id = thd->genId();
+        o = new model_animation_frame( m, id, animation_id, frame_id, ftime );
+        this->addComp( o, id, model_component_type_animation_frame );
+
+        ol = (model_animation_frame_writelock *)g.writeLock( o );
+        if( !ol )
+            return 0;
+        return (model_animation_frame_ref *)ol->getRef();
+    }
+
+    //find a animation_frame by id
+    model_animation_frame_ref *model::findAnimationFrame( dpid id )
+    {
+        return (model_animation_frame_ref *)this->find( id, model_component_type_animation_frame );
+    }
+
+    //get all animation_frames
+    unsigned int model::getAnimationFrames( std::list<model_animation_frame_ref *> *l )
+    {
+        return this->getComponentsByType( (std::list<model_component_ref *> *)l, model_component_type_animation_frame );
+    }
+
+    //release list returned by getanimation_frames()
+    void model::releaseGetAnimationFrames( std::list<model_animation_frame_ref *> *l )
     {
         model::releaseGetComponents( (std::list<model_component_ref *> *)l );
     }

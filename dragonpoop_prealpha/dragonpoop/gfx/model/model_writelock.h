@@ -20,6 +20,7 @@ namespace dragonpoop
     class model_material_ref;
     class model_animation_ref;
     class model_frame_ref;
+    class model_animation_frame_ref;
 
     class model_writelock : public shared_obj_writelock
     {
@@ -123,6 +124,14 @@ namespace dragonpoop
         unsigned int getFrames( std::list<model_frame_ref *> *l );
         //release list returned by getFrames()
         static void releaseGetFrames( std::list<model_frame_ref *> *l );
+        //create a animation_frame
+        model_animation_frame_ref *createAnimationFrame( dpthread_lock *thd, dpid animation_id, dpid frame_id, float ftime );
+        //find a animation_frame by id
+        model_animation_frame_ref *findAnimationFrame( dpid id );
+        //get all animation_frames
+        unsigned int getAnimationFrames( std::list<model_animation_frame_ref *> *l );
+        //release list returned by getAnimationFrames()
+        void releaseGetAnimationFrames( std::list<model_animation_frame_ref *> *l );
 
         friend class model;
     };
