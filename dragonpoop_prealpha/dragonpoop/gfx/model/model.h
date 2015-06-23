@@ -31,6 +31,8 @@ namespace dragonpoop
     class model_triangle_vertex;
     class model_material_ref;
     class model_material;
+    class model_animation_ref;
+    class model_animation;
 
     class model : public shared_obj
     {
@@ -148,10 +150,18 @@ namespace dragonpoop
         //find a material by id
         model_material_ref *findMaterial( dpid id );
         //get all materials
-        unsigned int getMateriales( std::list<model_material_ref *> *l );
+        unsigned int getMaterials( std::list<model_material_ref *> *l );
         //release list returned by getMateriales()
-        static void releaseGetMateriales( std::list<model_material_ref *> *l );
+        static void releaseGetMaterials( std::list<model_material_ref *> *l );
 
+        //create a animation
+        model_animation_ref *createAnimation( dpthread_lock *thd, model_writelock *m );
+        //find a animation by id
+        model_animation_ref *findAnimation( dpid id );
+        //get all animations
+        unsigned int getAnimations( std::list<model_animation_ref *> *l );
+        //release list returned by getAnimations()
+        static void releaseGetAnimations( std::list<model_animation_ref *> *l );
 
     public:
 

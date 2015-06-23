@@ -216,15 +216,39 @@ namespace dragonpoop
     }
 
     //get all materials
-    unsigned int model_writelock::getMateriales( std::list<model_material_ref *> *l )
+    unsigned int model_writelock::getMaterials( std::list<model_material_ref *> *l )
     {
-        return this->t->getMateriales( l );
+        return this->t->getMaterials( l );
     }
 
     //release list returned by getMateriales()
-    void model_writelock::releaseGetMateriales( std::list<model_material_ref *> *l )
+    void model_writelock::releaseGetMaterials( std::list<model_material_ref *> *l )
     {
-        model::releaseGetMateriales( l );
+        model::releaseGetMaterials( l );
+    }
+
+    //create a animation
+    model_animation_ref *model_writelock::createAnimation( dpthread_lock *thd )
+    {
+        return this->t->createAnimation( thd, this );
+    }
+
+    //find a animation by id
+    model_animation_ref *model_writelock::findAnimation( dpid id )
+    {
+        return this->t->findAnimation( id );
+    }
+
+    //get all animations
+    unsigned int model_writelock::getAnimations( std::list<model_animation_ref *> *l )
+    {
+        return this->t->getAnimations( l );
+    }
+
+    //release list returned by getanimationes()
+    void model_writelock::releaseGetAnimations( std::list<model_animation_ref *> *l )
+    {
+        model::releaseGetAnimations( l );
     }
 
 };
