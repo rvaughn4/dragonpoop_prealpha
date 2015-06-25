@@ -19,6 +19,7 @@ namespace dragonpoop
     class model_animation_ref;
     class model_frame_ref;
     class model_animation_frame_ref;
+    class model_frame_joint_ref;
 
     class model_readlock : public shared_obj_readlock
     {
@@ -100,6 +101,12 @@ namespace dragonpoop
         unsigned int getAnimationFrames( std::list<model_animation_frame_ref *> *l );
         //release list returned by getAnimationFrames()
         void releaseGetAnimationFrames( std::list<model_animation_frame_ref *> *l );
+        //find a frame joint by id
+        model_frame_joint_ref *findFrameJoint( dpid id );
+        //get all frame joints
+        unsigned int getFrameJoints( std::list<model_frame_joint_ref *> *l );
+        //release list returned by getFrameJoints()
+        void releaseGetFrameJoints( std::list<model_frame_joint_ref *> *l );
 
         friend class model;
     };
