@@ -323,4 +323,28 @@ namespace dragonpoop
         model::releaseGetFrameJoints( l );
     }
 
+    //create a joint
+    model_joint_ref *model_writelock::createJoint( dpthread_lock *thd )
+    {
+        return this->t->createJoint( thd, this );
+    }
+
+    //find a joint by id
+    model_joint_ref *model_writelock::findJoint( dpid id )
+    {
+        return this->t->findJoint( id );
+    }
+
+    //get all joints
+    unsigned int model_writelock::getJoints( std::list<model_joint_ref *> *l )
+    {
+        return this->t->getJoints( l );
+    }
+
+    //release list returned by getJoints()
+    void model_writelock::releaseGetJoints( std::list<model_joint_ref *> *l )
+    {
+        model::releaseGetJoints( l );
+    }
+
 };

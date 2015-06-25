@@ -18,6 +18,7 @@
 #include "model_frame/model_frames.h"
 #include "model_animation_frame/model_animation_frames.h"
 #include "model_frame_joint/model_frame_joints.h"
+#include "model_joint/model_joints.h"
 
 namespace dragonpoop
 {
@@ -674,11 +675,47 @@ namespace dragonpoop
     //get all joint frame
     unsigned int model::getFrameJoints( std::list<model_frame_joint_ref *> *l )
     {
-        return this->getComponentsByType( (std::list<model_component_ref *> *)l, model_component_type_animation_frame );
+        return this->getComponentsByType( (std::list<model_component_ref *> *)l, model_component_type_frame_joint );
     }
 
     //release list returned by getJointFrames()
     void model::releaseGetFrameJoints( std::list<model_frame_joint_ref *> *l )
+    {
+        model::releaseGetComponents( (std::list<model_component_ref *> *)l );
+    }
+
+    //create a joint
+    model_joint_ref *model::createJoint( dpthread_lock *thd, model_writelock *m )
+    {
+        model_joint *o;
+        dpid id;
+        shared_obj_guard g;
+        model_joint_writelock *ol;
+
+        id = thd->genId();
+        o = new model_joint( m, id );
+        this->addComp( o, id, model_component_type_joint );
+
+        ol = (model_joint_writelock *)g.writeLock( o );
+        if( !ol )
+            return 0;
+        return (model_joint_ref *)ol->getRef();
+    }
+
+    //find a joint by id
+    model_joint_ref *model::findJoint( dpid id )
+    {
+        return (model_joint_ref *)this->find( id, model_component_type_joint );
+    }
+
+    //get all joints
+    unsigned int model::getJoints( std::list<model_joint_ref *> *l )
+    {
+        return this->getComponentsByType( (std::list<model_component_ref *> *)l, model_component_type_joint );
+    }
+
+    //release list returned by getJoint()
+    void model::releaseGetJoints( std::list<model_joint_ref *> *l )
     {
         model::releaseGetComponents( (std::list<model_component_ref *> *)l );
     }

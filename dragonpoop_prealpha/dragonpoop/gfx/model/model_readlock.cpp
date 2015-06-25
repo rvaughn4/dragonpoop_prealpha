@@ -226,4 +226,23 @@ namespace dragonpoop
     {
         model::releaseGetFrameJoints( l );
     }
+
+    //find a joint by id
+    model_joint_ref *model_readlock::findJoint( dpid id )
+    {
+        return this->t->findJoint( id );
+    }
+
+    //get all joints
+    unsigned int model_readlock::getJoints( std::list<model_joint_ref *> *l )
+    {
+        return this->t->getJoints( l );
+    }
+
+    //release list returned by getJoints()
+    void model_readlock::releaseGetJoints( std::list<model_joint_ref *> *l )
+    {
+        model::releaseGetJoints( l );
+    }
+
 };
