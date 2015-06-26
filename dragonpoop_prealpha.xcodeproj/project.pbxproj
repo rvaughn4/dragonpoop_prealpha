@@ -110,6 +110,10 @@
 		79A7C7141B3BF1B500671500 /* model_joint_ref.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79A7C70C1B3BF1B500671500 /* model_joint_ref.cpp */; };
 		79A7C7151B3BF1B500671500 /* model_joint_writelock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79A7C70E1B3BF1B500671500 /* model_joint_writelock.cpp */; };
 		79A7C7161B3BF1B500671500 /* model_joint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79A7C7101B3BF1B500671500 /* model_joint.cpp */; };
+		79AF14521B3CC41A004A2B8A /* model_vertex_joint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79AF14491B3CC41A004A2B8A /* model_vertex_joint.cpp */; };
+		79AF14531B3CC41A004A2B8A /* model_vertex_joint_readlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79AF144B1B3CC41A004A2B8A /* model_vertex_joint_readlock.cpp */; };
+		79AF14541B3CC41A004A2B8A /* model_vertex_joint_ref.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79AF144D1B3CC41A004A2B8A /* model_vertex_joint_ref.cpp */; };
+		79AF14551B3CC41A004A2B8A /* model_vertex_joint_writelock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79AF144F1B3CC41A004A2B8A /* model_vertex_joint_writelock.cpp */; };
 		79C5BE251B38348B0049C497 /* model_frame_readlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79C5BE1C1B38348B0049C497 /* model_frame_readlock.cpp */; };
 		79C5BE261B38348B0049C497 /* model_frame_ref.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79C5BE1E1B38348B0049C497 /* model_frame_ref.cpp */; };
 		79C5BE271B38348B0049C497 /* model_frame_writelock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79C5BE201B38348B0049C497 /* model_frame_writelock.cpp */; };
@@ -381,6 +385,15 @@
 		79A7C7101B3BF1B500671500 /* model_joint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_joint.cpp; sourceTree = "<group>"; };
 		79A7C7111B3BF1B500671500 /* model_joint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_joint.h; sourceTree = "<group>"; };
 		79A7C7121B3BF1B500671500 /* model_joints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_joints.h; sourceTree = "<group>"; };
+		79AF14491B3CC41A004A2B8A /* model_vertex_joint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_vertex_joint.cpp; sourceTree = "<group>"; };
+		79AF144A1B3CC41A004A2B8A /* model_vertex_joint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_vertex_joint.h; sourceTree = "<group>"; };
+		79AF144B1B3CC41A004A2B8A /* model_vertex_joint_readlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_vertex_joint_readlock.cpp; sourceTree = "<group>"; };
+		79AF144C1B3CC41A004A2B8A /* model_vertex_joint_readlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_vertex_joint_readlock.h; sourceTree = "<group>"; };
+		79AF144D1B3CC41A004A2B8A /* model_vertex_joint_ref.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_vertex_joint_ref.cpp; sourceTree = "<group>"; };
+		79AF144E1B3CC41A004A2B8A /* model_vertex_joint_ref.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_vertex_joint_ref.h; sourceTree = "<group>"; };
+		79AF144F1B3CC41A004A2B8A /* model_vertex_joint_writelock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_vertex_joint_writelock.cpp; sourceTree = "<group>"; };
+		79AF14501B3CC41A004A2B8A /* model_vertex_joint_writelock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_vertex_joint_writelock.h; sourceTree = "<group>"; };
+		79AF14511B3CC41A004A2B8A /* model_vertex_joints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_vertex_joints.h; sourceTree = "<group>"; };
 		79C5BE1C1B38348B0049C497 /* model_frame_readlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_frame_readlock.cpp; sourceTree = "<group>"; };
 		79C5BE1D1B38348B0049C497 /* model_frame_readlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_frame_readlock.h; sourceTree = "<group>"; };
 		79C5BE1E1B38348B0049C497 /* model_frame_ref.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_frame_ref.cpp; sourceTree = "<group>"; };
@@ -657,6 +670,7 @@
 				7909E3A01B37606600E62EFA /* model_writelock.cpp */,
 				7909E3A11B37606600E62EFA /* model_writelock.h */,
 				7909E3A21B37606600E62EFA /* models.h */,
+				79AF14481B3CC41A004A2B8A /* model_vertex_joint */,
 				79A7C7091B3BF00900671500 /* model_joint */,
 				790BADD21B3980C800CFAD08 /* model_frame_joint */,
 				790BADC41B396D7700CFAD08 /* model_animation_frame */,
@@ -895,6 +909,22 @@
 			path = model_joint;
 			sourceTree = "<group>";
 		};
+		79AF14481B3CC41A004A2B8A /* model_vertex_joint */ = {
+			isa = PBXGroup;
+			children = (
+				79AF14491B3CC41A004A2B8A /* model_vertex_joint.cpp */,
+				79AF144A1B3CC41A004A2B8A /* model_vertex_joint.h */,
+				79AF144B1B3CC41A004A2B8A /* model_vertex_joint_readlock.cpp */,
+				79AF144C1B3CC41A004A2B8A /* model_vertex_joint_readlock.h */,
+				79AF144D1B3CC41A004A2B8A /* model_vertex_joint_ref.cpp */,
+				79AF144E1B3CC41A004A2B8A /* model_vertex_joint_ref.h */,
+				79AF144F1B3CC41A004A2B8A /* model_vertex_joint_writelock.cpp */,
+				79AF14501B3CC41A004A2B8A /* model_vertex_joint_writelock.h */,
+				79AF14511B3CC41A004A2B8A /* model_vertex_joints.h */,
+			);
+			path = model_vertex_joint;
+			sourceTree = "<group>";
+		};
 		79C5BE1B1B38337B0049C497 /* model_frame */ = {
 			isa = PBXGroup;
 			children = (
@@ -985,6 +1015,7 @@
 				7909E3FC1B37606600E62EFA /* model_readlock.cpp in Sources */,
 				7909E3DA1B37606600E62EFA /* dpthread_interface.cpp in Sources */,
 				7909E3DC1B37606600E62EFA /* shared_obj.cpp in Sources */,
+				79AF14551B3CC41A004A2B8A /* model_vertex_joint_writelock.cpp in Sources */,
 				7909E3DD1B37606600E62EFA /* shared_obj_guard.cpp in Sources */,
 				7909E4021B37606600E62EFA /* model_triangle_vertex.cpp in Sources */,
 				79A7C7131B3BF1B500671500 /* model_joint_readlock.cpp in Sources */,
@@ -1000,6 +1031,7 @@
 				7909E4031B37606600E62EFA /* model_triangle_vertex_readlock.cpp in Sources */,
 				7909E4211B3769AE00E62EFA /* model_material.cpp in Sources */,
 				7909E3D01B37606600E62EFA /* dptask.cpp in Sources */,
+				79AF14531B3CC41A004A2B8A /* model_vertex_joint_readlock.cpp in Sources */,
 				7909E3F91B37606600E62EFA /* model_group_readlock.cpp in Sources */,
 				790BADDD1B3980C800CFAD08 /* model_frame_joint_readlock.cpp in Sources */,
 				790BADCE1B396D7700CFAD08 /* model_animation_frame.cpp in Sources */,
@@ -1018,6 +1050,7 @@
 				7909E3C41B37606600E62EFA /* bytetree.cpp in Sources */,
 				7909E3CC1B37606600E62EFA /* dpmutex_master.cpp in Sources */,
 				7909E3ED1B37606600E62EFA /* gfx_writelock.cpp in Sources */,
+				79AF14521B3CC41A004A2B8A /* model_vertex_joint.cpp in Sources */,
 				7909E3F51B37606600E62EFA /* model_component_tree_byownertype.cpp in Sources */,
 				7909E4071B37606600E62EFA /* model_vertex_readlock.cpp in Sources */,
 				7909E40B1B37606600E62EFA /* ms3d_model_loader.cpp in Sources */,
@@ -1047,6 +1080,7 @@
 				7909E3CE1B37606600E62EFA /* dpmutex_writelock.cpp in Sources */,
 				7909E4141B37606600E62EFA /* renderer_writelock.cpp in Sources */,
 				7909E4101B37606600E62EFA /* renderer.cpp in Sources */,
+				79AF14541B3CC41A004A2B8A /* model_vertex_joint_ref.cpp in Sources */,
 				7909E3CF1B37606600E62EFA /* dpsponlock.cpp in Sources */,
 				7909E3F71B37606600E62EFA /* model_component_writelock.cpp in Sources */,
 				7909E3F31B37606600E62EFA /* model_component_tree_byidtype.cpp in Sources */,

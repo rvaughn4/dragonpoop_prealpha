@@ -41,6 +41,8 @@ namespace dragonpoop
     class model_frame_joint;
     class model_joint_ref;
     class model_joint;
+    class model_vertex_joint_ref;
+    class model_vertex_joint;
 
     class model : public shared_obj
     {
@@ -201,6 +203,14 @@ namespace dragonpoop
         unsigned int getJoints( std::list<model_joint_ref *> *l );
         //release list returned by getFrameJoints()
         static void releaseGetJoints( std::list<model_joint_ref *> *l );
+        //create a vertex joint
+        model_vertex_joint_ref *createVertexJoint( dpthread_lock *thd, model_writelock *m, dpid vertex_id, dpid joint_id );
+        //find a vertex joint by id
+        model_vertex_joint_ref *findVertexJoint( dpid id );
+        //get all vertex joints
+        unsigned int getVertexJoints( std::list<model_vertex_joint_ref *> *l );
+        //release list returned by getVertexJoints()
+        static void releaseGetVertexJoints( std::list<model_vertex_joint_ref *> *l );
 
     public:
 

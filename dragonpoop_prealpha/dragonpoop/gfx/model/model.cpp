@@ -19,6 +19,7 @@
 #include "model_animation_frame/model_animation_frames.h"
 #include "model_frame_joint/model_frame_joints.h"
 #include "model_joint/model_joints.h"
+#include "model_vertex_joint/model_vertex_joints.h"
 
 namespace dragonpoop
 {
@@ -716,6 +717,42 @@ namespace dragonpoop
 
     //release list returned by getJoint()
     void model::releaseGetJoints( std::list<model_joint_ref *> *l )
+    {
+        model::releaseGetComponents( (std::list<model_component_ref *> *)l );
+    }
+
+    //create a vertex joint
+    model_vertex_joint_ref *model::createVertexJoint( dpthread_lock *thd, model_writelock *m, dpid vertex_id, dpid joint_id )
+    {
+        model_vertex_joint *o;
+        dpid id;
+        shared_obj_guard g;
+        model_vertex_joint_writelock *ol;
+
+        id = thd->genId();
+        o = new model_vertex_joint( m, id, vertex_id, joint_id );
+        this->addComp( o, id, model_component_type_vertex_joint );
+
+        ol = (model_vertex_joint_writelock *)g.writeLock( o );
+        if( !ol )
+            return 0;
+        return (model_vertex_joint_ref *)ol->getRef();
+    }
+
+    //find a vertex joint by id
+    model_vertex_joint_ref *model::findVertexJoint( dpid id )
+    {
+        return (model_vertex_joint_ref *)this->find( id, model_component_type_vertex_joint );
+    }
+
+    //get all vertex joints
+    unsigned int model::getVertexJoints( std::list<model_vertex_joint_ref *> *l )
+    {
+        return this->getComponentsByType( (std::list<model_component_ref *> *)l, model_component_type_vertex_joint );
+    }
+
+    //release list returned by getVertexJoints()
+    void model::releaseGetVertexJoints( std::list<model_vertex_joint_ref *> *l )
     {
         model::releaseGetComponents( (std::list<model_component_ref *> *)l );
     }

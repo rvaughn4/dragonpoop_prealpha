@@ -70,7 +70,7 @@ namespace dragonpoop
         delete mr;
         if( !ml )
             return 0;
-        return 0;//ml->findJoint( this->joint_id );
+        return ml->findJoint( this->joint_id );
     }
 
     //returns frame id

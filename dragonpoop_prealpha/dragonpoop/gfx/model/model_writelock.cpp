@@ -347,4 +347,28 @@ namespace dragonpoop
         model::releaseGetJoints( l );
     }
 
+    //create a vertex joint
+    model_vertex_joint_ref *model_writelock::createVertexJoint( dpthread_lock *thd, dpid vertex_id, dpid joint_id )
+    {
+        return this->t->createVertexJoint( thd, this, vertex_id, joint_id );
+    }
+
+    //find a vertex joint by id
+    model_vertex_joint_ref *model_writelock::findVertexJoint( dpid id )
+    {
+        return this->t->findVertexJoint( id );
+    }
+
+    //get all vertex joints
+    unsigned int model_writelock::getVertexJoints( std::list<model_vertex_joint_ref *> *l )
+    {
+        return this->t->getVertexJoints( l );
+    }
+
+    //release list returned by getVertexJoints()
+    void model_writelock::releaseGetVertexJoints( std::list<model_vertex_joint_ref *> *l )
+    {
+        model::releaseGetVertexJoints( l );
+    }
+
 };

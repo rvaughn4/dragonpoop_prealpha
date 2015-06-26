@@ -245,4 +245,22 @@ namespace dragonpoop
         model::releaseGetJoints( l );
     }
 
+    //find a vertex joint by id
+    model_vertex_joint_ref *model_readlock::findVertexJoint( dpid id )
+    {
+        return this->t->findVertexJoint( id );
+    }
+
+    //get all vertex joints
+    unsigned int model_readlock::getVertexJoints( std::list<model_vertex_joint_ref *> *l )
+    {
+        return this->t->getVertexJoints( l );
+    }
+
+    //release list returned by getVertexJoints()
+    void model_readlock::releaseGetVertexJoints( std::list<model_vertex_joint_ref *> *l )
+    {
+        model::releaseGetVertexJoints( l );
+    }
+
 };
