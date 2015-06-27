@@ -468,6 +468,62 @@ namespace dragonpoop
         return 1;
     }
 
+    //read comments section
+    bool ms3d_model_loader::readCommentSection( std::fstream *f )
+    {
+
+        return 0;
+    }
+
+    //write comments section
+    bool ms3d_model_loader::writeCommentSection( std::fstream *f )
+    {
+
+        return 0;
+    }
+
+    //read comment
+    bool ms3d_model_loader::readComment( std::fstream *f, std::string *s )
+    {
+        ms3d_model_comment d;
+        union
+        {
+            ms3d_model_comment *c;
+            char *b;
+        };
+
+        f->read( (char *)&d.h, sizeof( d.h ) );
+        if( d.h.size < 0 )
+            d.h.size = 0;
+        if( d.h.size > 1024 )
+            d.h.size = 1024;
+        b = (char *)malloc( d.h.size + sizeof(ms3d_model_comment_prefix) + 1 );
+        b[ d.h.size + sizeof(ms3d_model_comment_prefix) ] = 0;
+        c->h = d.h;
+
+        f->read( &c->data, d.h.size );
+        s->assign( &c->data, d.h.size );
+
+        free( b );
+        return 1;
+    }
+
+    //write comment
+    bool ms3d_model_loader::writeComment( std::fstream *f, std::string *s )
+    {
+        ms3d_model_comment_prefix h;
+        char *c;
+
+        h.size = (unsigned int)s->size();
+        c = (char *)s->c_str();
+
+        f->write( (char *)&h, sizeof( h ) );
+        if( h.size )
+            f->write( c, h.size );
+
+        return 1;
+    }
+
 
     //create vertexes
     void ms3d_model_loader::createVertexes( void )

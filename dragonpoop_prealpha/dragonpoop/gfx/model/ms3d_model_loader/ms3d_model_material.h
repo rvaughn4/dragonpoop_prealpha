@@ -5,6 +5,7 @@
 
 #include <stdint.h>
 #include "../../../core/dpid/dpid.h"
+#include <string>
 
 namespace dragonpoop
 {
@@ -40,6 +41,7 @@ namespace dragonpoop
     {
         ms3d_model_material f;
         dpid id;
+        std::string cmt;
     };
 #pragma pack()
     

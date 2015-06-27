@@ -10,9 +10,11 @@
 #include "ms3d_model_material.h"
 #include "ms3d_model_animation.h"
 #include "ms3d_model_joint.h"
+#include "ms3d_model_comment.h"
 #include <fstream>
 #include <vector>
 #include "../../dpvertex/dpvertexes.h"
+#include <string>
 
 namespace dragonpoop
 {
@@ -24,6 +26,7 @@ namespace dragonpoop
 
         model_writelock *m;
         dpthread_lock *thd;
+        std::string cmt;
 
         //vertexes
         std::vector<ms3d_model_vertex_m> verts;
@@ -100,8 +103,14 @@ namespace dragonpoop
         bool readJointKeyframe( std::fstream *f, std::vector<ms3d_model_joint_keyframe> *l );
         //save joint keyframe
         bool writeJointKeyframe( std::fstream *f, ms3d_model_joint_keyframe *h );
-
-        //joints
+        //read comments section
+        bool readCommentSection( std::fstream *f );
+        //write comments section
+        bool writeCommentSection( std::fstream *f );
+        //read comment
+        bool readComment( std::fstream *f, std::string *s );
+        //write comment
+        bool writeComment( std::fstream *f, std::string *s );
 
         //create vertexes
         void createVertexes( void );

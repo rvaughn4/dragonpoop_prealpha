@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include "../../../core/dpid/dpid.h"
 #include <vector>
+#include <string>
 
 namespace dragonpoop
 {
@@ -47,6 +48,7 @@ namespace dragonpoop
         ms3d_model_group_end e;
         dpid id;
         std::vector<ms3d_model_group_triangle> triangles;
+        std::string cmt;
     };
 #pragma pack()
     

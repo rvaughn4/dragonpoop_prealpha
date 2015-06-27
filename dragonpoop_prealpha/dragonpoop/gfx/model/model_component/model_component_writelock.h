@@ -4,6 +4,7 @@
 
 #include "../../../core/shared_obj/shared_obj_writelock.h"
 #include "../../../core/dpid/dpid.h"
+#include <string>
 
 namespace dragonpoop
 {
@@ -44,6 +45,12 @@ namespace dragonpoop
         void run( dpthread_lock *thd, gfx_writelock *g, model_writelock *m );
         //return model
         model_ref *getModel( void );
+        //get comment
+        void getComment( std::string *s );
+        //set comment
+        void setComment( std::string *s );
+        //add comment
+        void addComment( std::string *s );
 
         friend class model_component;
     };

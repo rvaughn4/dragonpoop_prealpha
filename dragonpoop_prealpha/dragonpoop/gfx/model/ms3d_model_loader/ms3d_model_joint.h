@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include "../../../core/dpid/dpid.h"
 #include <vector>
+#include <string>
 
 namespace dragonpoop
 {
@@ -46,6 +47,7 @@ namespace dragonpoop
         ms3d_model_joint f;
         dpid id;
         std::vector<ms3d_model_joint_keyframe> rotate_frames, translate_frames;
+        std::string cmt;
     };
 #pragma pack()
     

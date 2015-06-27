@@ -116,5 +116,23 @@ namespace dragonpoop
         return (model_ref *)ml->getRef();
     }
 
+    //get comment
+    void model_component::getComment( std::string *s )
+    {
+        *s = this->scomment;
+    }
+
+    //set comment
+    void model_component::setComment( std::string *s )
+    {
+        this->scomment = *s;
+    }
+
+    //add comment
+    void model_component::addComment( std::string *s )
+    {
+        this->scomment.append( *s );
+    }
+
 };
 

@@ -47,4 +47,10 @@ namespace dragonpoop
         return this->t->getModel();
     }
 
+    //get comment
+    void model_component_readlock::getComment( std::string *s )
+    {
+        this->t->getComment( s );
+    }
+
 };

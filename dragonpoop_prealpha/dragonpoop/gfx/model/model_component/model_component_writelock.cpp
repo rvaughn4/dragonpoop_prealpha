@@ -59,4 +59,22 @@ namespace dragonpoop
         return this->t->getModel();
     }
 
+    //get comment
+    void model_component_writelock::getComment( std::string *s )
+    {
+        this->t->getComment( s );
+    }
+
+    //set comment
+    void model_component_writelock::setComment( std::string *s )
+    {
+        this->t->setComment( s );
+    }
+
+    //add comment
+    void model_component_writelock::addComment( std::string *s )
+    {
+        this->t->addComment( s );
+    }
+
 };
