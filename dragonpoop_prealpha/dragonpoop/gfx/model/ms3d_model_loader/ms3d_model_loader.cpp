@@ -6,6 +6,7 @@
 #include "../model_triangle_vertex/model_triangle_vertexes.h"
 #include "../model_joint/model_joints.h"
 #include "../../../core/shared_obj/shared_obj_guard.h"
+#include "../model_animation/model_animations.h"
 #include "../../dpvertex/dpvertexes.h"
 
 namespace dragonpoop
@@ -1296,12 +1297,7 @@ namespace dragonpoop
     {
         std::list<model_joint_ref *> l;
         std::list<model_joint_ref *>::iterator i;
-        model_joint_ref *r, *rp;
-        model_joint_readlock *rl, *rpl;
-        shared_obj_guard g, gp;
-        ms3d_model_joint_m v;
-        std::string s;
-        dpxyzw x;
+        model_joint_ref *r;
 
         this->m->getJoints( &l );
         this->joints.clear();
@@ -1309,42 +1305,7 @@ namespace dragonpoop
         for( i = l.begin(); i != l.end(); ++i )
         {
             r = *i;
-            rl = (model_joint_readlock *)g.readLock( r );
-            if( !rl )
-                continue;
-
-            rp = rl->getParent();
-            if( !rp )
-                rpl = 0;
-            else
-            {
-                rpl = (model_joint_readlock *)gp.readLock( rp );
-                delete rp;
-            }
-            memset( &v, 0, sizeof( v ) );
-
-            rl->getName( &s );
-            s.copy( (char *)&v.f.name, sizeof( v.f.name ) );
-
-            if( rpl )
-            {
-                rpl->getName( &s );
-                s.copy( (char *)&v.f.parent_name, sizeof( v.f.parent_name ) );
-            }
-
-            rl->getPosition( &x );
-            v.f.pos.x = x.x;
-            v.f.pos.y = x.y;
-            v.f.pos.z = x.z;
-
-            rl->getRotation( &x );
-            v.f.rot.x = x.x;
-            v.f.rot.y = x.y;
-            v.f.rot.z = x.z;
-
-            v.id = rl->getId();
-
-            this->joints.push_back( v );
+            this->convertJoint( r );
         }
 
         this->m->releaseGetJoints( &l );
@@ -1396,6 +1357,54 @@ namespace dragonpoop
         j->id = l->getId();
     }
 
+    //convert joint
+    void ms3d_model_loader::convertJoint( model_joint_ref *r )
+    {
+        model_joint_ref *rp;
+        model_joint_readlock *rl, *rpl;
+        shared_obj_guard g, gp;
+        ms3d_model_joint_m v;
+        std::string s;
+        dpxyzw x;
+
+        rl = (model_joint_readlock *)g.readLock( r );
+        if( !rl )
+            return;
+
+        rp = rl->getParent();
+        if( !rp )
+            rpl = 0;
+        else
+        {
+            rpl = (model_joint_readlock *)gp.readLock( rp );
+            delete rp;
+        }
+        memset( &v, 0, sizeof( v ) );
+
+        rl->getName( &s );
+        s.copy( (char *)&v.f.name, sizeof( v.f.name ) );
+
+        if( rpl )
+        {
+            rpl->getName( &s );
+            s.copy( (char *)&v.f.parent_name, sizeof( v.f.parent_name ) );
+        }
+
+        rl->getPosition( &x );
+        v.f.pos.x = x.x;
+        v.f.pos.y = x.y;
+        v.f.pos.z = x.z;
+
+        rl->getRotation( &x );
+        v.f.rot.x = x.x;
+        v.f.rot.y = x.y;
+        v.f.rot.z = x.z;
+
+        v.id = rl->getId();
+
+        this->joints.push_back( v );
+    }
+
     //find parent joint
     ms3d_model_joint_m *ms3d_model_loader::findJointParent( ms3d_model_joint_m *a )
     {
@@ -1417,6 +1426,34 @@ namespace dragonpoop
         }
 
         return 0;
+    }
+
+    //create animation
+    void ms3d_model_loader::createAnimation( void )
+    {
+        model_animation_ref *r;
+        model_animation_writelock *rl;
+        shared_obj_guard o;
+        std::string s;
+
+        r = this->m->createAnimation( this->thd );
+        if( !r )
+            return;
+        rl = (model_animation_writelock *)o.writeLock( r );
+        delete r;
+
+        s.assign( "Imported MS3D Animation" );
+        rl->setName( &s );
+        rl->setAutoPlay( 1 );
+        rl->setRepeatDelay( 100 );
+        rl->setRepeated( 1 );
+        rl->setSpeed( 1 );
+    }
+
+    //convert animation
+    void ms3d_model_loader::convertAnimation( void )
+    {
+
     }
 
 };

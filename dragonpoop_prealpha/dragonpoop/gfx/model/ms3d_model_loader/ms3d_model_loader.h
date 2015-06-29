@@ -28,6 +28,7 @@ namespace dragonpoop
         dpthread_lock *thd;
         std::string cmt;
         ms3d_model_extra ext;
+        dpid anim_id;
 
         //vertexes
         std::vector<ms3d_model_vertex_m> verts;
@@ -173,8 +174,14 @@ namespace dragonpoop
         void convertJoints( void );
         //create joint
         void createJoint( ms3d_model_joint_m *j );
+        //convert joint
+        void convertJoint( model_joint_ref *j );
         //find parent joint
         ms3d_model_joint_m *findJointParent( ms3d_model_joint_m *j );
+        //create animation
+        void createAnimation( void );
+        //convert animation
+        void convertAnimation( void );
 
 
     public:
