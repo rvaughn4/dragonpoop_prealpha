@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <atomic>
 #include <thread>
+#include <vector>
 
 namespace dragonpoop
 {
@@ -14,14 +15,19 @@ namespace dragonpoop
     class dpmutex_writelock;
     class dpspinlock;
 
+    struct dpmutex_thread
+    {
+        std::thread::id tid;
+        int cnt;
+    };
+
     class dpmutex
     {
 
     private:
 
-        std::atomic<int> ireadlock, iwritelock;
         dpmutex_master *m;
-        std::atomic<std::thread::id> tid, rtid;
+        std::vector<dpmutex_thread> rids, wids;
 
     protected:
 
@@ -29,10 +35,22 @@ namespace dragonpoop
         dpmutex( dpmutex_master *m );
         //dtor
         virtual ~dpmutex( void );
-        //returns pointer to read lock counter
-        std::atomic<int> *getReadCounter( void );
-        //returns pointer to write lock counter
-        std::atomic<int> *getWriteCounter( void );
+        //add thread id to readlock list
+        void addReadThread( std::thread::id tid );
+        //add thread id to writelock list
+        void addWriteThread( std::thread::id tid );
+        //remove thread id from readlock list
+        void removeReadThread( std::thread::id tid );
+        //remove thread id from writelock list
+        void removeWriteThread( std::thread::id tid );
+        //return count of threads holding readlock that are not this thread
+        int countReadThreads( std::thread::id tid );
+        //return count of threads holding writelock that are not this thread
+        int countWriteThreads( std::thread::id tid );
+        //find thread with id
+        dpmutex_thread *findReadThread( std::thread::id tid );
+        //find thread with id
+        dpmutex_thread *findWriteThread( std::thread::id tid );
 
     public:
 

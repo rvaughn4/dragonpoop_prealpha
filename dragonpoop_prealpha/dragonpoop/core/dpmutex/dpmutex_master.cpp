@@ -9,6 +9,7 @@
 #include <ratio>
 #include <chrono>
 #include <thread>
+#include <iostream>
 
 namespace dragonpoop
 {
@@ -42,8 +43,8 @@ namespace dragonpoop
     //destroy mutex
     void dpmutex_master::destroyMutex( dpmutex **mm )
     {
-        std::atomic<int> *wc, *rc;
         dpmutex *m;
+        std::thread::id i = std::this_thread::get_id();
 
         if( !mm )
             return;
@@ -54,12 +55,10 @@ namespace dragonpoop
 
         this->slk->lock();
 
-        wc = m->getWriteCounter();
-        rc = m->getReadCounter();
-
-        if( *wc + *rc == 0 )
+        if( m->countReadThreads( i ) > 0 || m->countWriteThreads( i ) > 0 )
+            std::cerr << "PROBLEM!!!! mutex still locked!\r\n\r\n";
+        else
             delete m;
-        //else{ abort!!!! }
 
         this->slk->unlock();
     }
@@ -68,24 +67,19 @@ namespace dragonpoop
     dpmutex_readlock *dpmutex_master::genReadLock( dpmutex *m, uint64_t wait_ms )
     {
         dpmutex_readlock *r;
-        std::atomic<int> *wc, *rc;
         std::thread::id i = std::this_thread::get_id();
 
         r = 0;
         this->slk->lock();
 
-        wc = m->getWriteCounter();
-        rc = m->getReadCounter();
-
-        if( *wc <= 0 || m->tid == i )
+        if( m->countWriteThreads( i ) > 0 )
         {
-            *rc = *rc + 1;
-            if( *rc == 1 )
-                m->rtid = i;
-            else
-                memset( &m->rtid, 0, sizeof( m->rtid ) );
-            r = new dpmutex_readlock( m );
+            this->slk->unlock();
+            return 0;
         }
+
+        r = new dpmutex_readlock( m );
+        m->addReadThread( i );
 
         this->slk->unlock();
         
@@ -96,27 +90,19 @@ namespace dragonpoop
     dpmutex_writelock *dpmutex_master::genWriteLock( dpmutex *m, uint64_t wait_ms )
     {
         dpmutex_writelock *r;
-        std::atomic<int> *wc, *rc;
         std::thread::id i = std::this_thread::get_id();
 
         r = 0;
         this->slk->lock();
 
-        wc = m->getWriteCounter();
-        rc = m->getReadCounter();
-
-        if( *rc > 1 || ( *rc > 0 && m->rtid != i ) )
+        if( m->countReadThreads( i ) > 0 || m->countWriteThreads( i ) > 0 )
         {
             this->slk->unlock();
             return 0;
         }
 
-        if( *wc <= 0 || i == m->tid )
-        {
-            *wc = *wc + 1;
-            m->tid = i;
-            r = new dpmutex_writelock( m );
-        }
+        r = new dpmutex_writelock( m );
+        m->addWriteThread( i );
 
         this->slk->unlock();
         
@@ -127,8 +113,8 @@ namespace dragonpoop
     void dpmutex_master::destroyLock( dpmutex_lock **ll )
     {
         dpmutex *m;
-        std::atomic<int> *wc, *rc;
         dpmutex_lock *l;
+        std::thread::id i = std::this_thread::get_id();
 
         if( !ll )
             return;
@@ -140,14 +126,10 @@ namespace dragonpoop
         this->slk->lock();
 
         m = l->getMutex();
-        wc = m->getWriteCounter();
-        rc = m->getReadCounter();
-
-        if( *rc > 0 )
-            *rc = *rc - 1;
-        if( *wc > 0 )
-            *wc = *wc - 1;
-        memset( &m->rtid, 0, sizeof(m->rtid) );
+        if( l->isReadLock() )
+            m->removeReadThread( i );
+        if( l->isWriteLock() )
+            m->removeWriteThread( i );
         delete l;
 
         this->slk->unlock();

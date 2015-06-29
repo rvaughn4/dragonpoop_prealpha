@@ -3,6 +3,7 @@
 #define dragonpoop_dpmutex_master_h
 
 #include <stdint.h>
+#include "dpmutex.h"
 
 namespace dragonpoop
 {
