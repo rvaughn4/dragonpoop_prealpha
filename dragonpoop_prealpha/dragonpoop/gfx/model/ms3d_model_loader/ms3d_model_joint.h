@@ -42,15 +42,33 @@ namespace dragonpoop
 #pragma pack()
 
 #pragma pack( 1 )
+    struct ms3d_model_joint_extra_section
+    {
+        int32_t version;
+    };
+#pragma pack()
+
+#pragma pack( 1 )
+    struct ms3d_model_joint_extra
+    {
+        struct
+        {
+            float r, g, b;
+        } color;
+    };
+#pragma pack()
+
+#pragma pack( 1 )
     struct ms3d_model_joint_m
     {
         ms3d_model_joint f;
         dpid id;
         std::vector<ms3d_model_joint_keyframe> rotate_frames, translate_frames;
+        ms3d_model_joint_extra e;
         std::string cmt;
     };
 #pragma pack()
-    
+
 }
 
 #endif

@@ -49,7 +49,10 @@ namespace dragonpoop
         if( !l.readJointSection( &f ) )
             return 0;
 
-        l.readCommentSection( &f );
+        if( l.readCommentSection( &f ) )
+        if( l.readVertexExtraSection( &f ) )
+        if( l.readJointExtraSection( &f ) )
+            l.readModelExtra( &f );
 
         l.createVertexes();
         l.createGroups();
@@ -88,8 +91,10 @@ namespace dragonpoop
         if( !l.writeJointSection( &f ) )
             return 0;
 
-        l.writeCommentSection( &f );
-
+        if( l.writeCommentSection( &f ) )
+        if( l.writeVertexExtraSection( &f ) )
+        if( l.writeJointExtraSection( &f ) )
+            l.writeModelExtra( &f );
 
         return 1;
     }
@@ -626,6 +631,189 @@ namespace dragonpoop
         return 1;
     }
 
+    //read vertex extra section
+    bool ms3d_model_loader::readVertexExtraSection( std::fstream *f )
+    {
+        ms3d_model_vertex_extra_section h;
+        ms3d_model_vertex_m *v;
+        unsigned int i, c;
+
+        f->read( (char *)&h, sizeof( h ) );
+        if( h.version < 1 || h.version > 2 )
+            return 0;
+
+        c = (unsigned int)this->verts.size();
+        for( i = 0; i < c; i++ )
+        {
+            v = &this->verts[ i ];
+            this->readVertexExtra( f, v, &h );
+        }
+
+        return 1;
+    }
+
+    //write vertex extra section
+    bool ms3d_model_loader::writeVertexExtraSection( std::fstream *f )
+    {
+        ms3d_model_vertex_extra_section h;
+        ms3d_model_vertex_m *v;
+        unsigned int i, c;
+
+        h.version = 1;
+        f->write( (char *)&h, sizeof( h ) );
+
+        c = (unsigned int)this->verts.size();
+        for( i = 0; i < c; i++ )
+        {
+            v = &this->verts[ i ];
+            this->writeVertexExtra( f, v, &h );
+        }
+
+        return 1;
+    }
+
+    //read vertex extra
+    bool ms3d_model_loader::readVertexExtra( std::fstream *f, ms3d_model_vertex_m *v, ms3d_model_vertex_extra_section *eh )
+    {
+        ms3d_model_vertex_extra_v2 h;
+
+        switch( eh->version )
+        {
+            case 1:
+                f->read( (char *)&h.v, sizeof( h.v ) );
+                break;
+            case 2:
+                f->read( (char *)&h, sizeof( h ) );
+                break;
+            default:
+                return 0;
+        }
+
+        v->bones[ 0 ].id = h.v.bones[ 0 ];
+        v->bones[ 0 ].weight = h.v.weights[ 0 ];
+        v->bones[ 1 ].id = h.v.bones[ 1 ];
+        v->bones[ 1 ].weight = h.v.weights[ 1 ];
+        v->bones[ 2 ].id = h.v.bones[ 2 ];
+        v->bones[ 2 ].weight = h.v.weights[ 2 ];
+        return 1;
+    }
+
+    //write vertex extra
+    bool ms3d_model_loader::writeVertexExtra( std::fstream *f, ms3d_model_vertex_m *v, ms3d_model_vertex_extra_section *eh )
+    {
+        ms3d_model_vertex_extra_v2 h;
+
+        h.extra = 0;
+        h.v.bones[ 0 ] = v->bones[ 0 ].id;
+        h.v.weights[ 0 ] = v->bones[ 0 ].weight;
+        h.v.bones[ 1 ] = v->bones[ 1 ].id;
+        h.v.weights[ 1 ] = v->bones[ 1 ].weight;
+        h.v.bones[ 2 ] = v->bones[ 2 ].id;
+        h.v.weights[ 2 ] = v->bones[ 2 ].weight;
+
+        switch( eh->version )
+        {
+            case 1:
+                f->write( (char *)&h.v, sizeof( h.v ) );
+                break;
+            case 2:
+                f->write( (char *)&h, sizeof( h ) );
+                break;
+            default:
+                return 0;
+        }
+
+        return 1;
+    }
+
+    //read joint extra section
+    bool ms3d_model_loader::readJointExtraSection( std::fstream *f )
+    {
+        ms3d_model_joint_extra_section h;
+        ms3d_model_joint_m *v;
+        unsigned int i, c;
+
+        f->read( (char *)&h, sizeof( h ) );
+        if( h.version != 1 )
+            return 0;
+
+        c = (unsigned int)this->joints.size();
+        for( i = 0; i < c; i++ )
+        {
+            v = &this->joints[ i ];
+            this->readJointExtra( f, v, &h );
+        }
+
+        return 1;
+    }
+
+    //write vertex extra section
+    bool ms3d_model_loader::writeJointExtraSection( std::fstream *f )
+    {
+        ms3d_model_joint_extra_section h;
+        ms3d_model_joint_m *v;
+        unsigned int i, c;
+
+        h.version = 1;
+        f->write( (char *)&h, sizeof( h ) );
+
+        c = (unsigned int)this->joints.size();
+        for( i = 0; i < c; i++ )
+        {
+            v = &this->joints[ i ];
+            this->writeJointExtra( f, v, &h );
+        }
+        
+        return 1;
+    }
+
+    //read joint extra
+    bool ms3d_model_loader::readJointExtra( std::fstream *f, ms3d_model_joint_m *v, ms3d_model_joint_extra_section *eh )
+    {
+        ms3d_model_joint_extra h;
+
+        if( eh->version != 1 )
+            return 0;
+        f->read( (char *)&h, sizeof( h ) );
+        v->e = h;
+
+        return 1;
+    }
+
+    //write joint extra
+    bool ms3d_model_loader::writeJointExtra( std::fstream *f, ms3d_model_joint_m *v, ms3d_model_joint_extra_section *eh )
+    {
+        ms3d_model_joint_extra h;
+
+        if( eh->version != 1 )
+            return 0;
+        h = v->e;
+        f->write( (char *)&h, sizeof( h ) );
+
+        return 1;
+    }
+
+    //read model extra
+    bool ms3d_model_loader::readModelExtra( std::fstream *f )
+    {
+        ms3d_model_extra h;
+
+        f->read( (char *)&h, sizeof( h ) );
+        this->ext = h;
+
+        return 1;
+    }
+
+    //write model extra
+    bool ms3d_model_loader::writeModelExtra( std::fstream *f )
+    {
+        ms3d_model_extra h;
+
+        h = this->ext;
+        f->write( (char *)&h, sizeof( h ) );
+
+        return 1;
+    }
 
     //create vertexes
     void ms3d_model_loader::createVertexes( void )

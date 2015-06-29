@@ -27,6 +27,7 @@ namespace dragonpoop
         model_writelock *m;
         dpthread_lock *thd;
         std::string cmt;
+        ms3d_model_extra ext;
 
         //vertexes
         std::vector<ms3d_model_vertex_m> verts;
@@ -111,6 +112,26 @@ namespace dragonpoop
         bool readComment( std::fstream *f, std::string *s );
         //write comment
         bool writeComment( std::fstream *f, std::string *s );
+        //read vertex extra section
+        bool readVertexExtraSection( std::fstream *f );
+        //write vertex extra section
+        bool writeVertexExtraSection( std::fstream *f );
+        //read vertex extra
+        bool readVertexExtra( std::fstream *f, ms3d_model_vertex_m *v, ms3d_model_vertex_extra_section *eh );
+        //write vertex extra
+        bool writeVertexExtra( std::fstream *f, ms3d_model_vertex_m *v, ms3d_model_vertex_extra_section *eh );
+        //read joint extra section
+        bool readJointExtraSection( std::fstream *f );
+        //write joint extra section
+        bool writeJointExtraSection( std::fstream *f );
+        //read joint extra
+        bool readJointExtra( std::fstream *f, ms3d_model_joint_m *v, ms3d_model_joint_extra_section *eh );
+        //write joint extra
+        bool writeJointExtra( std::fstream *f, ms3d_model_joint_m *v, ms3d_model_joint_extra_section *eh );
+        //read model extra
+        bool readModelExtra( std::fstream *f );
+        //write model extra
+        bool writeModelExtra( std::fstream *f );
 
         //create vertexes
         void createVertexes( void );

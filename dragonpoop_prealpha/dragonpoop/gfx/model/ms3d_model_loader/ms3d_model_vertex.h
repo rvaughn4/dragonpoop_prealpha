@@ -30,6 +30,29 @@ namespace dragonpoop
 #pragma pack()
 
 #pragma pack( 1 )
+    struct ms3d_model_vertex_extra_section
+    {
+        int32_t version;
+    };
+#pragma pack()
+
+#pragma pack( 1 )
+    struct ms3d_model_vertex_extra_v1
+    {
+        int8_t bones[ 3 ];
+        uint8_t weights[ 3 ];
+    };
+#pragma pack()
+
+#pragma pack( 1 )
+    struct ms3d_model_vertex_extra_v2
+    {
+        ms3d_model_vertex_extra_v1 v;
+        uint32_t extra;
+    };
+#pragma pack()
+
+#pragma pack( 1 )
     struct ms3d_model_vertex_m
     {
         ms3d_model_vertex f;

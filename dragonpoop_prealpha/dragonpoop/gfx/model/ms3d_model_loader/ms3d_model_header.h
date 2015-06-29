@@ -17,6 +17,15 @@ namespace dragonpoop
     };
 #pragma pack()
 
+#pragma pack( 1 )
+    struct ms3d_model_extra
+    {
+        float joint_size;
+        int32_t transparency_mode;
+        float alpha_ref;
+    };
+#pragma pack()
+
 }
 
 #endif
