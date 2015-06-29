@@ -33,6 +33,10 @@ namespace dragonpoop
         void getRotation( dpxyzw *p );
         //get name
         void getName( std::string *s );
+        //return parent id
+        dpid getParentId( void );
+        //return parent
+        model_joint_ref *getParent( void );
 
         friend class model_joint;
     };

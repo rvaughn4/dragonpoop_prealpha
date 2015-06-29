@@ -35,4 +35,16 @@ namespace dragonpoop
         this->t->getName( s );
     }
 
+    //return parent id
+    dpid model_joint_readlock::getParentId( void )
+    {
+        return this->t->getParentId();
+    }
+
+    //return parent
+    model_joint_ref *model_joint_readlock::getParent( void )
+    {
+        return this->t->getParent();
+    }
+
 };

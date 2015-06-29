@@ -80,6 +80,10 @@ namespace dragonpoop
         if( *wc <= 0 || m->tid == i )
         {
             *rc = *rc + 1;
+            if( *rc == 1 )
+                m->rtid = i;
+            else
+                memset( &m->rtid, 0, sizeof( m->rtid ) );
             r = new dpmutex_readlock( m );
         }
 
@@ -101,7 +105,7 @@ namespace dragonpoop
         wc = m->getWriteCounter();
         rc = m->getReadCounter();
 
-        if( *rc > 0 )
+        if( *rc > 1 || ( *rc > 0 && m->rtid != i ) )
         {
             this->slk->unlock();
             return 0;
@@ -143,6 +147,7 @@ namespace dragonpoop
             *rc = *rc - 1;
         if( *wc > 0 )
             *wc = *wc - 1;
+        memset( &m->rtid, 0, sizeof(m->rtid) );
         delete l;
 
         this->slk->unlock();

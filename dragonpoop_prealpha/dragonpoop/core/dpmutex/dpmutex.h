@@ -12,6 +12,7 @@ namespace dragonpoop
     class dpmutex_master;
     class dpmutex_readlock;
     class dpmutex_writelock;
+    class dpspinlock;
 
     class dpmutex
     {
@@ -20,7 +21,7 @@ namespace dragonpoop
 
         std::atomic<int> ireadlock, iwritelock;
         dpmutex_master *m;
-        std::atomic<std::thread::id> tid;
+        std::atomic<std::thread::id> tid, rtid;
 
     protected:
 

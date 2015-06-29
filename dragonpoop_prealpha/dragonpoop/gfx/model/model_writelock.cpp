@@ -329,6 +329,12 @@ namespace dragonpoop
         return this->t->createJoint( thd, this );
     }
 
+    //create a joint
+    model_joint_ref *model_writelock::createJoint( dpthread_lock *thd, dpid parent_id )
+    {
+        return this->t->createJoint( thd, this, parent_id );
+    }
+
     //find a joint by id
     model_joint_ref *model_writelock::findJoint( dpid id )
     {
@@ -339,6 +345,12 @@ namespace dragonpoop
     unsigned int model_writelock::getJoints( std::list<model_joint_ref *> *l )
     {
         return this->t->getJoints( l );
+    }
+
+    //get all joints by parent id
+    unsigned int model_writelock::getJointsByParent( std::list<model_joint_ref *> *l, dpid parent_id )
+    {
+        return this->t->getJointsByParent( l, parent_id );
     }
 
     //release list returned by getJoints()

@@ -21,6 +21,7 @@ namespace dragonpoop
 
         dpxyzw pos, rot;
         std::string sname;
+        dpid pid;
 
     protected:
 
@@ -44,11 +45,15 @@ namespace dragonpoop
         void setRotation( dpxyzw *p );
         //set name
         void setName( std::string *s );
+        //return parent id
+        dpid getParentId( void );
+        //return parent
+        model_joint_ref *getParent( void );
 
     public:
 
         //ctor
-        model_joint( model_writelock *ml, dpid id );
+        model_joint( model_writelock *ml, dpid id, dpid pid );
         //dtor
         virtual ~model_joint( void );
 

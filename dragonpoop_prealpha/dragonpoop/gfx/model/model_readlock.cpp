@@ -239,6 +239,12 @@ namespace dragonpoop
         return this->t->getJoints( l );
     }
 
+    //get all joints by parent id
+    unsigned int model_readlock::getJointsByParent( std::list<model_joint_ref *> *l, dpid parent_id )
+    {
+        return this->t->getJointsByParent( l, parent_id );
+    }
+
     //release list returned by getJoints()
     void model_readlock::releaseGetJoints( std::list<model_joint_ref *> *l )
     {

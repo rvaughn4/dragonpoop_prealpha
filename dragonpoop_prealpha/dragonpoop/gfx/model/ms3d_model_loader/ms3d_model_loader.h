@@ -41,6 +41,8 @@ namespace dragonpoop
         ms3d_model_animation_section anim;
         //joints
         std::vector<ms3d_model_joint_m> joints;
+        //frames
+        std::vector<ms3d_model_frame> frames;
 
     protected:
 
@@ -161,6 +163,19 @@ namespace dragonpoop
         void createTriangleVertex( ms3d_model_triangle_m *t, ms3d_model_vertex_m *v, dpxyzw *n, dpst *t0, dpst *t1 );
         //convert triangle vertex
         void convertTriangleVertex( ms3d_model_triangle_m *t, unsigned int vi, model_triangle_vertex_ref *v );
+        //create frames
+        void createFrames( void );
+        //convert frames
+        void convertFrames( void );
+        //create joints
+        void createJoints( void );
+        //convert joints
+        void convertJoints( void );
+        //create joint
+        void createJoint( ms3d_model_joint_m *j );
+        //find parent joint
+        ms3d_model_joint_m *findJointParent( ms3d_model_joint_m *j );
+
 
     public:
 

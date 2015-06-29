@@ -62,7 +62,7 @@ namespace dragonpoop
     struct ms3d_model_joint_m
     {
         ms3d_model_joint f;
-        dpid id;
+        dpid id, pid;
         std::vector<ms3d_model_joint_keyframe> rotate_frames, translate_frames;
         ms3d_model_joint_extra e;
         std::string cmt;

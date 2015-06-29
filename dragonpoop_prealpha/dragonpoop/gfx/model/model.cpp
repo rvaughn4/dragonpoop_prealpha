@@ -125,7 +125,7 @@ namespace dragonpoop
     //run model components
     void model::runComps( dpthread_lock *thd, gfx_writelock *g, model_writelock *m )
     {
-        std::list<model_component *> *l, d;
+        std::list<model_component *> *l, d, lc;
         std::list<model_component *>::iterator i;
         model_component *p;
         model_component_readlock *prl;
@@ -134,6 +134,13 @@ namespace dragonpoop
         shared_obj_guard o;
 
         l = &this->comps.lst;
+        for( i = l->begin(); i != l->end(); ++i )
+        {
+            p = *i;
+            lc.push_back( p );
+        }
+
+        l = &lc;
         for( i = l->begin(); i != l->end(); ++i )
         {
             p = *i;
@@ -685,8 +692,17 @@ namespace dragonpoop
         model::releaseGetComponents( (std::list<model_component_ref *> *)l );
     }
 
+
     //create a joint
     model_joint_ref *model::createJoint( dpthread_lock *thd, model_writelock *m )
+    {
+        dpid i;
+        dpid_zero( &i );
+        return this->createJoint( thd, m, i );
+    }
+
+    //create a joint
+    model_joint_ref *model::createJoint( dpthread_lock *thd, model_writelock *m, dpid parent_id )
     {
         model_joint *o;
         dpid id;
@@ -694,8 +710,8 @@ namespace dragonpoop
         model_joint_writelock *ol;
 
         id = thd->genId();
-        o = new model_joint( m, id );
-        this->addComp( o, id, model_component_type_joint );
+        o = new model_joint( m, id, parent_id );
+        this->addComp( o, id, model_component_type_joint, parent_id );
 
         ol = (model_joint_writelock *)g.writeLock( o );
         if( !ol )
@@ -713,6 +729,12 @@ namespace dragonpoop
     unsigned int model::getJoints( std::list<model_joint_ref *> *l )
     {
         return this->getComponentsByType( (std::list<model_component_ref *> *)l, model_component_type_joint );
+    }
+
+    //get all joints by parent
+    unsigned int model::getJointsByParent( std::list<model_joint_ref *> *l, dpid parent_id )
+    {
+        return this->getComponentsByOwnerAndType( (std::list<model_component_ref *> *)l, parent_id, model_component_type_joint );
     }
 
     //release list returned by getJoint()

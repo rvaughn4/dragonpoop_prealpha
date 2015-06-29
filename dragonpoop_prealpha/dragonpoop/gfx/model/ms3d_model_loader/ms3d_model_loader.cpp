@@ -4,7 +4,9 @@
 #include "../model_group/model_groups.h"
 #include "../model_triangle/model_triangles.h"
 #include "../model_triangle_vertex/model_triangle_vertexes.h"
+#include "../model_joint/model_joints.h"
 #include "../../../core/shared_obj/shared_obj_guard.h"
+#include "../../dpvertex/dpvertexes.h"
 
 namespace dragonpoop
 {
@@ -54,6 +56,8 @@ namespace dragonpoop
         if( l.readJointExtraSection( &f ) )
             l.readModelExtra( &f );
 
+        l.createFrames();
+        l.createJoints();
         l.createVertexes();
         l.createGroups();
         l.createTriangles();
@@ -71,6 +75,8 @@ namespace dragonpoop
         if( !f.is_open() )
             return 0;
 
+        l.convertFrames();
+        l.convertJoints();
         l.convertVertexes();
         l.convertGroups();
         l.convertTriangles();
@@ -1190,7 +1196,7 @@ namespace dragonpoop
         rl->setTexcoord( 0, t1 );
     }
 
-        //convert triangle vertex
+    //convert triangle vertex
     void ms3d_model_loader::convertTriangleVertex( ms3d_model_triangle_m *t, unsigned int vi, model_triangle_vertex_ref *v )
     {
         model_triangle_vertex_readlock *rl;
@@ -1212,6 +1218,205 @@ namespace dragonpoop
         t->f.s[ vi ] = tx.s;
         t->f.t[ vi ] = tx.t;
         t->f.verticies[ vi ] = this->findVertex( rl->getVertexId() );
+    }
+
+    //create frames
+    void ms3d_model_loader::createFrames( void )
+    {
+        ms3d_model_frame f;
+        std::vector<float> d, e;
+        unsigned int i, c, j, k, l;
+        ms3d_model_joint_m *jt;
+        ms3d_model_joint_keyframe *kf;
+
+        c = (unsigned int)this->joints.size();
+        for( i = 0; i < c; i++ )
+        {
+            jt = &this->joints[ i ];
+
+            k = (unsigned int)jt->translate_frames.size();
+            for( j = 0; j < k; j++ )
+            {
+                kf = &jt->translate_frames[ j ];
+                d.push_back( kf->time );
+            }
+
+            k = (unsigned int)jt->rotate_frames.size();
+            for( j = 0; j < k; j++ )
+            {
+                kf = &jt->rotate_frames[ j ];
+                d.push_back( kf->time );
+            }
+        }
+
+        c = (unsigned int)d.size();
+        for( i = 0; i < c; i++ )
+        {
+            k = (unsigned int)e.size();
+            l = 0;
+            for( j = 0; j < k; j++ )
+            {
+                if( d[ i ] == e[ j ] )
+                    l++;
+            }
+            if( !l )
+                e.push_back( d[ i ] );
+        }
+        std::sort( e.begin(), e.end() );
+
+        c = (unsigned int)e.size();
+        for( i = 0; i < c; i++ )
+        {
+            f.t = e[ i ];
+            this->frames.push_back( f );
+        }
+    }
+
+    //convert frames
+    void ms3d_model_loader::convertFrames( void )
+    {
+    }
+
+    //create joints
+    void ms3d_model_loader::createJoints( void )
+    {
+        ms3d_model_joint_m *j;
+        unsigned int i, c;
+
+        c = (unsigned int)this->joints.size();
+        for( i = 0; i < c; i++ )
+        {
+           j = &this->joints[ i ];
+           this->createJoint( j );
+        }
+    }
+
+    //convert joints
+    void ms3d_model_loader::convertJoints( void )
+    {
+        std::list<model_joint_ref *> l;
+        std::list<model_joint_ref *>::iterator i;
+        model_joint_ref *r, *rp;
+        model_joint_readlock *rl, *rpl;
+        shared_obj_guard g, gp;
+        ms3d_model_joint_m v;
+        std::string s;
+        dpxyzw x;
+
+        this->m->getJoints( &l );
+        this->joints.clear();
+
+        for( i = l.begin(); i != l.end(); ++i )
+        {
+            r = *i;
+            rl = (model_joint_readlock *)g.readLock( r );
+            if( !rl )
+                continue;
+
+            rp = rl->getParent();
+            if( !rp )
+                rpl = 0;
+            else
+            {
+                rpl = (model_joint_readlock *)gp.readLock( rp );
+                delete rp;
+            }
+            memset( &v, 0, sizeof( v ) );
+
+            rl->getName( &s );
+            s.copy( (char *)&v.f.name, sizeof( v.f.name ) );
+
+            if( rpl )
+            {
+                rpl->getName( &s );
+                s.copy( (char *)&v.f.parent_name, sizeof( v.f.parent_name ) );
+            }
+
+            rl->getPosition( &x );
+            v.f.pos.x = x.x;
+            v.f.pos.y = x.y;
+            v.f.pos.z = x.z;
+
+            rl->getRotation( &x );
+            v.f.rot.x = x.x;
+            v.f.rot.y = x.y;
+            v.f.rot.z = x.z;
+
+            v.id = rl->getId();
+
+            this->joints.push_back( v );
+        }
+
+        this->m->releaseGetJoints( &l );
+    }
+
+    //create joint
+    void ms3d_model_loader::createJoint( ms3d_model_joint_m *j )
+    {
+        model_joint_ref *r;
+        model_joint_writelock *l;
+        shared_obj_guard g;
+        std::string s;
+        dpxyzw x;
+        ms3d_model_joint_m *p;
+
+        if( !dpid_isZero( &j->id ) )
+            return;
+
+        p = this->findJointParent( j );
+        if( p )
+            this->createJoint( p );
+
+        if( p )
+            r = this->m->createJoint( this->thd, p->id );
+        else
+            r = this->m->createJoint( this->thd );
+        if( !r )
+            return;
+        l = (model_joint_writelock *)g.writeLock( r );
+        delete r;
+        if( !l )
+            return;
+
+        s.assign( (char *)j->f.name, sizeof( j->f.name ) );
+        l->setName( &s );
+
+        x.x = j->f.pos.x;
+        x.y = j->f.pos.y;
+        x.z = j->f.pos.z;
+        x.w = 1.0f;
+        l->setPosition( &x );
+
+        x.x = j->f.rot.x;
+        x.y = j->f.rot.y;
+        x.z = j->f.rot.z;
+        x.w = 1.0f;
+        l->setRotation( &x );
+
+        j->id = l->getId();
+    }
+
+    //find parent joint
+    ms3d_model_joint_m *ms3d_model_loader::findJointParent( ms3d_model_joint_m *a )
+    {
+        unsigned int i, c;
+        std::string sa, sb;
+        ms3d_model_joint_m *b;
+
+        if( !a->f.name[ 0 ] )
+            return 0;
+        sa.assign( (char *)a->f.parent_name, sizeof( a->f.parent_name ) );
+
+        c = (unsigned int)this->joints.size();
+        for( i = 0; i < c; i++ )
+        {
+            b = &this->joints[ i ];
+            sb.assign( (char *)b->f.name, sizeof( b->f.name ) );
+            if( sa.compare( sb ) == 0 )
+                return b;
+        }
+
+        return 0;
     }
 
 };

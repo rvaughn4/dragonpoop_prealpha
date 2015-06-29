@@ -25,7 +25,7 @@ namespace dragonpoop
         {
             struct
             {
-                float r, g, b;
+                float r, g, b, a;
             } ambient, diffuse, specular, emissive;
         } colors;
         float shininess;

@@ -18,6 +18,11 @@ namespace dragonpoop
     };
 #pragma pack()
 
+    struct ms3d_model_frame
+    {
+        float t;
+    };
+
 }
 
 #endif

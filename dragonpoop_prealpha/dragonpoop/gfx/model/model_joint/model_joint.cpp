@@ -10,8 +10,11 @@ namespace dragonpoop
 {
 
     //ctor
-    model_joint::model_joint( model_writelock *ml, dpid id ) : model_component( ml, id, model_component_type_joint, 0 )
+    model_joint::model_joint( model_writelock *ml, dpid id, dpid parent_id ) : model_component( ml, id, model_component_type_joint, 0 )
     {
+        if( dpid_compare( &id, &parent_id ) )
+            dpid_zero( &parent_id );
+        this->pid = parent_id;
     }
 
     //dtor
@@ -82,6 +85,34 @@ namespace dragonpoop
     void model_joint::setName( std::string *s )
     {
         this->sname = *s;
+    }
+
+    //return parent id
+    dpid model_joint::getParentId( void )
+    {
+        return this->pid;
+    }
+
+    //return parent
+    model_joint_ref *model_joint::getParent( void )
+    {
+        model_ref *r;
+        model_readlock *rl;
+        shared_obj_guard g;
+
+        if( dpid_isZero( &this->pid ) )
+            return 0;
+
+        r = this->getModel();
+        if( !r )
+            return 0;
+
+        rl = (model_readlock *)g.readLock( r );
+        delete r;
+        if( !rl )
+            return 0;
+
+        return rl->findJoint( this->pid );
     }
 
 };

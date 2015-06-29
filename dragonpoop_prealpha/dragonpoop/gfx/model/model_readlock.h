@@ -111,8 +111,10 @@ namespace dragonpoop
         void releaseGetFrameJoints( std::list<model_frame_joint_ref *> *l );
         //find a joint by id
         model_joint_ref *findJoint( dpid id );
-        //get all frame joints
+        //get all joints
         unsigned int getJoints( std::list<model_joint_ref *> *l );
+        //get all joints by parent id
+        unsigned int getJointsByParent( std::list<model_joint_ref *> *l, dpid parent_id );
         //release list returned by getFrameJoints()
         void releaseGetJoints( std::list<model_joint_ref *> *l );
         //find a vertex joint by id

@@ -1,6 +1,7 @@
 
 #include "dpmutex.h"
 #include "dpmutex_master.h"
+#include "../dpspinlock/dpsponlock.h"
 
 namespace dragonpoop
 {
@@ -16,7 +17,6 @@ namespace dragonpoop
     //dtor
     dpmutex::~dpmutex( void )
     {
-
     }
 
     //returns pointer to read lock counter
