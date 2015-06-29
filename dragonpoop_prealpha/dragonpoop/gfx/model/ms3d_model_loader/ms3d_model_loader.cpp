@@ -49,6 +49,8 @@ namespace dragonpoop
         if( !l.readJointSection( &f ) )
             return 0;
 
+        l.readCommentSection( &f );
+
         l.createVertexes();
         l.createGroups();
         l.createTriangles();
@@ -85,6 +87,8 @@ namespace dragonpoop
             return 0;
         if( !l.writeJointSection( &f ) )
             return 0;
+
+        l.writeCommentSection( &f );
 
 
         return 1;
@@ -471,15 +475,113 @@ namespace dragonpoop
     //read comments section
     bool ms3d_model_loader::readCommentSection( std::fstream *f )
     {
+        ms3d_model_comment_section cs;
+        ms3d_model_comment_header h;
+        ms3d_model_group_m *g;
+        ms3d_model_material_m *m;
+        ms3d_model_joint_m *j;
+        std::string s;
+        int i;
 
-        return 0;
+        f->read( (char *)&cs, sizeof( cs ) );
+        if( cs.version != 1 )
+            return 0;
+
+        //group
+        h.cnt = 0;
+        f->read( (char *)&h, sizeof( h ) );
+        for( i = 0; i < h.cnt; i++ )
+        {
+            this->readComment( f, &s );
+            if( i >= this->groups.size() )
+                continue;
+            g = &this->groups[ i ];
+            g->cmt.append( s );
+        }
+
+        //material
+        h.cnt = 0;
+        f->read( (char *)&h, sizeof( h ) );
+        for( i = 0; i < h.cnt; i++ )
+        {
+            this->readComment( f, &s );
+            if( i >= this->mats.size() )
+                continue;
+            m = &this->mats[ i ];
+            m->cmt.append( s );
+        }
+
+        //joint
+        h.cnt = 0;
+        f->read( (char *)&h, sizeof( h ) );
+        for( i = 0; i < h.cnt; i++ )
+        {
+            this->readComment( f, &s );
+            if( i >= this->joints.size() )
+                continue;
+            j = &this->joints[ i ];
+            j->cmt.append( s );
+        }
+
+        //model
+        h.cnt = 0;
+        f->read( (char *)&h, sizeof( h ) );
+        for( i = 0; i < h.cnt; i++ )
+        {
+            this->readComment( f, &s );
+            this->cmt.append( s );
+        }
+
+        return 1;
     }
 
     //write comments section
     bool ms3d_model_loader::writeCommentSection( std::fstream *f )
     {
+        ms3d_model_comment_section cs;
+        ms3d_model_comment_header h;
+        ms3d_model_group_m *g;
+        ms3d_model_material_m *m;
+        ms3d_model_joint_m *j;
+        std::string s;
+        int i;
 
-        return 0;
+        cs.version = 1;
+        f->write( (char *)&cs, sizeof( cs ) );
+
+        //group
+        h.cnt = (int)this->groups.size();
+        f->write( (char *)&h, sizeof( h ) );
+        for( i = 0; i < h.cnt; i++ )
+        {
+            g = &this->groups[ i ];
+            this->writeComment( f, &g->cmt );
+        }
+
+        //material
+        h.cnt = (int)this->mats.size();
+        f->write( (char *)&h, sizeof( h ) );
+        for( i = 0; i < h.cnt; i++ )
+        {
+            m = &this->mats[ i ];
+            this->writeComment( f, &m->cmt );
+        }
+
+        //joint
+        h.cnt = (int)this->joints.size();
+        f->write( (char *)&h, sizeof( h ) );
+        for( i = 0; i < h.cnt; i++ )
+        {
+            j = &this->joints[ i ];
+            this->writeComment( f, &j->cmt );
+        }
+
+        //model
+        h.cnt = 1;
+        f->write( (char *)&h, sizeof( h ) );
+        this->writeComment( f, &this->cmt );
+
+        return 1;
     }
 
     //read comment
