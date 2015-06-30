@@ -650,6 +650,12 @@ namespace dragonpoop
         return this->getComponentsByType( (std::list<model_component_ref *> *)l, model_component_type_animation_frame );
     }
 
+    //get all animation_frames by animation id
+    unsigned int model::getAnimationFramesByAnimation( std::list<model_animation_frame_ref *> *l, dpid anim_id )
+    {
+        return this->getComponentsByOwnerAndType( (std::list<model_component_ref *> *)l, anim_id, model_component_type_animation_frame );
+    }
+
     //release list returned by getanimation_frames()
     void model::releaseGetAnimationFrames( std::list<model_animation_frame_ref *> *l )
     {
@@ -777,6 +783,24 @@ namespace dragonpoop
     void model::releaseGetVertexJoints( std::list<model_vertex_joint_ref *> *l )
     {
         model::releaseGetComponents( (std::list<model_component_ref *> *)l );
+    }
+
+    //returns default animation id
+    dpid model::getDefaultAnimationId( void )
+    {
+        return this->default_anim_id;
+    }
+
+    //returns default animation
+    model_animation_ref *model::getDefaultAnimation( void )
+    {
+        return this->findAnimation( this->default_anim_id );
+    }
+
+    //set default animation id
+    void model::setDefaultAnimationId( dpid id )
+    {
+        this->default_anim_id = id;
     }
 
 };

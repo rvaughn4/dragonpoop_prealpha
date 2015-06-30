@@ -52,7 +52,7 @@ namespace dragonpoop
         core *c;
         gfx_ref *g;
         std::string sname;
-        dpid id;
+        dpid id, default_anim_id;
         bool bAlive;
 
         struct
@@ -185,6 +185,8 @@ namespace dragonpoop
         model_animation_frame_ref *findAnimationFrame( dpid id );
         //get all animation_frames
         unsigned int getAnimationFrames( std::list<model_animation_frame_ref *> *l );
+        //get all animation_frames by animation id
+        unsigned int getAnimationFramesByAnimation( std::list<model_animation_frame_ref *> *l, dpid anim_id );
         //release list returned by getAnimationFrames()
         static void releaseGetAnimationFrames( std::list<model_animation_frame_ref *> *l );
         //create a frame joint
@@ -215,6 +217,12 @@ namespace dragonpoop
         unsigned int getVertexJoints( std::list<model_vertex_joint_ref *> *l );
         //release list returned by getVertexJoints()
         static void releaseGetVertexJoints( std::list<model_vertex_joint_ref *> *l );
+        //returns default animation id
+        dpid getDefaultAnimationId( void );
+        //returns default animation
+        model_animation_ref *getDefaultAnimation( void );
+        //set default animation id
+        void setDefaultAnimationId( dpid id );
 
     public:
 

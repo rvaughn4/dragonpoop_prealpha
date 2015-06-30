@@ -7,7 +7,10 @@
 #include "../model_joint/model_joints.h"
 #include "../../../core/shared_obj/shared_obj_guard.h"
 #include "../model_animation/model_animations.h"
+#include "../model_animation_frame/model_animation_frames.h"
+#include "../model_frame/model_frames.h"
 #include "../../dpvertex/dpvertexes.h"
+#include <sstream>
 
 namespace dragonpoop
 {
@@ -57,6 +60,7 @@ namespace dragonpoop
         if( l.readJointExtraSection( &f ) )
             l.readModelExtra( &f );
 
+        l.createAnimation();
         l.createFrames();
         l.createJoints();
         l.createVertexes();
@@ -77,6 +81,7 @@ namespace dragonpoop
             return 0;
 
         l.convertFrames();
+        l.convertAnimation();
         l.convertJoints();
         l.convertVertexes();
         l.convertGroups();
@@ -472,6 +477,8 @@ namespace dragonpoop
 
         memset( &h, 0, sizeof( h ) );
         f->read( (char *)&h, sizeof( h ) );
+        h.time = h.time * this->anim.fps;
+        h.time = (int)h.time;
 
         l->push_back( h );
         return 1;
@@ -480,6 +487,7 @@ namespace dragonpoop
     //save joint keyframe
     bool ms3d_model_loader::writeJointKeyframe( std::fstream *f, ms3d_model_joint_keyframe *h )
     {
+        h->time = h->time / this->anim.fps;
         f->write( (char *)h, sizeof( ms3d_model_joint_keyframe ) );
         return 1;
     }
@@ -1269,6 +1277,7 @@ namespace dragonpoop
         for( i = 0; i < c; i++ )
         {
             f.t = e[ i ];
+            this->createFrame( &f );
             this->frames.push_back( f );
         }
     }
@@ -1276,6 +1285,70 @@ namespace dragonpoop
     //convert frames
     void ms3d_model_loader::convertFrames( void )
     {
+        std::list<model_animation_frame_ref *> l;
+        std::list<model_animation_frame_ref *>::iterator li;
+        model_animation_frame_ref *p;
+        model_animation_frame_readlock *pl;
+        std::vector<float> d;
+        shared_obj_guard o;
+        unsigned int i, c;
+        ms3d_model_frame f;
+
+        this->anim_id = this->m->getDefaultAnimationId();
+        this->m->getAnimationFramesByAnimation( &l, this->anim_id );
+
+        for( li = l.begin(); li != l.end(); ++li )
+        {
+            p = *li;
+            pl = (model_animation_frame_readlock *)o.readLock( p );
+            d.push_back( pl->getTime() );
+        }
+
+        this->m->releaseGetAnimationFrames( &l );
+
+        std::sort( d.begin(), d.end() );
+
+        c = (unsigned int)d.size();
+        for( i = 0; i < c; i++ )
+        {
+            f.t = d[ i ];
+            this->frames.push_back( f );
+        }
+    }
+
+    //create frame
+    void ms3d_model_loader::createFrame( ms3d_model_frame *f )
+    {
+        model_frame_ref *fr;
+        model_frame_writelock *frl;
+        model_animation_frame_ref *ar;
+        model_animation_frame_writelock *arl;
+        shared_obj_guard o;
+        std::stringstream ss;
+        std::string s;
+
+        fr = this->m->createFrame( this->thd );
+        if( !fr )
+            return;
+        frl = (model_frame_writelock *)o.writeLock( fr );
+        delete fr;
+        if( !frl )
+            return;
+
+        ss << "MS3D Imported Frame #" << f->t << "";
+        s = ss.str();
+        frl->setName( &s );
+        f->id = frl->getId();
+
+        ar = this->m->createAnimationFrame( this->thd, this->anim_id, f->id, f->t );
+        if( !ar )
+            return;
+        arl = (model_animation_frame_writelock *)o.writeLock( ar );
+        delete ar;
+        if( !arl )
+            return;
+
+        f->afid = arl->getId();
     }
 
     //create joints
@@ -1447,13 +1520,29 @@ namespace dragonpoop
         rl->setAutoPlay( 1 );
         rl->setRepeatDelay( 100 );
         rl->setRepeated( 1 );
-        rl->setSpeed( 1 );
+        rl->setSpeed( this->anim.fps );
+
+        this->anim_id = rl->getId();
+        this->m->setDefaultAnimationId( this->anim_id );
     }
 
     //convert animation
     void ms3d_model_loader::convertAnimation( void )
     {
+        model_animation_ref *r;
+        model_animation_readlock *rl;
+        shared_obj_guard o;
 
+        r = this->m->getDefaultAnimation();
+        if( !r )
+            return;
+        rl = (model_animation_readlock *)o.readLock( r );
+        delete r;
+
+        this->anim_id = rl->getId();
+        this->anim.fps = rl->getSpeed();
+        this->anim.cnt_frames = (unsigned int)this->frames.size();
+        this->anim.current_time = 0;
     }
 
 };

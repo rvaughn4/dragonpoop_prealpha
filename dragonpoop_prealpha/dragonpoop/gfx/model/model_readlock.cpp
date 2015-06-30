@@ -203,6 +203,12 @@ namespace dragonpoop
         return this->t->getAnimationFrames( l );
     }
 
+    //get all animation_frames by animation id
+    unsigned int model_readlock::getAnimationFramesByAnimation( std::list<model_animation_frame_ref *> *l, dpid anim_id )
+    {
+        return this->t->getAnimationFramesByAnimation( l, anim_id );
+    }
+
     //release list returned by getanimation_framees()
     void model_readlock::releaseGetAnimationFrames( std::list<model_animation_frame_ref *> *l )
     {
@@ -267,6 +273,24 @@ namespace dragonpoop
     void model_readlock::releaseGetVertexJoints( std::list<model_vertex_joint_ref *> *l )
     {
         model::releaseGetVertexJoints( l );
+    }
+
+    //returns default animation id
+    dpid model_readlock::getDefaultAnimationId( void )
+    {
+        return this->t->getDefaultAnimationId();
+    }
+
+    //returns default animation
+    model_animation_ref *model_readlock::getDefaultAnimation( void )
+    {
+        return this->t->getDefaultAnimation();
+    }
+
+    //set default animation id
+    void model_readlock::setDefaultAnimationId( dpid id )
+    {
+        this->t->setDefaultAnimationId( id );
     }
 
 };

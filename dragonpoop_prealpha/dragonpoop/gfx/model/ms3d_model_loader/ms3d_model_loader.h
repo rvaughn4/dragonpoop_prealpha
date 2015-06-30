@@ -168,6 +168,9 @@ namespace dragonpoop
         void createFrames( void );
         //convert frames
         void convertFrames( void );
+        //create frame
+        void createFrame( ms3d_model_frame *f );
+
         //create joints
         void createJoints( void );
         //convert joints

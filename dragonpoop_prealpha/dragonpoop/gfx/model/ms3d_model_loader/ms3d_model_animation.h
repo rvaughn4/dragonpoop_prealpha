@@ -21,6 +21,7 @@ namespace dragonpoop
     struct ms3d_model_frame
     {
         float t;
+        dpid id, afid;
     };
 
 }
