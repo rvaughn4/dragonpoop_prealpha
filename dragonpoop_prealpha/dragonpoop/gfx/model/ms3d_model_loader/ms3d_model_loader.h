@@ -185,7 +185,16 @@ namespace dragonpoop
         void createAnimation( void );
         //convert animation
         void convertAnimation( void );
-
+        //create keyframes/frame_joints
+        void createFrameJoints( void );
+        //convert keyframes/frame_joints
+        void convertFrameJoints( void );
+        //create keyframe/frame_joint for joint at frame
+        void createFrameJoint( ms3d_model_joint_m *j, ms3d_model_frame *f );
+        //convert keyframe/frame_joint for joint at frame
+        void convertFrameJoint( ms3d_model_joint_m *j, ms3d_model_frame *f );
+        //find translation and rotation at frame time for joint
+        void findKeyFrameAtTime( ms3d_model_joint_m *j, ms3d_model_frame *f, ms3d_model_joint_keyframe *trans, ms3d_model_joint_keyframe *rot );
 
     public:
 

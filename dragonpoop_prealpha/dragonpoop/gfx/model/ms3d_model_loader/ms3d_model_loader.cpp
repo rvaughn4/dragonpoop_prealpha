@@ -1545,4 +1545,64 @@ namespace dragonpoop
         this->anim.current_time = 0;
     }
 
+    //create keyframes/frame_joints
+    void ms3d_model_loader::createFrameJoints( void )
+    {
+        unsigned int i, c, l, d;
+        ms3d_model_frame *f;
+        ms3d_model_joint_m *j;
+
+        c = (unsigned int)this->joints.size();
+        for( i = 0; i < c; i++ )
+        {
+            j = &this->joints[ i ];
+            d = (unsigned int)this->frames.size();
+            for( l = 0; l < d; l++ )
+            {
+                f = &this->frames[ l ];
+                this->createFrameJoint( j, f );
+            }
+        }
+    }
+
+    //convert keyframes/frame_joints
+    void ms3d_model_loader::convertFrameJoints( void )
+    {
+        unsigned int i, c, l, d;
+        ms3d_model_frame *f;
+        ms3d_model_joint_m *j;
+
+        c = (unsigned int)this->joints.size();
+        for( i = 0; i < c; i++ )
+        {
+            j = &this->joints[ i ];
+            d = (unsigned int)this->frames.size();
+            for( l = 0; l < d; l++ )
+            {
+                f = &this->frames[ l ];
+                this->convertFrameJoint( j, f );
+            }
+        }
+    }
+
+    //create keyframe/frame_joint for joint at frame
+    void ms3d_model_loader::createFrameJoint( ms3d_model_joint_m *j, ms3d_model_frame *f )
+    {
+        ms3d_model_joint_keyframe trans, rot;
+
+        this->findKeyFrameAtTime( j, f, &trans, &rot );
+    }
+
+    //convert keyframe/frame_joint for joint at frame
+    void ms3d_model_loader::convertFrameJoint( ms3d_model_joint_m *j, ms3d_model_frame *f )
+    {
+
+    }
+
+    //find translation and rotation at frame time for joint
+    void ms3d_model_loader::findKeyFrameAtTime( ms3d_model_joint_m *j, ms3d_model_frame *f, ms3d_model_joint_keyframe *trans, ms3d_model_joint_keyframe *rot )
+    {
+
+    }
+
 };

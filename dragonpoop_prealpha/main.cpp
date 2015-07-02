@@ -32,7 +32,7 @@ namespace dragonpoop
 
             ml = (model_writelock *)g.writeLock( mr );
 
-            ms3d_model_loader::load( th, ml, "monster.ms3d" );
+            ms3d_model_loader::load( th, ml, "felhound.ms3d" );
             ms3d_model_loader::save( th, ml, "o1.ms3d" );
 
             ml->clear();
