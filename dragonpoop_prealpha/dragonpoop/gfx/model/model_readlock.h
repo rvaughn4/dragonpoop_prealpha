@@ -109,6 +109,12 @@ namespace dragonpoop
         model_frame_joint_ref *findFrameJoint( dpid id );
         //get all frame joints
         unsigned int getFrameJoints( std::list<model_frame_joint_ref *> *l );
+        //get all frame joints by frame id
+        unsigned int getFrameJointsByFrame( std::list<model_frame_joint_ref *> *l, dpid frame_id );
+        //get all frame joints by joint id
+        unsigned int getFrameJointsByJoint( std::list<model_frame_joint_ref *> *l, dpid joint_id );
+        //get all frame joints by joint and frame id
+        unsigned int getFrameJointsByFrameAndJoint( std::list<model_frame_joint_ref *> *l, dpid frame_id, dpid joint_id );
         //release list returned by getFrameJoints()
         void releaseGetFrameJoints( std::list<model_frame_joint_ref *> *l );
         //find a joint by id
@@ -123,6 +129,10 @@ namespace dragonpoop
         model_vertex_joint_ref *findVertexJoint( dpid id );
         //get all vertex joints
         unsigned int getVertexJoints( std::list<model_vertex_joint_ref *> *l );
+        //get all vertex joints by vertex
+        unsigned int getVertexJointsByVertex( std::list<model_vertex_joint_ref *> *l, dpid vertex_id );
+        //get all vertex joints by joint
+        unsigned int getVertexJointsByJoint( std::list<model_vertex_joint_ref *> *l, dpid joint_id );
         //release list returned by getVertexJoints()
         void releaseGetVertexJoints( std::list<model_vertex_joint_ref *> *l );
         //returns default animation id

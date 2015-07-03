@@ -1,15 +1,17 @@
 
 #include "ms3d_model_loader.h"
+#include "../../dpvertex/dpvertexes.h"
+#include "../../../core/shared_obj/shared_obj_guard.h"
 #include "../model_vertex/model_vertexes.h"
 #include "../model_group/model_groups.h"
 #include "../model_triangle/model_triangles.h"
 #include "../model_triangle_vertex/model_triangle_vertexes.h"
 #include "../model_joint/model_joints.h"
-#include "../../../core/shared_obj/shared_obj_guard.h"
 #include "../model_animation/model_animations.h"
 #include "../model_animation_frame/model_animation_frames.h"
 #include "../model_frame/model_frames.h"
-#include "../../dpvertex/dpvertexes.h"
+#include "../model_frame_joint/model_frame_joints.h"
+#include "../model_vertex_joint/model_vertex_joints.h"
 #include <sstream>
 
 namespace dragonpoop
@@ -63,6 +65,7 @@ namespace dragonpoop
         l.createAnimation();
         l.createFrames();
         l.createJoints();
+        l.createFrameJoints();
         l.createVertexes();
         l.createGroups();
         l.createTriangles();
@@ -83,6 +86,7 @@ namespace dragonpoop
         l.convertFrames();
         l.convertAnimation();
         l.convertJoints();
+        l.convertFrameJoints();
         l.convertVertexes();
         l.convertGroups();
         l.convertTriangles();
@@ -478,7 +482,6 @@ namespace dragonpoop
         memset( &h, 0, sizeof( h ) );
         f->read( (char *)&h, sizeof( h ) );
         h.time = h.time * this->anim.fps;
-        h.time = (int)h.time;
 
         l->push_back( h );
         return 1;
@@ -859,6 +862,8 @@ namespace dragonpoop
             rl->setPosition( &x );
             v->id = rl->getId();
 
+            this->createVertexJoints( v );
+
             delete r;
         }
     }
@@ -893,10 +898,102 @@ namespace dragonpoop
             v.f.flags = 0;
             v.f.boneId = 0;
 
+            this->convertVertexJoints( &v );
+
             this->verts.push_back( v );
         }
 
         this->m->releaseGetVertexes( &l );
+    }
+
+    //create vertex joints
+    void ms3d_model_loader::createVertexJoints( ms3d_model_vertex_m *v )
+    {
+        this->createVertexJoint( v, v->f.boneId, 1.0f );
+        this->createVertexJoint( v, v->bones[ 0 ].id, v->bones[ 0 ].weight / 100.0f );
+        this->createVertexJoint( v, v->bones[ 1 ].id, v->bones[ 1 ].weight / 100.0f );
+        this->createVertexJoint( v, v->bones[ 2 ].id, v->bones[ 2 ].weight / 100.0f );
+    }
+
+    //convert vertex joints
+    void ms3d_model_loader::convertVertexJoints( ms3d_model_vertex_m *v )
+    {
+        std::list<model_vertex_joint_ref *> l;
+        std::list<model_vertex_joint_ref *>::iterator i;
+        model_vertex_joint_ref *p;
+        unsigned int cnt;
+
+        this->m->getVertexJointsByVertex( &l, v->id );
+
+        for( cnt = 0, i = l.begin(); i != l.end(); ++i, cnt++ )
+        {
+            p = *i;
+            this->convertVertexJoint( v, p, cnt );
+        }
+
+        this->m->releaseGetVertexJoints( &l );
+    }
+
+    //create vertex joint
+    void ms3d_model_loader::createVertexJoint( ms3d_model_vertex_m *v, int jindex, float w )
+    {
+        model_vertex_joint_ref *r;
+        model_vertex_joint_writelock *rl;
+        ms3d_model_joint_m *j;
+        shared_obj_guard o;
+
+        if( jindex < 0 || jindex >= this->joints.size() )
+            return;
+        if( w <= 0.0f )
+            return;
+        j = &this->joints[ jindex ];
+
+        r = this->m->createVertexJoint( this->thd, v->id, j->id );
+        if( !r )
+            return;
+        rl = (model_vertex_joint_writelock *)o.writeLock( r );
+        delete r;
+        if( !rl )
+            return;
+
+        rl->setWeight( w );
+    }
+
+    //convert vertex joint
+    void ms3d_model_loader::convertVertexJoint( ms3d_model_vertex_m *v, model_vertex_joint_ref *r, unsigned int cnt )
+    {
+        unsigned int i, c, f;
+        ms3d_model_joint_m *j;
+        model_vertex_joint_readlock *rl;
+        shared_obj_guard o;
+        dpid id;
+
+        if( !r )
+            return;
+        rl = (model_vertex_joint_readlock *)o.readLock( r );
+        if( !rl )
+            return;
+        id = rl->getJointId();
+
+        c = (unsigned int)this->joints.size();
+        for( f = c, i = 0; i < c && f >= c; i++ )
+        {
+            j = &this->joints[ i ];
+            if( dpid_compare( &j->id, &id ) )
+                f = i;
+        }
+        if( f >= c )
+            return;
+
+        if( cnt > 3 )
+            return;
+        if( cnt == 0 )
+        {
+            v->f.boneId = f;
+            return;
+        }
+        v->bones[ cnt - 1 ].id = f;
+        v->bones[ cnt - 1 ].weight = rl->getWeight() * 100.0f;
     }
 
     //create groups
@@ -1271,14 +1368,17 @@ namespace dragonpoop
             if( !l )
                 e.push_back( d[ i ] );
         }
-        std::sort( e.begin(), e.end() );
+        //std::sort( e.begin(), e.end() );
 
+        this->highest_frame = 0;
         c = (unsigned int)e.size();
         for( i = 0; i < c; i++ )
         {
             f.t = e[ i ];
             this->createFrame( &f );
             this->frames.push_back( f );
+            if( f.t > this->highest_frame )
+                this->highest_frame = f.t;
         }
     }
 
@@ -1289,31 +1389,26 @@ namespace dragonpoop
         std::list<model_animation_frame_ref *>::iterator li;
         model_animation_frame_ref *p;
         model_animation_frame_readlock *pl;
-        std::vector<float> d;
         shared_obj_guard o;
-        unsigned int i, c;
         ms3d_model_frame f;
 
         this->anim_id = this->m->getDefaultAnimationId();
         this->m->getAnimationFramesByAnimation( &l, this->anim_id );
 
+        this->highest_frame = 0;
         for( li = l.begin(); li != l.end(); ++li )
         {
             p = *li;
             pl = (model_animation_frame_readlock *)o.readLock( p );
-            d.push_back( pl->getTime() );
+            f.t = pl->getTime();
+            f.id = pl->getFrameId();
+            f.afid = pl->getId();
+            this->frames.push_back( f );
+            if( f.t > this->highest_frame )
+                this->highest_frame = f.t;
         }
 
         this->m->releaseGetAnimationFrames( &l );
-
-        std::sort( d.begin(), d.end() );
-
-        c = (unsigned int)d.size();
-        for( i = 0; i < c; i++ )
-        {
-            f.t = d[ i ];
-            this->frames.push_back( f );
-        }
     }
 
     //create frame
@@ -1541,7 +1636,7 @@ namespace dragonpoop
 
         this->anim_id = rl->getId();
         this->anim.fps = rl->getSpeed();
-        this->anim.cnt_frames = (unsigned int)this->frames.size();
+        this->anim.cnt_frames = (unsigned int)this->highest_frame + 1;
         this->anim.current_time = 0;
     }
 
@@ -1589,20 +1684,179 @@ namespace dragonpoop
     void ms3d_model_loader::createFrameJoint( ms3d_model_joint_m *j, ms3d_model_frame *f )
     {
         ms3d_model_joint_keyframe trans, rot;
+        model_frame_joint_ref *r;
+        model_frame_joint_writelock *rl;
+        shared_obj_guard o;
+        dpxyzw x;
 
         this->findKeyFrameAtTime( j, f, &trans, &rot );
+
+        r = this->m->createFrameJoint( this->thd, f->id, j->id );
+        if( !r )
+            return;
+        rl = (model_frame_joint_writelock *)o.writeLock( r );
+        delete r;
+        if( !rl )
+            return;
+
+        x.x = trans.x;
+        x.y = trans.y;
+        x.z = trans.z;
+        x.w = 1.0f;
+        rl->setPosition( &x );
+
+        x.x = rot.x;
+        x.y = rot.y;
+        x.z = rot.z;
+        x.w = 1.0f;
+        rl->setRotation( &x );
     }
 
     //convert keyframe/frame_joint for joint at frame
     void ms3d_model_loader::convertFrameJoint( ms3d_model_joint_m *j, ms3d_model_frame *f )
     {
+        std::list<model_frame_joint_ref *> l;
+        std::list<model_frame_joint_ref *>::iterator i;
+        model_frame_joint_ref *r;
+        model_frame_joint_readlock *rl;
+        shared_obj_guard o;
+        ms3d_model_joint_keyframe kf;
+        dpxyzw x;
 
+        this->m->getFrameJointsByFrameAndJoint( &l, f->id, j->id );
+
+        for( i = l.begin(); i != l.end(); ++i )
+        {
+            r = *i;
+            rl = (model_frame_joint_readlock *)o.readLock( r );
+            if( !rl )
+                continue;
+
+            kf.time = f->t;
+
+            rl->getPosition( &x );
+            kf.x = x.x;
+            kf.y = x.y;
+            kf.z = x.z;
+            j->translate_frames.push_back( kf );
+
+            rl->getRotation( &x );
+            kf.x = x.x;
+            kf.y = x.y;
+            kf.z = x.z;
+            j->rotate_frames.push_back( kf );
+        }
+        o.unlock();
+
+        this->m->releaseGetFrameJoints( &l );
     }
 
     //find translation and rotation at frame time for joint
     void ms3d_model_loader::findKeyFrameAtTime( ms3d_model_joint_m *j, ms3d_model_frame *f, ms3d_model_joint_keyframe *trans, ms3d_model_joint_keyframe *rot )
     {
+        ms3d_model_joint_keyframe t0, t1, r0, r1;
+        float m0, m1, d;
 
+        this->findKeyFrameBeforeTime( j, f, &t0, &r0 );
+        this->findKeyFrameAfterTime( j, f, &t1, &r1 );
+
+        d = t1.time - t0.time;
+        if( d - 0.0f < 0.01f )
+            d = 1.0f;
+        m1 = ( f->t - t0.time ) / d;
+        m0 = 1.0f - m1;
+        trans->time = f->t;
+        trans->x = t0.x * m0 + t1.x * m1;
+        trans->y = t0.y * m0 + t1.y * m1;
+        trans->z = t0.z * m0 + t1.z * m1;
+
+        d = r1.time - r0.time;
+        if( d - 0.0f < 0.01f )
+            d = 1.0f;
+        m1 = ( f->t - r0.time ) / d;
+        m0 = 1.0f - m1;
+        rot->time = f->t;
+        rot->x = r0.x * m0 + r1.x * m1;
+        rot->y = r0.y * m0 + r1.y * m1;
+        rot->z = r0.z * m0 + r1.z * m1;
+    }
+
+    //find keyframes before time
+    void ms3d_model_loader::findKeyFrameBeforeTime( ms3d_model_joint_m *j, ms3d_model_frame *f, ms3d_model_joint_keyframe *trans, ms3d_model_joint_keyframe *rot )
+    {
+        unsigned int i, c;
+        ms3d_model_joint_keyframe *r;
+
+        rot->x = rot->y = rot->z = rot->time = 0;
+        c = (unsigned int)j->rotate_frames.size();
+        for( i = 0; i < c; i++ )
+        {
+            r = &j->rotate_frames[ i ];
+            if( r->time > f->t )
+                continue;
+            if( r->time < rot->time )
+                continue;
+            rot->time = r->time;
+            rot->x = r->x;
+            rot->y = r->y;
+            rot->z = r->z;
+        }
+
+        trans->x = trans->y = trans->z = trans->time = 0;
+        c = (unsigned int)j->translate_frames.size();
+        for( i = 0; i < c; i++ )
+        {
+            r = &j->translate_frames[ i ];
+            if( r->time > f->t )
+                continue;
+            if( r->time < trans->time )
+                continue;
+            trans->time = r->time;
+            trans->x = r->x;
+            trans->y = r->y;
+            trans->z = r->z;
+        }
+    }
+
+    //find keyframes after time
+    void ms3d_model_loader::findKeyFrameAfterTime( ms3d_model_joint_m *j, ms3d_model_frame *f, ms3d_model_joint_keyframe *trans, ms3d_model_joint_keyframe *rot )
+    {
+        unsigned int i, c;
+        ms3d_model_joint_keyframe *r;
+
+        this->findKeyFrameBeforeTime( j, f, trans, rot );
+
+        c = (unsigned int)j->rotate_frames.size();
+        for( i = 0; i < c; i++ )
+        {
+            r = &j->rotate_frames[ i ];
+            if( r->time < f->t )
+                continue;
+            if( r->time > rot->time )
+                continue;
+            rot->time = r->time;
+            rot->x = r->x;
+            rot->y = r->y;
+            rot->z = r->z;
+        }
+        if( rot->time < f->t )
+            rot->time = this->highest_frame;
+
+        c = (unsigned int)j->translate_frames.size();
+        for( i = 0; i < c; i++ )
+        {
+            r = &j->translate_frames[ i ];
+            if( r->time < f->t )
+                continue;
+            if( r->time > trans->time )
+                continue;
+            trans->time = r->time;
+            trans->x = r->x;
+            trans->y = r->y;
+            trans->z = r->z;
+        }
+        if( trans->time < f->t )
+            trans->time = this->highest_frame;
     }
 
 };

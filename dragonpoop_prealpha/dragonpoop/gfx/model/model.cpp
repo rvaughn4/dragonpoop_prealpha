@@ -295,6 +295,28 @@ namespace dragonpoop
         return (unsigned int)l->size();
     }
 
+    //get components by owner
+    unsigned int model::getComponentsByTwoOwners( std::list<model_component_ref *> *l, dpid id0, dpid id1 )
+    {
+        std::list<model_component *> lc;
+
+        this->comps.byowner->findLeaves( id0, id1, &lc );
+        model::createComponentRefs( &lc, l );
+
+        return (unsigned int)l->size();
+    }
+
+    //get components by owner and type
+    unsigned int model::getComponentsByTwoOwnersAndType( std::list<model_component_ref *> *l, dpid id0, dpid id1, uint16_t ctype )
+    {
+        std::list<model_component *> lc;
+
+        this->comps.byownertype->findLeaves( id0, id1, ctype, &lc );
+        model::createComponentRefs( &lc, l );
+
+        return (unsigned int)l->size();
+    }
+    
     //release list retured by getComponents()
     void model::releaseGetComponents( std::list<model_component_ref *> *l )
     {
@@ -630,7 +652,7 @@ namespace dragonpoop
 
         id = thd->genId();
         o = new model_animation_frame( m, id, animation_id, frame_id, ftime );
-        this->addComp( o, id, model_component_type_animation_frame );
+        this->addComp( o, id, model_component_type_animation_frame, animation_id );
 
         ol = (model_animation_frame_writelock *)g.writeLock( o );
         if( !ol )
@@ -672,7 +694,7 @@ namespace dragonpoop
 
         id = thd->genId();
         o = new model_frame_joint( m, id, frame_id, joint_id );
-        this->addComp( o, id, model_component_type_frame_joint );
+        this->addComp( o, id, model_component_type_frame_joint, frame_id, joint_id );
 
         ol = (model_frame_joint_writelock *)g.writeLock( o );
         if( !ol )
@@ -692,12 +714,29 @@ namespace dragonpoop
         return this->getComponentsByType( (std::list<model_component_ref *> *)l, model_component_type_frame_joint );
     }
 
+    //get all frame joints by frame id
+    unsigned int model::getFrameJointsByFrame( std::list<model_frame_joint_ref *> *l, dpid frame_id )
+    {
+        return this->getComponentsByOwnerAndType( (std::list<model_component_ref *> *)l, frame_id, model_component_type_frame_joint );
+    }
+
+    //get all frame joints by joint id
+    unsigned int model::getFrameJointsByJoint( std::list<model_frame_joint_ref *> *l, dpid joint_id )
+    {
+        return this->getComponentsByOwnerAndType( (std::list<model_component_ref *> *)l, joint_id, model_component_type_frame_joint );
+    }
+
+    //get all frame joints by joint and frame id
+    unsigned int model::getFrameJointsByFrameAndJoint( std::list<model_frame_joint_ref *> *l, dpid frame_id, dpid joint_id )
+    {
+        return this->getComponentsByTwoOwnersAndType( (std::list<model_component_ref *> *)l, joint_id, frame_id, model_component_type_frame_joint );
+    }
+
     //release list returned by getJointFrames()
     void model::releaseGetFrameJoints( std::list<model_frame_joint_ref *> *l )
     {
         model::releaseGetComponents( (std::list<model_component_ref *> *)l );
     }
-
 
     //create a joint
     model_joint_ref *model::createJoint( dpthread_lock *thd, model_writelock *m )
@@ -759,7 +798,7 @@ namespace dragonpoop
 
         id = thd->genId();
         o = new model_vertex_joint( m, id, vertex_id, joint_id );
-        this->addComp( o, id, model_component_type_vertex_joint );
+        this->addComp( o, id, model_component_type_vertex_joint, vertex_id, joint_id );
 
         ol = (model_vertex_joint_writelock *)g.writeLock( o );
         if( !ol )
@@ -777,6 +816,18 @@ namespace dragonpoop
     unsigned int model::getVertexJoints( std::list<model_vertex_joint_ref *> *l )
     {
         return this->getComponentsByType( (std::list<model_component_ref *> *)l, model_component_type_vertex_joint );
+    }
+
+    //get all vertex joints by vertex
+    unsigned int model::getVertexJointsByVertex( std::list<model_vertex_joint_ref *> *l, dpid vertex_id )
+    {
+        return this->getComponentsByOwnerAndType( (std::list<model_component_ref *> *)l, vertex_id, model_component_type_vertex_joint );
+    }
+
+    //get all vertex joints by joint
+    unsigned int model::getVertexJointsByJoint( std::list<model_vertex_joint_ref *> *l, dpid joint_id )
+    {
+        return this->getComponentsByOwnerAndType( (std::list<model_component_ref *> *)l, joint_id, model_component_type_vertex_joint );
     }
 
     //release list returned by getVertexJoints()

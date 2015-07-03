@@ -109,6 +109,10 @@ namespace dragonpoop
         unsigned int getComponentsByOwner( std::list<model_component_ref *> *l, dpid id );
         //get components by owner and type
         unsigned int getComponentsByOwnerAndType( std::list<model_component_ref *> *l, dpid id, uint16_t ctype );
+        //get components by two owners
+        unsigned int getComponentsByTwoOwners( std::list<model_component_ref *> *l, dpid id0, dpid id1 );
+        //get componetns by two owners and type
+        unsigned int getComponentsByTwoOwnersAndType( std::list<model_component_ref *> *l, dpid id0, dpid id1, uint16_t ctype );
         //create a list of comp refs from list of components
         static void createComponentRefs( std::list<model_component *> *l, std::list<model_component_ref *> *lr );
         //release list retured by getComponents()
@@ -195,6 +199,12 @@ namespace dragonpoop
         model_frame_joint_ref *findFrameJoint( dpid id );
         //get all frame joints
         unsigned int getFrameJoints( std::list<model_frame_joint_ref *> *l );
+        //get all frame joints by frame id
+        unsigned int getFrameJointsByFrame( std::list<model_frame_joint_ref *> *l, dpid frame_id );
+        //get all frame joints by joint id
+        unsigned int getFrameJointsByJoint( std::list<model_frame_joint_ref *> *l, dpid joint_id );
+        //get all frame joints by joint and frame id
+        unsigned int getFrameJointsByFrameAndJoint( std::list<model_frame_joint_ref *> *l, dpid frame_id, dpid joint_id );
         //release list returned by getFrameJoints()
         static void releaseGetFrameJoints( std::list<model_frame_joint_ref *> *l );
         //create a joint
@@ -215,6 +225,10 @@ namespace dragonpoop
         model_vertex_joint_ref *findVertexJoint( dpid id );
         //get all vertex joints
         unsigned int getVertexJoints( std::list<model_vertex_joint_ref *> *l );
+        //get all vertex joints by vertex
+        unsigned int getVertexJointsByVertex( std::list<model_vertex_joint_ref *> *l, dpid vertex_id );
+        //get all vertex joints by joint
+        unsigned int getVertexJointsByJoint( std::list<model_vertex_joint_ref *> *l, dpid joint_id );
         //release list returned by getVertexJoints()
         static void releaseGetVertexJoints( std::list<model_vertex_joint_ref *> *l );
         //returns default animation id

@@ -44,6 +44,7 @@ namespace dragonpoop
         std::vector<ms3d_model_joint_m> joints;
         //frames
         std::vector<ms3d_model_frame> frames;
+        float highest_frame;
 
     protected:
 
@@ -195,6 +196,18 @@ namespace dragonpoop
         void convertFrameJoint( ms3d_model_joint_m *j, ms3d_model_frame *f );
         //find translation and rotation at frame time for joint
         void findKeyFrameAtTime( ms3d_model_joint_m *j, ms3d_model_frame *f, ms3d_model_joint_keyframe *trans, ms3d_model_joint_keyframe *rot );
+        //find keyframes before time
+        void findKeyFrameBeforeTime( ms3d_model_joint_m *j, ms3d_model_frame *f, ms3d_model_joint_keyframe *trans, ms3d_model_joint_keyframe *rot );
+        //find keyframes after time
+        void findKeyFrameAfterTime( ms3d_model_joint_m *j, ms3d_model_frame *f, ms3d_model_joint_keyframe *trans, ms3d_model_joint_keyframe *rot );
+        //create vertex joints
+        void createVertexJoints( ms3d_model_vertex_m *v );
+        //convert vertex joints
+        void convertVertexJoints( ms3d_model_vertex_m *v );
+        //create vertex joint
+        void createVertexJoint( ms3d_model_vertex_m *v, int jindex, float w );
+        //convert vertex joint
+        void convertVertexJoint( ms3d_model_vertex_m *v, model_vertex_joint_ref *r, unsigned int cnt );
 
     public:
 

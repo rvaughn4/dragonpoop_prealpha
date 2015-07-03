@@ -227,6 +227,24 @@ namespace dragonpoop
         return this->t->getFrameJoints( l );
     }
 
+    //get all frame joints by frame id
+    unsigned int model_readlock::getFrameJointsByFrame( std::list<model_frame_joint_ref *> *l, dpid frame_id )
+    {
+        return this->t->getFrameJointsByFrame( l, frame_id );
+    }
+
+    //get all frame joints by joint id
+    unsigned int model_readlock::getFrameJointsByJoint( std::list<model_frame_joint_ref *> *l, dpid joint_id )
+    {
+        return this->t->getFrameJointsByJoint( l, joint_id );
+    }
+
+    //get all frame joints by joint and frame id
+    unsigned int model_readlock::getFrameJointsByFrameAndJoint( std::list<model_frame_joint_ref *> *l, dpid frame_id, dpid joint_id )
+    {
+        return this->t->getFrameJointsByFrameAndJoint( l, frame_id, joint_id );
+    }
+
     //release list returned by getFrameJoints()
     void model_readlock::releaseGetFrameJoints( std::list<model_frame_joint_ref *> *l )
     {
@@ -267,6 +285,18 @@ namespace dragonpoop
     unsigned int model_readlock::getVertexJoints( std::list<model_vertex_joint_ref *> *l )
     {
         return this->t->getVertexJoints( l );
+    }
+
+    //get all vertex joints by vertex
+    unsigned int model_readlock::getVertexJointsByVertex( std::list<model_vertex_joint_ref *> *l, dpid vertex_id )
+    {
+        return this->t->getVertexJointsByVertex( l, vertex_id );
+    }
+
+    //get all vertex joints
+    unsigned int model_readlock::getVertexJointsByJoint( std::list<model_vertex_joint_ref *> *l, dpid joint_id )
+    {
+        return this->t->getVertexJointsByJoint( l, joint_id );
     }
 
     //release list returned by getVertexJoints()

@@ -22,6 +22,32 @@ namespace dragonpoop
         this->dpid_multibytetree::findLeaves( id, (std::list<void *> *)l );
     }
 
+    //find leaves by two owners
+    void model_component_tree_byowner::findLeaves( dpid id0, dpid id1, std::list<model_component *> *l )
+    {
+        std::list<model_component *> l0, l1;
+        std::list<model_component *>::iterator i0, i1;
+        model_component *p0, *p1;
+        bool b;
+
+        this->findLeaves( id0, &l0 );
+        this->findLeaves( id1, &l1 );
+
+        for( i0 = l0.begin(); i0 != l0.end(); ++i0 )
+        {
+            p0 = *i0;
+            b = 0;
+            for( i1 = l1.begin(); i1 != l1.end() && !b; ++i1 )
+            {
+                p1 = *i1;
+                if( p1 == p0 )
+                    b = 1;
+            }
+            if( b )
+                l->push_back( p0 );
+        }
+    }
+
     //add leaf
     void model_component_tree_byowner::addLeaf( dpid id, model_component *o )
     {

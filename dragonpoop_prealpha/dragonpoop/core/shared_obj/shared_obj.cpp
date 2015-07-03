@@ -162,6 +162,7 @@ namespace dragonpoop
     //remove dead refs
     void shared_obj::removeDeadRefs( void )
     {
+/*
         std::list<std::shared_ptr<shared_obj_refkernal>> *l, d;
         std::list<std::shared_ptr<shared_obj_refkernal>>::iterator i;
         std::shared_ptr<shared_obj_refkernal> p;
@@ -183,6 +184,7 @@ namespace dragonpoop
             this->refs.remove( p );
         }
         l->clear();
+ */
     }
 
     //generate refkernal
