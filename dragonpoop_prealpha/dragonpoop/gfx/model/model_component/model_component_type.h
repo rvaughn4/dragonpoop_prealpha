@@ -16,5 +16,7 @@
 #define model_component_type_instance 12
 #define model_component_type_vertex_instance 13
 #define model_component_type_triangle_vertex_instance 14
+#define model_component_type_triangle_instance 15
+#define model_component_type_group_instance 16
 
 #endif

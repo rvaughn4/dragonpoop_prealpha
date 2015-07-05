@@ -126,6 +126,14 @@
 		79B481471B4945290044B13F /* model_triangle_vertex_instance_readlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79B4813F1B4945290044B13F /* model_triangle_vertex_instance_readlock.cpp */; };
 		79B481481B4945290044B13F /* model_triangle_vertex_instance_ref.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79B481411B4945290044B13F /* model_triangle_vertex_instance_ref.cpp */; };
 		79B481491B4945290044B13F /* model_triangle_vertex_instance_writelock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79B481431B4945290044B13F /* model_triangle_vertex_instance_writelock.cpp */; };
+		79B481541B495A1F0044B13F /* model_triangle_instance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79B4814B1B495A1F0044B13F /* model_triangle_instance.cpp */; };
+		79B481551B495A1F0044B13F /* model_triangle_instance_readlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79B4814D1B495A1F0044B13F /* model_triangle_instance_readlock.cpp */; };
+		79B481561B495A1F0044B13F /* model_triangle_instance_ref.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79B4814F1B495A1F0044B13F /* model_triangle_instance_ref.cpp */; };
+		79B481571B495A1F0044B13F /* model_triangle_instance_writelock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79B481511B495A1F0044B13F /* model_triangle_instance_writelock.cpp */; };
+		79B481621B4961830044B13F /* model_group_instance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79B481591B4961830044B13F /* model_group_instance.cpp */; };
+		79B481631B4961830044B13F /* model_group_instance_readlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79B4815B1B4961830044B13F /* model_group_instance_readlock.cpp */; };
+		79B481641B4961830044B13F /* model_group_instance_ref.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79B4815D1B4961830044B13F /* model_group_instance_ref.cpp */; };
+		79B481651B4961830044B13F /* model_group_instance_writelock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79B4815F1B4961830044B13F /* model_group_instance_writelock.cpp */; };
 		79C5BE251B38348B0049C497 /* model_frame_readlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79C5BE1C1B38348B0049C497 /* model_frame_readlock.cpp */; };
 		79C5BE261B38348B0049C497 /* model_frame_ref.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79C5BE1E1B38348B0049C497 /* model_frame_ref.cpp */; };
 		79C5BE271B38348B0049C497 /* model_frame_writelock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79C5BE201B38348B0049C497 /* model_frame_writelock.cpp */; };
@@ -434,6 +442,24 @@
 		79B481431B4945290044B13F /* model_triangle_vertex_instance_writelock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_triangle_vertex_instance_writelock.cpp; sourceTree = "<group>"; };
 		79B481441B4945290044B13F /* model_triangle_vertex_instance_writelock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_triangle_vertex_instance_writelock.h; sourceTree = "<group>"; };
 		79B481451B4945290044B13F /* model_triangle_vertex_instances.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_triangle_vertex_instances.h; sourceTree = "<group>"; };
+		79B4814B1B495A1F0044B13F /* model_triangle_instance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_triangle_instance.cpp; sourceTree = "<group>"; };
+		79B4814C1B495A1F0044B13F /* model_triangle_instance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_triangle_instance.h; sourceTree = "<group>"; };
+		79B4814D1B495A1F0044B13F /* model_triangle_instance_readlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_triangle_instance_readlock.cpp; sourceTree = "<group>"; };
+		79B4814E1B495A1F0044B13F /* model_triangle_instance_readlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_triangle_instance_readlock.h; sourceTree = "<group>"; };
+		79B4814F1B495A1F0044B13F /* model_triangle_instance_ref.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_triangle_instance_ref.cpp; sourceTree = "<group>"; };
+		79B481501B495A1F0044B13F /* model_triangle_instance_ref.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_triangle_instance_ref.h; sourceTree = "<group>"; };
+		79B481511B495A1F0044B13F /* model_triangle_instance_writelock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_triangle_instance_writelock.cpp; sourceTree = "<group>"; };
+		79B481521B495A1F0044B13F /* model_triangle_instance_writelock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_triangle_instance_writelock.h; sourceTree = "<group>"; };
+		79B481531B495A1F0044B13F /* model_triangle_instances.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_triangle_instances.h; sourceTree = "<group>"; };
+		79B481591B4961830044B13F /* model_group_instance.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_group_instance.cpp; sourceTree = "<group>"; };
+		79B4815A1B4961830044B13F /* model_group_instance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_group_instance.h; sourceTree = "<group>"; };
+		79B4815B1B4961830044B13F /* model_group_instance_readlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_group_instance_readlock.cpp; sourceTree = "<group>"; };
+		79B4815C1B4961830044B13F /* model_group_instance_readlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_group_instance_readlock.h; sourceTree = "<group>"; };
+		79B4815D1B4961830044B13F /* model_group_instance_ref.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_group_instance_ref.cpp; sourceTree = "<group>"; };
+		79B4815E1B4961830044B13F /* model_group_instance_ref.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_group_instance_ref.h; sourceTree = "<group>"; };
+		79B4815F1B4961830044B13F /* model_group_instance_writelock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_group_instance_writelock.cpp; sourceTree = "<group>"; };
+		79B481601B4961830044B13F /* model_group_instance_writelock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_group_instance_writelock.h; sourceTree = "<group>"; };
+		79B481611B4961830044B13F /* model_group_instances.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_group_instances.h; sourceTree = "<group>"; };
 		79C5BE1C1B38348B0049C497 /* model_frame_readlock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_frame_readlock.cpp; sourceTree = "<group>"; };
 		79C5BE1D1B38348B0049C497 /* model_frame_readlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = model_frame_readlock.h; sourceTree = "<group>"; };
 		79C5BE1E1B38348B0049C497 /* model_frame_ref.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = model_frame_ref.cpp; sourceTree = "<group>"; };
@@ -710,6 +736,8 @@
 				7909E3A01B37606600E62EFA /* model_writelock.cpp */,
 				7909E3A11B37606600E62EFA /* model_writelock.h */,
 				7909E3A21B37606600E62EFA /* models.h */,
+				79B481581B4961830044B13F /* model_group_instance */,
+				79B4814A1B495A1F0044B13F /* model_triangle_instance */,
 				79B4813C1B4945290044B13F /* model_triangle_vertex_instance */,
 				79B4812E1B493FEA0044B13F /* model_vertex_instance */,
 				79B481201B4932F50044B13F /* model_instance */,
@@ -1017,6 +1045,38 @@
 			path = model_triangle_vertex_instance;
 			sourceTree = "<group>";
 		};
+		79B4814A1B495A1F0044B13F /* model_triangle_instance */ = {
+			isa = PBXGroup;
+			children = (
+				79B4814B1B495A1F0044B13F /* model_triangle_instance.cpp */,
+				79B4814C1B495A1F0044B13F /* model_triangle_instance.h */,
+				79B4814D1B495A1F0044B13F /* model_triangle_instance_readlock.cpp */,
+				79B4814E1B495A1F0044B13F /* model_triangle_instance_readlock.h */,
+				79B4814F1B495A1F0044B13F /* model_triangle_instance_ref.cpp */,
+				79B481501B495A1F0044B13F /* model_triangle_instance_ref.h */,
+				79B481511B495A1F0044B13F /* model_triangle_instance_writelock.cpp */,
+				79B481521B495A1F0044B13F /* model_triangle_instance_writelock.h */,
+				79B481531B495A1F0044B13F /* model_triangle_instances.h */,
+			);
+			path = model_triangle_instance;
+			sourceTree = "<group>";
+		};
+		79B481581B4961830044B13F /* model_group_instance */ = {
+			isa = PBXGroup;
+			children = (
+				79B481591B4961830044B13F /* model_group_instance.cpp */,
+				79B4815A1B4961830044B13F /* model_group_instance.h */,
+				79B4815B1B4961830044B13F /* model_group_instance_readlock.cpp */,
+				79B4815C1B4961830044B13F /* model_group_instance_readlock.h */,
+				79B4815D1B4961830044B13F /* model_group_instance_ref.cpp */,
+				79B4815E1B4961830044B13F /* model_group_instance_ref.h */,
+				79B4815F1B4961830044B13F /* model_group_instance_writelock.cpp */,
+				79B481601B4961830044B13F /* model_group_instance_writelock.h */,
+				79B481611B4961830044B13F /* model_group_instances.h */,
+			);
+			path = model_group_instance;
+			sourceTree = "<group>";
+		};
 		79C5BE1B1B38337B0049C497 /* model_frame */ = {
 			isa = PBXGroup;
 			children = (
@@ -1104,10 +1164,13 @@
 				7909E3CD1B37606600E62EFA /* dpmutex_readlock.cpp in Sources */,
 				79B481481B4945290044B13F /* model_triangle_vertex_instance_ref.cpp in Sources */,
 				7909E3E01B37606600E62EFA /* shared_obj_readlock.cpp in Sources */,
+				79B481561B495A1F0044B13F /* model_triangle_instance_ref.cpp in Sources */,
 				7909E3E41B37606600E62EFA /* dpmatrix.cpp in Sources */,
+				79B481571B495A1F0044B13F /* model_triangle_instance_writelock.cpp in Sources */,
 				79A7C7161B3BF1B500671500 /* model_joint.cpp in Sources */,
 				79A7C7141B3BF1B500671500 /* model_joint_ref.cpp in Sources */,
 				7909E3E31B37606600E62EFA /* shared_obj_writelock.cpp in Sources */,
+				79B481631B4961830044B13F /* model_group_instance_readlock.cpp in Sources */,
 				7909E3FC1B37606600E62EFA /* model_readlock.cpp in Sources */,
 				7909E3DA1B37606600E62EFA /* dpthread_interface.cpp in Sources */,
 				7909E3DC1B37606600E62EFA /* shared_obj.cpp in Sources */,
@@ -1120,10 +1183,12 @@
 				7909E3D41B37606600E62EFA /* dptask_writelock.cpp in Sources */,
 				790BADDF1B3980C800CFAD08 /* model_frame_joint_writelock.cpp in Sources */,
 				792AF5A31B3789E700DD480A /* model_animation_writelock.cpp in Sources */,
+				79B481641B4961830044B13F /* model_group_instance_ref.cpp in Sources */,
 				79B4813B1B493FEA0044B13F /* model_vertex_instance_writelock.cpp in Sources */,
 				7909E2DF1B375FBE00E62EFA /* main.cpp in Sources */,
 				7909E3E61B37606600E62EFA /* dpvertex.cpp in Sources */,
 				7909E3FF1B37606600E62EFA /* model_triangle_readlock.cpp in Sources */,
+				79B481651B4961830044B13F /* model_group_instance_writelock.cpp in Sources */,
 				7909E4121B37606600E62EFA /* renderer_ref.cpp in Sources */,
 				7909E4031B37606600E62EFA /* model_triangle_vertex_readlock.cpp in Sources */,
 				7909E4211B3769AE00E62EFA /* model_material.cpp in Sources */,
@@ -1133,6 +1198,7 @@
 				790BADDD1B3980C800CFAD08 /* model_frame_joint_readlock.cpp in Sources */,
 				790BADCE1B396D7700CFAD08 /* model_animation_frame.cpp in Sources */,
 				7909E3D61B37606600E62EFA /* dptaskpool_readlock.cpp in Sources */,
+				79B481541B495A1F0044B13F /* model_triangle_instance.cpp in Sources */,
 				7909E4061B37606600E62EFA /* model_vertex.cpp in Sources */,
 				7909E40E1B37606600E62EFA /* openglx_1o5_renderer_ref.cpp in Sources */,
 				7909E40A1B37606600E62EFA /* model_writelock.cpp in Sources */,
@@ -1179,6 +1245,7 @@
 				7909E40C1B37606600E62EFA /* openglx_1o5_renderer.cpp in Sources */,
 				7909E3CE1B37606600E62EFA /* dpmutex_writelock.cpp in Sources */,
 				79B481491B4945290044B13F /* model_triangle_vertex_instance_writelock.cpp in Sources */,
+				79B481551B495A1F0044B13F /* model_triangle_instance_readlock.cpp in Sources */,
 				7909E4141B37606600E62EFA /* renderer_writelock.cpp in Sources */,
 				7909E4101B37606600E62EFA /* renderer.cpp in Sources */,
 				79AF14541B3CC41A004A2B8A /* model_vertex_joint_ref.cpp in Sources */,
@@ -1188,6 +1255,7 @@
 				7909E3F01B37606600E62EFA /* model_component_readlock.cpp in Sources */,
 				7909E3DF1B37606600E62EFA /* shared_obj_lock.cpp in Sources */,
 				7909E3C61B37606600E62EFA /* dpid_multibytetree.cpp in Sources */,
+				79B481621B4961830044B13F /* model_group_instance.cpp in Sources */,
 				7909E3C71B37606600E62EFA /* multibytetree.cpp in Sources */,
 				7909E3E71B37606600E62EFA /* dpvertex_buffer.cpp in Sources */,
 				7909E3F11B37606600E62EFA /* model_component_ref.cpp in Sources */,
