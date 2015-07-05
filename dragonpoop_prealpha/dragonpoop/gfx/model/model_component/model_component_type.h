@@ -14,5 +14,6 @@
 #define model_component_type_frame_joint 10
 #define model_component_type_vertex_joint 11
 #define model_component_type_instance 12
+#define model_component_type_vertex_instance 13
 
 #endif
