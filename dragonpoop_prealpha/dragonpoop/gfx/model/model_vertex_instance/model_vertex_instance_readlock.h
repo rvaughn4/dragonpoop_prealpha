@@ -28,6 +28,8 @@ namespace dragonpoop
 
         //return instance id
         dpid getInstanceId( void );
+        //return vertex id
+        dpid getVertexId( void );
 
         friend class model_vertex_instance;
     };

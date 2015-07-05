@@ -17,7 +17,7 @@ namespace dragonpoop
 
     private:
 
-        dpid instance_id;
+        dpid instance_id, triangle_id, vertex_id;
 
     protected:
 
@@ -31,11 +31,15 @@ namespace dragonpoop
         virtual void onRun( dpthread_lock *thd, gfx_writelock *g, model_writelock *m, model_component_writelock *l );
         //return instance id
         dpid getInstanceId( void );
+        //return triangle id
+        dpid getTriangleId( void );
+        //return vertex id
+        dpid getVertexId( void );
 
     public:
 
         //ctor
-        model_triangle_vertex_instance( model_writelock *ml, dpid id, dpid instance_id );
+        model_triangle_vertex_instance( model_writelock *ml, dpid id, dpid instance_id, dpid triangle_id, dpid vertex_id );
         //dtor
         virtual ~model_triangle_vertex_instance( void );
 

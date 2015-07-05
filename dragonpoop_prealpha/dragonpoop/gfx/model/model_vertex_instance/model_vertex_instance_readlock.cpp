@@ -23,4 +23,10 @@ namespace dragonpoop
         return this->t->getInstanceId();
     }
 
+    //return vertex id
+    dpid model_vertex_instance_readlock::getVertexId( void )
+    {
+        return this->t->getVertexId();
+    }
+
 };

@@ -22,5 +22,17 @@ namespace dragonpoop
     {
         return this->t->getInstanceId();
     }
-    
+
+    //return triangle id
+    dpid model_triangle_vertex_instance_readlock::getTriangleId( void )
+    {
+        return this->t->getTriangleId();
+    }
+
+    //return vertex id
+    dpid model_triangle_vertex_instance_readlock::getVertexId( void )
+    {
+        return this->t->getVertexId();
+    }
+
 };
