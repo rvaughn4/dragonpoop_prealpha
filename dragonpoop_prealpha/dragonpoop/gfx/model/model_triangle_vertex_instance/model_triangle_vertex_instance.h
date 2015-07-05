@@ -1,6 +1,6 @@
 
-#ifndef dragonpoop_model_vertex_instance_h
-#define dragonpoop_model_vertex_instance_h
+#ifndef dragonpoop_model_triangle_vertex_instance_h
+#define dragonpoop_model_triangle_vertex_instance_h
 
 #include "../model_component/model_component_type.h"
 #include "../model_component/model_component.h"
@@ -8,11 +8,11 @@
 namespace dragonpoop
 {
 
-    class model_vertex_instance_ref;
-    class model_vertex_instance_readlock;
-    class model_vertex_instance_writelock;
+    class model_triangle_vertex_instance_ref;
+    class model_triangle_vertex_instance_readlock;
+    class model_triangle_vertex_instance_writelock;
 
-    class model_vertex_instance : public model_component
+    class model_triangle_vertex_instance : public model_component
     {
 
     private:
@@ -35,12 +35,12 @@ namespace dragonpoop
     public:
 
         //ctor
-        model_vertex_instance( model_writelock *ml, dpid id, dpid instance_id );
+        model_triangle_vertex_instance( model_writelock *ml, dpid id, dpid instance_id );
         //dtor
-        virtual ~model_vertex_instance( void );
+        virtual ~model_triangle_vertex_instance( void );
 
-        friend class model_vertex_instance_readlock;
-        friend class model_vertex_instance_writelock;
+        friend class model_triangle_vertex_instance_readlock;
+        friend class model_triangle_vertex_instance_writelock;
     };
     
 };

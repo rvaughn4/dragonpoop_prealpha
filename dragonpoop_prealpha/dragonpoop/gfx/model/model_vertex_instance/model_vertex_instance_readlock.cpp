@@ -16,5 +16,11 @@ namespace dragonpoop
     {
 
     }
-    
+
+    //return instance id
+    dpid model_vertex_instance_readlock::getInstanceId( void )
+    {
+        return this->t->getInstanceId();
+    }
+
 };

@@ -26,6 +26,9 @@ namespace dragonpoop
 
     public:
 
+        //return instance id
+        dpid getInstanceId( void );
+
         friend class model_vertex_instance;
     };
     

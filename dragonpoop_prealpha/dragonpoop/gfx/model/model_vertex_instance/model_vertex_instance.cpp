@@ -8,9 +8,9 @@ namespace dragonpoop
 {
 
     //ctor
-    model_vertex_instance::model_vertex_instance( model_writelock *ml, dpid id ) : model_component( ml, id,model_component_type_vertex_instance, 0 )
+    model_vertex_instance::model_vertex_instance( model_writelock *ml, dpid id, dpid instance_id ) : model_component( ml, id,model_component_type_vertex_instance, 0 )
     {
-
+        this->instance_id = instance_id;
     }
 
     //dtor
@@ -42,5 +42,11 @@ namespace dragonpoop
     {
         
     }
-    
+
+    //return instance id
+    dpid model_vertex_instance::getInstanceId( void )
+    {
+        return this->instance_id;
+    }
+
 };
