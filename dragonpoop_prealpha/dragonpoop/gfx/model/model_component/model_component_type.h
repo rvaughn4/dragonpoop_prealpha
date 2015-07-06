@@ -18,5 +18,12 @@
 #define model_component_type_triangle_vertex_instance 14
 #define model_component_type_triangle_instance 15
 #define model_component_type_group_instance 16
+#define model_component_type_animation_instance 17
+#define model_component_type_frame_instance 18
+
+#define model_component_type_animation_frame_instance 19
+#define model_component_type_joint_instance 20
+#define model_component_type_frame_joint_instance 21
+#define model_component_type_vertex_joint_instance 22
 
 #endif
