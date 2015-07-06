@@ -8,10 +8,11 @@ namespace dragonpoop
 {
 
     //ctor
-    model_group_instance::model_group_instance( model_writelock *ml, dpid id, dpid instance_id, dpid group_id ) : model_component( ml, id,model_component_type_group_instance, 0 )
+    model_group_instance::model_group_instance( model_writelock *ml, dpid id, dpid instance_id, dpid group_id, dpid parent_id ) : model_component( ml, id,model_component_type_group_instance, 0 )
     {
         this->instance_id = instance_id;
         this->group_id = group_id;
+        this->parent_id = parent_id;
     }
 
     //dtor
@@ -55,5 +56,11 @@ namespace dragonpoop
     {
         return this->group_id;
     }
-    
+
+    //return partent id
+    dpid model_group_instance::getParentId( void )
+    {
+        return this->parent_id;
+    }
+
 };

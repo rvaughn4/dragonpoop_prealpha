@@ -28,5 +28,11 @@ namespace dragonpoop
     {
         return this->t->getGroupId();
     }
+
+    //return partent id
+    dpid model_group_instance_readlock::getParentId( void )
+    {
+        return this->t->getParentId();
+    }
     
 };

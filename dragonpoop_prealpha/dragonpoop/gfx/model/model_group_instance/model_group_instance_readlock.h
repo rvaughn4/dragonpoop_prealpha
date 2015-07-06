@@ -30,6 +30,8 @@ namespace dragonpoop
         dpid getInstanceId( void );
         //return group id
         dpid getGroupId( void );
+        //return partent id
+        dpid getParentId( void );
 
         friend class model_group_instance;
     };

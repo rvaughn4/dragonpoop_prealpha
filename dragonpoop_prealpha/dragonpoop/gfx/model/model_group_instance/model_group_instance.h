@@ -17,7 +17,7 @@ namespace dragonpoop
 
     private:
 
-        dpid instance_id, group_id;
+        dpid instance_id, group_id, parent_id;
 
     protected:
 
@@ -33,11 +33,13 @@ namespace dragonpoop
         dpid getInstanceId( void );
         //return group id
         dpid getGroupId( void );
+        //return partent id
+        dpid getParentId( void );
 
     public:
 
         //ctor
-        model_group_instance( model_writelock *ml, dpid id, dpid instance_id, dpid group_id );
+        model_group_instance( model_writelock *ml, dpid id, dpid instance_id, dpid group_id, dpid parent_id );
         //dtor
         virtual ~model_group_instance( void );
 
