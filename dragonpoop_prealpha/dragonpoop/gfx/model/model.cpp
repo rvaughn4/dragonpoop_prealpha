@@ -230,6 +230,14 @@ namespace dragonpoop
         this->comps.byownertype->addLeaf( parent_1, ctype, c );
     }
 
+    //add new comp
+    void model::addComp( model_component *c, dpid id, uint16_t ctype, dpid parent_0, dpid parent_1, dpid parent_2 )
+    {
+        this->addComp( c, id, ctype, parent_0, parent_1 );
+        this->comps.byowner->addLeaf( parent_2, c );
+        this->comps.byownertype->addLeaf( parent_2, ctype, c );
+    }
+
     //find model component by id
     model_component_ref *model::find( dpid id )
     {

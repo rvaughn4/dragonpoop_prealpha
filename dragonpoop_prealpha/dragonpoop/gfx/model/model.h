@@ -97,6 +97,8 @@ namespace dragonpoop
         void addComp( model_component *c, dpid id, uint16_t ctype, dpid parent_0 );
         //add new comp
         void addComp( model_component *c, dpid id, uint16_t ctype, dpid parent_0, dpid parent_1 );
+        //add new comp
+        void addComp( model_component *c, dpid id, uint16_t ctype, dpid parent_0, dpid parent_1, dpid parent_2 );
         //clear all components from model
         void clear( void );
         //find model component by id
