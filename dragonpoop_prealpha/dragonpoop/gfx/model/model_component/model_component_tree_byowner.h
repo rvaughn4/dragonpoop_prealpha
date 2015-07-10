@@ -30,6 +30,8 @@ namespace dragonpoop
         void findLeaves( dpid id, std::list<model_component *> *l );
         //find leaves by two owners
         void findLeaves( dpid id0, dpid id1, std::list<model_component *> *l );
+        //find leaves by three owners
+        void findLeaves( dpid id0, dpid id1, dpid id2, std::list<model_component *> *l );
         //add leaf
         void addLeaf( dpid id, model_component *o );
         //remove leaf
