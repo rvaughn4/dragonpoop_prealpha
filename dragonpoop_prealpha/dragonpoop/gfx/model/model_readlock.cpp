@@ -341,4 +341,28 @@ namespace dragonpoop
         model::releaseGetInstances( l );
     }
 
+    //find group instance
+    model_group_instance_ref *model_readlock::findGroupInstance( dpid id )
+    {
+        return this->t->findGroupInstance( id );
+    }
+
+    //get group instances by model instance id
+    unsigned int model_readlock::getGroupInstancesByInstance( dpid instance_id, std::list<model_group_instance_ref *> *l )
+    {
+        return this->t->getGroupInstancesByInstance( instance_id, l );
+    }
+
+    //get group instances by model instance id and parent group id
+    unsigned int model_readlock::getGroupInstancesByInstanceAndParent( dpid instance_id, dpid parent_id, std::list<model_group_instance_ref *> *l )
+    {
+        return this->t->getGroupInstancesByInstanceAndParent( instance_id, parent_id, l );
+    }
+
+    //release list returned by getGroupInstances()
+    void model_readlock::releaseGetGroupInstances( std::list<model_group_instance_ref *> *l )
+    {
+        model::releaseGetGroupInstances( l );
+    }
+
 };

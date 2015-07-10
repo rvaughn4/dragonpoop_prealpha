@@ -461,4 +461,34 @@ namespace dragonpoop
         model::releaseGetInstances( l );
     }
 
+    //create group instance
+    model_group_instance_ref *model_writelock::createGroupInstance( dpthread_lock *thd, dpid instance_id, dpid group_id, dpid parent_id )
+    {
+        return this->t->createGroupInstance( thd, this, instance_id, group_id, parent_id );
+    }
+
+    //find group instance
+    model_group_instance_ref *model_writelock::findGroupInstance( dpid id )
+    {
+        return this->t->findGroupInstance( id );
+    }
+
+    //get group instances by model instance id
+    unsigned int model_writelock::getGroupInstancesByInstance( dpid instance_id, std::list<model_group_instance_ref *> *l )
+    {
+        return this->t->getGroupInstancesByInstance( instance_id, l );
+    }
+
+    //get group instances by model instance id and parent group id
+    unsigned int model_writelock::getGroupInstancesByInstanceAndParent( dpid instance_id, dpid parent_id, std::list<model_group_instance_ref *> *l )
+    {
+        return this->t->getGroupInstancesByInstanceAndParent( instance_id, parent_id, l );
+    }
+
+    //release list returned by getGroupInstances()
+    void model_writelock::releaseGetGroupInstances( std::list<model_group_instance_ref *> *l )
+    {
+        model::releaseGetGroupInstances( l );
+    }
+
 };

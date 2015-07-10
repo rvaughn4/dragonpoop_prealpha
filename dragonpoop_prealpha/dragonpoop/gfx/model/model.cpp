@@ -21,6 +21,7 @@
 #include "model_joint/model_joints.h"
 #include "model_vertex_joint/model_vertex_joints.h"
 #include "model_instance/model_instances.h"
+#include "model_group_instance/model_group_instances.h"
 
 namespace dragonpoop
 {
@@ -895,6 +896,48 @@ namespace dragonpoop
 
     //release list returned by getInstances()
     void model::releaseGetInstances( std::list<model_instance_ref *> *l )
+    {
+        model::releaseGetComponents( (std::list<model_component_ref *> *)l );
+    }
+
+    //create group instance
+    model_group_instance_ref *model::createGroupInstance( dpthread_lock *thd, model_writelock *m, dpid instance_id, dpid group_id, dpid parent_id )
+    {
+        model_group_instance *o;
+        dpid id;
+        shared_obj_guard g;
+        model_group_instance_writelock *ol;
+
+        id = thd->genId();
+        o = new model_group_instance( m, id, instance_id, group_id, parent_id );
+        this->addComp( o, id, model_component_type_group_instance, instance_id, group_id, parent_id );
+
+        ol = (model_group_instance_writelock *)g.writeLock( o );
+        if( !ol )
+            return 0;
+        return (model_group_instance_ref *)ol->getRef();
+    }
+
+    //find group instance
+    model_group_instance_ref *model::findGroupInstance( dpid id )
+    {
+        return (model_group_instance_ref *)this->find( id, model_component_type_group_instance );
+    }
+
+    //get group instances by model instance id
+    unsigned int model::getGroupInstancesByInstance( dpid instance_id, std::list<model_group_instance_ref *> *l )
+    {
+        return this->getComponentsByOwnerAndType( (std::list<model_component_ref *> *)l, instance_id, model_component_type_instance );
+    }
+
+    //get group instances by model instance id and parent group id
+    unsigned int model::getGroupInstancesByInstanceAndParent( dpid instance_id, dpid parent_id, std::list<model_group_instance_ref *> *l )
+    {
+        return this->getComponentsByTwoOwnersAndType( (std::list<model_component_ref *> *)l, instance_id, parent_id, model_component_type_instance );
+    }
+
+    //release list returned by getGroupInstances()
+    void model::releaseGetGroupInstances( std::list<model_group_instance_ref *> *l )
     {
         model::releaseGetComponents( (std::list<model_component_ref *> *)l );
     }

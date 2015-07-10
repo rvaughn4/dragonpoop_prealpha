@@ -33,6 +33,7 @@ namespace dragonpoop
     class model_joint_ref;
     class model_vertex_joint_ref;
     class model_instance_ref;
+    class model_group_instance_ref;
 
     class model : public shared_obj
     {
@@ -237,6 +238,18 @@ namespace dragonpoop
         unsigned int getInstances( std::list<model_instance_ref *> *l );
         //release list returned by getInstances()
         static void releaseGetInstances( std::list<model_instance_ref *> *l );
+        //create group instance
+        model_group_instance_ref *createGroupInstance( dpthread_lock *thd, model_writelock *m, dpid instance_id, dpid group_id, dpid parent_id );
+        //find group instance
+        model_group_instance_ref *findGroupInstance( dpid id );
+        //get group instances by model instance id
+        unsigned int getGroupInstancesByInstance( dpid instance_id, std::list<model_group_instance_ref *> *l );
+        //get group instances by model instance id and parent group id
+        unsigned int getGroupInstancesByInstanceAndParent( dpid instance_id, dpid parent_id, std::list<model_group_instance_ref *> *l );
+        //release list returned by getGroupInstances()
+        static void releaseGetGroupInstances( std::list<model_group_instance_ref *> *l );
+
+
 
     public:
 
