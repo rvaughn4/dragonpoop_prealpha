@@ -21,28 +21,18 @@ namespace dragonpoop
     class model_component_tree_byidtype;
     class model_component_tree_byowner;
     class model_component_tree_byownertype;
-    class model_vertex;
     class model_vertex_ref;
     class model_group_ref;
-    class model_group;
     class model_triangle_ref;
-    class model_triangle;
     class model_triangle_vertex_ref;
-    class model_triangle_vertex;
     class model_material_ref;
-    class model_material;
     class model_animation_ref;
-    class model_animation;
     class model_frame_ref;
-    class model_frame;
     class model_animation_frame_ref;
-    class model_animation_frame;
     class model_frame_joint_ref;
-    class model_frame_joint;
     class model_joint_ref;
-    class model_joint;
     class model_vertex_joint_ref;
-    class model_vertex_joint;
+    class model_instance_ref;
 
     class model : public shared_obj
     {
@@ -239,6 +229,15 @@ namespace dragonpoop
         model_animation_ref *getDefaultAnimation( void );
         //set default animation id
         void setDefaultAnimationId( dpid id );
+
+        //create model instance
+        model_instance_ref *createInstance( dpthread_lock *thd, model_writelock *m );
+        //find model instance
+        model_instance_ref *findInstance( dpid id );
+        //get model instances
+        unsigned int getInstances( std::list<model_instance_ref *> *l );
+        //release list returned by getInstances()
+        static void releaseGetInstances( std::list<model_instance_ref *> *l );
 
     public:
 

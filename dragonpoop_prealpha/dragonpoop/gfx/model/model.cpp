@@ -20,6 +20,7 @@
 #include "model_frame_joint/model_frame_joints.h"
 #include "model_joint/model_joints.h"
 #include "model_vertex_joint/model_vertex_joints.h"
+#include "model_instance/model_instances.h"
 
 namespace dragonpoop
 {
@@ -860,6 +861,42 @@ namespace dragonpoop
     void model::setDefaultAnimationId( dpid id )
     {
         this->default_anim_id = id;
+    }
+
+    //create model instance
+    model_instance_ref *model::createInstance( dpthread_lock *thd, model_writelock *m )
+    {
+        model_instance *o;
+        dpid id;
+        shared_obj_guard g;
+        model_instance_writelock *ol;
+
+        id = thd->genId();
+        o = new model_instance( m, id );
+        this->addComp( o, id, model_component_type_instance );
+
+        ol = (model_instance_writelock *)g.writeLock( o );
+        if( !ol )
+            return 0;
+        return (model_instance_ref *)ol->getRef();
+    }
+
+    //find model instance
+    model_instance_ref *model::findInstance( dpid id )
+    {
+        return (model_instance_ref *)this->find( id, model_component_type_instance );
+    }
+
+    //get model instances
+    unsigned int model::getInstances( std::list<model_instance_ref *> *l )
+    {
+        return this->getComponentsByType( (std::list<model_component_ref *> *)l, model_component_type_instance );
+    }
+
+    //release list returned by getInstances()
+    void model::releaseGetInstances( std::list<model_instance_ref *> *l )
+    {
+        model::releaseGetComponents( (std::list<model_component_ref *> *)l );
     }
 
 };
