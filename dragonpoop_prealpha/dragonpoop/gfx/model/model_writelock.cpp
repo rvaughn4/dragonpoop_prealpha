@@ -437,4 +437,28 @@ namespace dragonpoop
         this->t->setDefaultAnimationId( id );
     }
 
+    //create model instance
+    model_instance_ref *model_writelock::createInstance( dpthread_lock *thd )
+    {
+        return this->t->createInstance( thd, this );
+    }
+
+    //find model instance
+    model_instance_ref *model_writelock::findInstance( dpid id )
+    {
+        return this->t->findInstance( id );
+    }
+
+    //get model instances
+    unsigned int model_writelock::getInstances( std::list<model_instance_ref *> *l )
+    {
+        return this->t->getInstances( l );
+    }
+
+    //release list returned by getInstances()
+    void model_writelock::releaseGetInstances( std::list<model_instance_ref *> *l )
+    {
+        model::releaseGetInstances( l );
+    }
+
 };

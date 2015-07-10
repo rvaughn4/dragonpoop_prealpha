@@ -22,6 +22,7 @@ namespace dragonpoop
     class model_frame_joint_ref;
     class model_joint_ref;
     class model_vertex_joint_ref;
+    class model_instance_ref;
 
     class model_readlock : public shared_obj_readlock
     {
@@ -141,6 +142,12 @@ namespace dragonpoop
         model_animation_ref *getDefaultAnimation( void );
         //set default animation id
         void setDefaultAnimationId( dpid id );
+        //find model instance
+        model_instance_ref *findInstance( dpid id );
+        //get model instances
+        unsigned int getInstances( std::list<model_instance_ref *> *l );
+        //release list returned by getInstances()
+        void releaseGetInstances( std::list<model_instance_ref *> *l );
 
         friend class model;
     };

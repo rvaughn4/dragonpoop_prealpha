@@ -323,4 +323,22 @@ namespace dragonpoop
         this->t->setDefaultAnimationId( id );
     }
 
+    //find model instance
+    model_instance_ref *model_readlock::findInstance( dpid id )
+    {
+        return this->t->findInstance( id );
+    }
+
+    //get model instances
+    unsigned int model_readlock::getInstances( std::list<model_instance_ref *> *l )
+    {
+        return this->t->getInstances( l );
+    }
+
+    //release list returned by getInstances()
+    void model_readlock::releaseGetInstances( std::list<model_instance_ref *> *l )
+    {
+        model::releaseGetInstances( l );
+    }
+
 };

@@ -229,7 +229,6 @@ namespace dragonpoop
         model_animation_ref *getDefaultAnimation( void );
         //set default animation id
         void setDefaultAnimationId( dpid id );
-
         //create model instance
         model_instance_ref *createInstance( dpthread_lock *thd, model_writelock *m );
         //find model instance
