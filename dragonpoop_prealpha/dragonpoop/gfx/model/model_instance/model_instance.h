@@ -13,6 +13,7 @@ namespace dragonpoop
     class model_instance_writelock;
     class model_readlock;
     class model_group_instance_ref;
+    class model_triangle_instance_ref;
 
     class model_instance : public model_component
     {
@@ -29,7 +30,6 @@ namespace dragonpoop
         virtual shared_obj_ref *genRef( shared_obj *p, std::shared_ptr<shared_obj_refkernal> *k );
         //do background processing
         virtual void onRun( dpthread_lock *thd, gfx_writelock *g, model_writelock *m, model_component_writelock *l );
-
         //create group instances
         void makeGroups( dpthread_lock *thd, model_writelock *ml );
         //destroy group instances
@@ -40,6 +40,16 @@ namespace dragonpoop
         unsigned int getGroupsByParent( dpid parent_id, std::list<model_group_instance_ref *> *l );
         //release list returned by getGroups()
         static void releaseGetGroups( std::list<model_group_instance_ref *> *l );
+        //create triangle instances
+        void makeTriangles( dpthread_lock *thd, model_writelock *ml );
+        //destroy triangle instances
+        void killTriangles( void );
+        //get triangle instances
+        unsigned int getTriangles( std::list<model_triangle_instance_ref *> *l );
+        //get triangle instances by group
+        unsigned int getTrianglesByGroup( dpid group_id, std::list<model_triangle_instance_ref *> *l );
+        //release list returned by getTriangles()
+        static void releaseGetTriangles( std::list<model_triangle_instance_ref *> *l );
 
     public:
 

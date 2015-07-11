@@ -3,12 +3,15 @@
 #define dragonpoop_model_instance_readlock_h
 
 #include "../model_component/model_component_readlock.h"
+#include <list>
 
 namespace dragonpoop
 {
 
     class model_instance;
     class model_instance_ref;
+    class model_group_instance_ref;
+    class model_triangle_instance_ref;
 
     class model_instance_readlock : public model_component_readlock
     {
@@ -25,6 +28,19 @@ namespace dragonpoop
         virtual ~model_instance_readlock( void );
 
     public:
+
+        //get group instances
+        unsigned int getGroups( std::list<model_group_instance_ref *> *l );
+        //get group instances by parent
+        unsigned int getGroupsByParent( dpid parent_id, std::list<model_group_instance_ref *> *l );
+        //release list returned by getGroups()
+        void releaseGetGroups( std::list<model_group_instance_ref *> *l );
+        //get triangle instances
+        unsigned int getTriangles( std::list<model_triangle_instance_ref *> *l );
+        //get triangle instances by group
+        unsigned int getTrianglesByGroup( dpid group_id, std::list<model_triangle_instance_ref *> *l );
+        //release list returned by getTriangles()
+        void releaseGetTriangles( std::list<model_triangle_instance_ref *> *l );
 
         friend class model_instance;
     };
