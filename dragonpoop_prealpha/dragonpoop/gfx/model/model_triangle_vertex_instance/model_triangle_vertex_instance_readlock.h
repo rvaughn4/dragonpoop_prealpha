@@ -32,6 +32,8 @@ namespace dragonpoop
         dpid getTriangleId( void );
         //return vertex id
         dpid getVertexId( void );
+        //return triangle vertex id
+        dpid getTriangleVertexId( void );
 
         friend class model_triangle_vertex_instance;
     };

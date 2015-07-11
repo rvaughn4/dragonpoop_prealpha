@@ -389,4 +389,28 @@ namespace dragonpoop
         model::releaseGetTriangleInstances( l );
     }
 
+    //find triangle vertex instance
+    model_triangle_vertex_instance_ref *model_readlock::findTriangleVertexInstance( dpid id )
+    {
+        return this->t->findTriangleVertexInstance( id );
+    }
+
+    //get triangle vertex instances by model instance id
+    unsigned int model_readlock::getTriangleVertexInstancesByInstance( dpid instance_id, std::list<model_triangle_vertex_instance_ref *> *l )
+    {
+        return this->t->getTriangleVertexInstancesByInstance( instance_id, l );
+    }
+
+    //get triangle vertex instances by model instance id and parent triangle id
+    unsigned int model_readlock::getTriangleVertexInstancesByInstanceAndTriangle( dpid instance_id, dpid triangle_id, std::list<model_triangle_vertex_instance_ref *> *l )
+    {
+        return this->t->getTriangleVertexInstancesByInstanceAndTriangle( instance_id, triangle_id, l );
+    }
+
+    //release list returned by getTriangleVertexInstances()
+    void model_readlock::releaseGetTriangleVertexInstances( std::list<model_triangle_vertex_instance_ref *> *l )
+    {
+        model::releaseGetTriangleVertexInstances( l );
+    }
+
 };

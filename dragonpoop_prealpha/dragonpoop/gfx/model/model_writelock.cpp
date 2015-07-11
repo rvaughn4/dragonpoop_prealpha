@@ -521,4 +521,34 @@ namespace dragonpoop
         model::releaseGetTriangleInstances( l );
     }
 
+    //create triangle vertex instance
+    model_triangle_vertex_instance_ref *model_writelock::createTriangleVertexInstance( dpthread_lock *thd, dpid instance_id, dpid triangle_vertex_id, dpid triangle_id, dpid vertex_id )
+    {
+        return this->t->createTriangleVertexInstance( thd, this, instance_id, triangle_vertex_id, triangle_id, vertex_id );
+    }
+
+    //find triangle vertex instance
+    model_triangle_vertex_instance_ref *model_writelock::findTriangleVertexInstance( dpid id )
+    {
+        return this->t->findTriangleVertexInstance( id );
+    }
+
+    //get triangle vertex instances by model instance id
+    unsigned int model_writelock::getTriangleVertexInstancesByInstance( dpid instance_id, std::list<model_triangle_vertex_instance_ref *> *l )
+    {
+        return this->t->getTriangleVertexInstancesByInstance( instance_id, l );
+    }
+
+    //get triangle vertex instances by model instance id and parent triangle id
+    unsigned int model_writelock::getTriangleVertexInstancesByInstanceAndTriangle( dpid instance_id, dpid triangle_id, std::list<model_triangle_vertex_instance_ref *> *l )
+    {
+        return this->t->getTriangleVertexInstancesByInstanceAndTriangle( instance_id, triangle_id, l );
+    }
+
+    //release list returned by getTriangleVertexInstances()
+    void model_writelock::releaseGetTriangleVertexInstances( std::list<model_triangle_vertex_instance_ref *> *l )
+    {
+        model::releaseGetTriangleVertexInstances( l );
+    }
+
 };

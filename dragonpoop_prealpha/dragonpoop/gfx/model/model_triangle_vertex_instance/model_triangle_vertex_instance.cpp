@@ -8,11 +8,12 @@ namespace dragonpoop
 {
 
     //ctor
-    model_triangle_vertex_instance::model_triangle_vertex_instance( model_writelock *ml, dpid id, dpid instance_id, dpid triangle_id, dpid vertex_id ) : model_component( ml, id,model_component_type_triangle_vertex_instance, 0 )
+    model_triangle_vertex_instance::model_triangle_vertex_instance( model_writelock *ml, dpid id, dpid instance_id, dpid triangle_vertex_id, dpid triangle_id, dpid vertex_id ) : model_component( ml, id,model_component_type_triangle_vertex_instance, 0 )
     {
         this->instance_id = instance_id;
         this->triangle_id = triangle_id;
         this->vertex_id = vertex_id;
+        this->triangle_vertex_id = triangle_vertex_id;
     }
 
     //dtor
@@ -61,6 +62,12 @@ namespace dragonpoop
     dpid model_triangle_vertex_instance::getVertexId( void )
     {
         return this->vertex_id;
+    }
+
+    //return triangle vertex id
+    dpid model_triangle_vertex_instance::getTriangleVertexId( void )
+    {
+        return this->triangle_vertex_id;
     }
 
 };

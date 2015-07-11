@@ -35,4 +35,10 @@ namespace dragonpoop
         return this->t->getVertexId();
     }
 
+    //return triangle vertex id
+    dpid model_triangle_vertex_instance_readlock::getTriangleVertexId( void )
+    {
+        return this->t->getTriangleVertexId();
+    }
+
 };
