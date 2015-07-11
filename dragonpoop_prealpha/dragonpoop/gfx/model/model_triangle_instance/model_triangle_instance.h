@@ -17,7 +17,7 @@ namespace dragonpoop
 
     private:
 
-        dpid instance_id, triangle_id;
+        dpid instance_id, triangle_id, group_id;
 
     protected:
 
@@ -33,11 +33,13 @@ namespace dragonpoop
         dpid getInstanceId( void );
         //return triangle id
         dpid getTriangleId( void );
+        //return group id
+        dpid getGroupId( void );
 
     public:
 
         //ctor
-        model_triangle_instance( model_writelock *ml, dpid id, dpid instance_id, dpid triangle_id );
+        model_triangle_instance( model_writelock *ml, dpid id, dpid instance_id, dpid triangle_id, dpid group_id );
         //dtor
         virtual ~model_triangle_instance( void );
 

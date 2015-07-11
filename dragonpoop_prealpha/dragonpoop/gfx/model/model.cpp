@@ -22,6 +22,7 @@
 #include "model_vertex_joint/model_vertex_joints.h"
 #include "model_instance/model_instances.h"
 #include "model_group_instance/model_group_instances.h"
+#include "model_triangle_instance/model_triangle_instances.h"
 
 namespace dragonpoop
 {
@@ -927,17 +928,59 @@ namespace dragonpoop
     //get group instances by model instance id
     unsigned int model::getGroupInstancesByInstance( dpid instance_id, std::list<model_group_instance_ref *> *l )
     {
-        return this->getComponentsByOwnerAndType( (std::list<model_component_ref *> *)l, instance_id, model_component_type_instance );
+        return this->getComponentsByOwnerAndType( (std::list<model_component_ref *> *)l, instance_id, model_component_type_group_instance );
     }
 
     //get group instances by model instance id and parent group id
     unsigned int model::getGroupInstancesByInstanceAndParent( dpid instance_id, dpid parent_id, std::list<model_group_instance_ref *> *l )
     {
-        return this->getComponentsByTwoOwnersAndType( (std::list<model_component_ref *> *)l, instance_id, parent_id, model_component_type_instance );
+        return this->getComponentsByTwoOwnersAndType( (std::list<model_component_ref *> *)l, instance_id, parent_id, model_component_type_group_instance );
     }
 
     //release list returned by getGroupInstances()
     void model::releaseGetGroupInstances( std::list<model_group_instance_ref *> *l )
+    {
+        model::releaseGetComponents( (std::list<model_component_ref *> *)l );
+    }
+
+    //create triangle instance
+    model_triangle_instance_ref *model::createTriangleInstance( dpthread_lock *thd, model_writelock *m, dpid instance_id, dpid triangle_id, dpid group_id )
+    {
+        model_triangle_instance *o;
+        dpid id;
+        shared_obj_guard g;
+        model_triangle_instance_writelock *ol;
+
+        id = thd->genId();
+        o = new model_triangle_instance( m, id, instance_id, triangle_id, group_id );
+        this->addComp( o, id, model_component_type_triangle_instance, instance_id, triangle_id, group_id );
+
+        ol = (model_triangle_instance_writelock *)g.writeLock( o );
+        if( !ol )
+            return 0;
+        return (model_triangle_instance_ref *)ol->getRef();
+    }
+
+    //find triangle instance
+    model_triangle_instance_ref *model::findTriangleInstance( dpid id )
+    {
+        return (model_triangle_instance_ref *)this->find( id, model_component_type_triangle_instance );
+    }
+
+    //get group instances by model instance id
+    unsigned int model::getTriangleInstancesByInstance( dpid instance_id, std::list<model_triangle_instance_ref *> *l )
+    {
+        return this->getComponentsByOwnerAndType( (std::list<model_component_ref *> *)l, instance_id, model_component_type_triangle_instance );
+    }
+
+    //get triangle instances by model instance id and parent group id
+    unsigned int model::getTriangleInstancesByInstanceAndGroup( dpid instance_id, dpid group_id, std::list<model_triangle_instance_ref *> *l )
+    {
+        return this->getComponentsByTwoOwnersAndType( (std::list<model_component_ref *> *)l, instance_id, group_id, model_component_type_triangle_instance );
+    }
+
+    //release list returned by getTriangleInstances()
+    void model::releaseGetTriangleInstances( std::list<model_triangle_instance_ref *> *l )
     {
         model::releaseGetComponents( (std::list<model_component_ref *> *)l );
     }

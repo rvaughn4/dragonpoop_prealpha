@@ -365,4 +365,28 @@ namespace dragonpoop
         model::releaseGetGroupInstances( l );
     }
 
+    //find triangle instance
+    model_triangle_instance_ref *model_readlock::findTriangleInstance( dpid id )
+    {
+        return this->t->findTriangleInstance( id );
+    }
+
+    //get group instances by model instance id
+    unsigned int model_readlock::getTriangleInstancesByInstance( dpid instance_id, std::list<model_triangle_instance_ref *> *l )
+    {
+        return this->t->getTriangleInstancesByInstance( instance_id, l );
+    }
+
+    //get triangle instances by model instance id and parent group id
+    unsigned int model_readlock::getTriangleInstancesByInstanceAndGroup( dpid instance_id, dpid group_id, std::list<model_triangle_instance_ref *> *l )
+    {
+        return this->t->getTriangleInstancesByInstanceAndGroup( instance_id, group_id, l );
+    }
+
+    //release list returned by getTriangleInstances()
+    void model_readlock::releaseGetTriangleInstances( std::list<model_triangle_instance_ref *> *l )
+    {
+        model::releaseGetTriangleInstances( l );
+    }
+
 };

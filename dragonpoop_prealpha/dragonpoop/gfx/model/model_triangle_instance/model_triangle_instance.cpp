@@ -8,10 +8,11 @@ namespace dragonpoop
 {
 
     //ctor
-    model_triangle_instance::model_triangle_instance( model_writelock *ml, dpid id, dpid instance_id, dpid triangle_id ) : model_component( ml, id,model_component_type_triangle_instance, 0 )
+    model_triangle_instance::model_triangle_instance( model_writelock *ml, dpid id, dpid instance_id, dpid triangle_id, dpid group_id ) : model_component( ml, id,model_component_type_triangle_instance, 0 )
     {
         this->instance_id = instance_id;
         this->triangle_id = triangle_id;
+        this->group_id = group_id;
     }
 
     //dtor
@@ -55,5 +56,11 @@ namespace dragonpoop
     {
         return this->triangle_id;
     }
-    
+
+    //return group id
+    dpid model_triangle_instance::getGroupId( void )
+    {
+        return this->group_id;
+    }
+
 };

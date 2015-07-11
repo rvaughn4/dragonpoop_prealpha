@@ -491,4 +491,34 @@ namespace dragonpoop
         model::releaseGetGroupInstances( l );
     }
 
+    //create triangle instance
+    model_triangle_instance_ref *model_writelock::createTriangleInstance( dpthread_lock *thd, dpid instance_id, dpid triangle_id, dpid group_id )
+    {
+        return this->t->createTriangleInstance( thd, this, instance_id, triangle_id, group_id );
+    }
+
+    //find triangle instance
+    model_triangle_instance_ref *model_writelock::findTriangleInstance( dpid id )
+    {
+        return this->t->findTriangleInstance( id );
+    }
+
+    //get group instances by model instance id
+    unsigned int model_writelock::getTriangleInstancesByInstance( dpid instance_id, std::list<model_triangle_instance_ref *> *l )
+    {
+        return this->t->getTriangleInstancesByInstance( instance_id, l );
+    }
+
+    //get triangle instances by model instance id and parent group id
+    unsigned int model_writelock::getTriangleInstancesByInstanceAndGroup( dpid instance_id, dpid group_id, std::list<model_triangle_instance_ref *> *l )
+    {
+        return this->t->getTriangleInstancesByInstanceAndGroup( instance_id, group_id, l );
+    }
+
+    //release list returned by getTriangleInstances()
+    void model_writelock::releaseGetTriangleInstances( std::list<model_triangle_instance_ref *> *l )
+    {
+        model::releaseGetTriangleInstances( l );
+    }
+
 };

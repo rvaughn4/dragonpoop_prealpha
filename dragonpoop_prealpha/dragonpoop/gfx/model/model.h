@@ -34,6 +34,7 @@ namespace dragonpoop
     class model_vertex_joint_ref;
     class model_instance_ref;
     class model_group_instance_ref;
+    class model_triangle_instance_ref;
 
     class model : public shared_obj
     {
@@ -246,6 +247,14 @@ namespace dragonpoop
         unsigned int getGroupInstancesByInstance( dpid instance_id, std::list<model_group_instance_ref *> *l );
         //get group instances by model instance id and parent group id
         unsigned int getGroupInstancesByInstanceAndParent( dpid instance_id, dpid parent_id, std::list<model_group_instance_ref *> *l );
+        //create triangle instance
+        model_triangle_instance_ref *createTriangleInstance( dpthread_lock *thd, model_writelock *m, dpid instance_id, dpid triangle_id, dpid group_id );
+        //find triangle instance
+        model_triangle_instance_ref *findTriangleInstance( dpid id );
+        //get group instances by model instance id
+        unsigned int getTriangleInstancesByInstance( dpid instance_id, std::list<model_triangle_instance_ref *> *l );
+        //get triangle instances by model instance id and parent group id
+        unsigned int getTriangleInstancesByInstanceAndGroup( dpid instance_id, dpid group_id, std::list<model_triangle_instance_ref *> *l );
 
 
     public:
@@ -261,6 +270,8 @@ namespace dragonpoop
 
         //release list returned by getGroupInstances()
         static void releaseGetGroupInstances( std::list<model_group_instance_ref *> *l );
+        //release list returned by getTriangleInstances()
+        static void releaseGetTriangleInstances( std::list<model_triangle_instance_ref *> *l );
 
         friend class model_readlock;
         friend class model_writelock;

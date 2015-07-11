@@ -28,5 +28,11 @@ namespace dragonpoop
     {
         return this->t->getTriangleId();
     }
-    
+
+    //return group id
+    dpid model_triangle_instance_writelock::getGroupId( void )
+    {
+        return this->t->getGroupId();
+    }
+
 };
