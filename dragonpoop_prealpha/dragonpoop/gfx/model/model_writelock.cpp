@@ -564,7 +564,7 @@ namespace dragonpoop
     }
 
     //get  vertex instances by model instance id
-    unsigned int model_writelock::getVertexInstancesByInstance( dpid instance_id, std::list<model_triangle_vertex_instance_ref *> *l )
+    unsigned int model_writelock::getVertexInstancesByInstance( dpid instance_id, std::list<model_vertex_instance_ref *> *l )
     {
         return this->t->getVertexInstancesByInstance( instance_id, l );
     }

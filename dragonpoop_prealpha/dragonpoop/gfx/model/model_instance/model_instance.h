@@ -15,6 +15,7 @@ namespace dragonpoop
     class model_group_instance_ref;
     class model_triangle_instance_ref;
     class model_triangle_vertex_instance_ref;
+    class model_vertex_instance_ref;
 
     class model_instance : public model_component
     {
@@ -62,6 +63,14 @@ namespace dragonpoop
         unsigned int getTriangleVertexsByTriangle( dpid triangle_id, std::list<model_triangle_vertex_instance_ref *> *l );
         //release list returned by getTriangleVertexs()
         static void releaseGetTriangleVertexs( std::list<model_triangle_vertex_instance_ref *> *l );
+        //create vertex instances
+        void makeVertexs( dpthread_lock *thd, model_writelock *ml );
+        //destroy vertex instances
+        void killVertexs( void );
+        //get vertex instances
+        unsigned int getVertexs( std::list<model_vertex_instance_ref *> *l );
+        //release list returned by getVertexs()
+        static void releaseGetVertexs( std::list<model_vertex_instance_ref *> *l );
 
     public:
 

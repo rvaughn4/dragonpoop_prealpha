@@ -1062,7 +1062,7 @@ namespace dragonpoop
     }
 
     //get  vertex instances by model instance id
-    unsigned int model::getVertexInstancesByInstance( dpid instance_id, std::list<model_triangle_vertex_instance_ref *> *l )
+    unsigned int model::getVertexInstancesByInstance( dpid instance_id, std::list<model_vertex_instance_ref *> *l )
     {
         return this->getComponentsByOwnerAndType( (std::list<model_component_ref *> *)l, instance_id, model_component_type_vertex_instance );
     }
