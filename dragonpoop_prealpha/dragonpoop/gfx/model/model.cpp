@@ -873,7 +873,7 @@ namespace dragonpoop
         model_instance_writelock *ol;
 
         id = thd->genId();
-        o = new model_instance( m, id );
+        o = new model_instance( thd, m, id );
         this->addComp( o, id, model_component_type_instance );
 
         ol = (model_instance_writelock *)g.writeLock( o );

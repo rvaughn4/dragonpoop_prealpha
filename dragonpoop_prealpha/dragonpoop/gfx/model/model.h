@@ -246,9 +246,6 @@ namespace dragonpoop
         unsigned int getGroupInstancesByInstance( dpid instance_id, std::list<model_group_instance_ref *> *l );
         //get group instances by model instance id and parent group id
         unsigned int getGroupInstancesByInstanceAndParent( dpid instance_id, dpid parent_id, std::list<model_group_instance_ref *> *l );
-        //release list returned by getGroupInstances()
-        static void releaseGetGroupInstances( std::list<model_group_instance_ref *> *l );
-
 
 
     public:
@@ -261,6 +258,9 @@ namespace dragonpoop
         core *getCore( void );
         //returns true if alive
         bool isAlive( void );
+
+        //release list returned by getGroupInstances()
+        static void releaseGetGroupInstances( std::list<model_group_instance_ref *> *l );
 
         friend class model_readlock;
         friend class model_writelock;

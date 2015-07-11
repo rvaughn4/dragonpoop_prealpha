@@ -1,22 +1,22 @@
 
-#include "model_instance.h"
-#include "model_instance_readlock.h"
-#include "model_instance_writelock.h"
-#include "model_instance_ref.h"
+#include "model_instances.h"
+#include "../models.h"
+#include "../model_group_instance/model_group_instances.h"
+#include "../model_group/model_groups.h"
 
 namespace dragonpoop
 {
 
     //ctor
-    model_instance::model_instance( model_writelock *ml, dpid id ) : model_component( ml, id,model_component_type_instance, 0 )
+    model_instance::model_instance( dpthread_lock *thd, model_writelock *ml, dpid id ) : model_component( ml, id,model_component_type_instance, 0 )
     {
-
+        this->makeGroups( thd, ml );
     }
 
     //dtor
     model_instance::~model_instance( void )
     {
-
+        this->killGroups();
     }
 
     //generate read lock
@@ -41,6 +41,92 @@ namespace dragonpoop
     void model_instance::onRun( dpthread_lock *thd, gfx_writelock *g, model_writelock *m, model_component_writelock *l )
     {
 
+    }
+
+    //create group instances
+    void model_instance::makeGroups( dpthread_lock *thd, model_writelock *ml )
+    {
+        std::list<model_group_ref *> l;
+        std::list<model_group_ref *>::iterator i;
+        model_group_ref *p;
+        model_group_readlock *pl;
+        model_group_instance_ref *r;
+        shared_obj_guard o;
+
+        ml->getGroups( &l );
+
+        for( i = l.begin(); i != l.end(); ++i )
+        {
+            p = *i;
+            pl = (model_group_readlock *)o.readLock( p );
+            r = ml->createGroupInstance( thd, this->getId(), pl->getId(), pl->getParentId() );
+            delete r;
+        }
+
+        ml->releaseGetGroups( &l );
+    }
+
+    //destroy group instances
+    void model_instance::killGroups( void )
+    {
+        std::list<model_group_instance_ref *> l;
+        std::list<model_group_instance_ref *>::iterator i;
+        model_group_instance_ref *p;
+        model_group_instance_writelock *pl;
+        shared_obj_guard o;
+
+        this->getGroups( &l );
+
+        for( i = l.begin(); i != l.end(); ++i )
+        {
+            p = *i;
+            pl = (model_group_instance_writelock *)o.writeLock( p );
+            pl->kill();
+        }
+
+        model_instance::releaseGetGroups( &l );
+    }
+
+    //get group instances
+    unsigned int model_instance::getGroups( std::list<model_group_instance_ref *> *l )
+    {
+        model_readlock *ml;
+        model_ref *m;
+        shared_obj_guard o;
+
+        m = this->getModel();
+        if( !m )
+            return 0;
+        ml = (model_readlock *)o.readLock( m );
+        delete m;
+        if( !ml )
+            return 0;
+
+        return ml->getGroupInstancesByInstance( this->getId(), l );
+    }
+
+    //get group instances by parent
+    unsigned int model_instance::getGroupsByParent( dpid parent_id, std::list<model_group_instance_ref *> *l )
+    {
+        model_readlock *ml;
+        model_ref *m;
+        shared_obj_guard o;
+
+        m = this->getModel();
+        if( !m )
+            return 0;
+        ml = (model_readlock *)o.readLock( m );
+        delete m;
+        if( !ml )
+            return 0;
+
+        return ml->getGroupInstancesByInstanceAndParent( this->getId(), parent_id, l );
+    }
+
+    //release list returned by getGroups()
+    void model_instance::releaseGetGroups( std::list<model_group_instance_ref *> *l )
+    {
+        model::releaseGetGroupInstances( l );
     }
 
 };

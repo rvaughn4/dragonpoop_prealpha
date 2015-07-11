@@ -8,6 +8,7 @@
 #include "model_writelock.h"
 
 #include "model_component/model_components.h"
+#include "model_instance/model_instances.h"
 
 #include "ms3d_model_loader/ms3d_model_loader.h"
 

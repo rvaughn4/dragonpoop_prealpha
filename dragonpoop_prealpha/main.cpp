@@ -25,6 +25,7 @@ namespace dragonpoop
             model_writelock *ml;
             shared_obj_guard g;
             gfx_writelock *gl;
+            model_instance_ref *mi;
 
             gl = (gfx_writelock *)g.writeLock( this->g );
             mr = gl->createModel( th );
@@ -34,13 +35,16 @@ namespace dragonpoop
 
             ms3d_model_loader::load( th, ml, "felhound.ms3d" );
             ms3d_model_loader::save( th, ml, "o1.ms3d" );
+            mi = ml->createInstance( th );
 
             ml->clear();
             ms3d_model_loader::load( th, ml, "o1.ms3d" );
             ms3d_model_loader::save( th, ml, "o2.ms3d" );
 
+            ml->kill();
             tl->kill();
             delete mr;
+            delete mi;
         }
 
     };
