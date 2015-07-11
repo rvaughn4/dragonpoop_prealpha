@@ -5,6 +5,8 @@
 #include "../model_group/model_groups.h"
 #include "../model_triangle_instance/model_triangle_instances.h"
 #include "../model_triangle/model_triangles.h"
+#include "../model_triangle_vertex_instance/model_triangle_vertex_instances.h"
+#include "../model_triangle_vertex/model_triangle_vertexes.h"
 
 namespace dragonpoop
 {
@@ -14,6 +16,7 @@ namespace dragonpoop
     {
         this->makeGroups( thd, ml );
         this->makeTriangles( thd, ml );
+        this->makeTriangleVertexs( thd, ml );
     }
 
     //dtor
@@ -21,6 +24,7 @@ namespace dragonpoop
     {
         this->killGroups();
         this->killTriangles();
+        this->killTriangleVertexs();
     }
 
     //generate read lock
@@ -217,6 +221,92 @@ namespace dragonpoop
     void model_instance::releaseGetTriangles( std::list<model_triangle_instance_ref *> *l )
     {
         model::releaseGetTriangleInstances( l );
+    }
+
+    //create triangle vertex instances
+    void model_instance::makeTriangleVertexs( dpthread_lock *thd, model_writelock *ml )
+    {
+        std::list<model_triangle_vertex_ref *> l;
+        std::list<model_triangle_vertex_ref *>::iterator i;
+        model_triangle_vertex_ref *p;
+        model_triangle_vertex_readlock *pl;
+        model_triangle_vertex_instance_ref *r;
+        shared_obj_guard o;
+
+        ml->getTriangleVertexes( &l );
+
+        for( i = l.begin(); i != l.end(); ++i )
+        {
+            p = *i;
+            pl = (model_triangle_vertex_readlock *)o.readLock( p );
+            r = ml->createTriangleVertexInstance( thd, this->getId(), pl->getId(), pl->getTriangleId(), pl->getVertexId() );
+            delete r;
+        }
+
+        ml->releaseGetTriangleVertexes( &l );
+    }
+
+    //destroy triangle vertex instances
+    void model_instance::killTriangleVertexs( void )
+    {
+        std::list<model_triangle_vertex_instance_ref *> l;
+        std::list<model_triangle_vertex_instance_ref *>::iterator i;
+        model_triangle_vertex_instance_ref *p;
+        model_triangle_vertex_instance_writelock *pl;
+        shared_obj_guard o;
+
+        this->getTriangleVertexs( &l );
+
+        for( i = l.begin(); i != l.end(); ++i )
+        {
+            p = *i;
+            pl = (model_triangle_vertex_instance_writelock *)o.writeLock( p );
+            pl->kill();
+        }
+
+        model_instance::releaseGetTriangleVertexs( &l );
+    }
+
+    //get triangle vertex instances
+    unsigned int model_instance::getTriangleVertexs( std::list<model_triangle_vertex_instance_ref *> *l )
+    {
+        model_readlock *ml;
+        model_ref *m;
+        shared_obj_guard o;
+
+        m = this->getModel();
+        if( !m )
+            return 0;
+        ml = (model_readlock *)o.readLock( m );
+        delete m;
+        if( !ml )
+            return 0;
+
+        return ml->getTriangleVertexInstancesByInstance( this->getId(), l );
+    }
+
+    //get triangle vertex instances by triangle
+    unsigned int model_instance::getTriangleVertexsByTriangle( dpid triangle_id, std::list<model_triangle_vertex_instance_ref *> *l )
+    {
+        model_readlock *ml;
+        model_ref *m;
+        shared_obj_guard o;
+
+        m = this->getModel();
+        if( !m )
+            return 0;
+        ml = (model_readlock *)o.readLock( m );
+        delete m;
+        if( !ml )
+            return 0;
+
+        return ml->getTriangleVertexInstancesByInstanceAndTriangle( this->getId(), triangle_id, l );
+    }
+
+    //release list returned by getTriangleVertexs()
+    void model_instance::releaseGetTriangleVertexs( std::list<model_triangle_vertex_instance_ref *> *l )
+    {
+        model::releaseGetTriangleVertexInstances( l );
     }
 
 };

@@ -12,6 +12,7 @@ namespace dragonpoop
     class model_instance_ref;
     class model_group_instance_ref;
     class model_triangle_instance_ref;
+    class model_triangle_vertex_instance_ref;
 
     class model_instance_writelock : public model_component_writelock
     {
@@ -41,6 +42,12 @@ namespace dragonpoop
         unsigned int getTrianglesByGroup( dpid group_id, std::list<model_triangle_instance_ref *> *l );
         //release list returned by getTriangles()
         void releaseGetTriangles( std::list<model_triangle_instance_ref *> *l );
+        //get triangle vertex instances
+        unsigned int getTriangleVertexs( std::list<model_triangle_vertex_instance_ref *> *l );
+        //get triangle vertex instances by triangle
+        unsigned int getTriangleVertexsByTriangle( dpid triangle_id, std::list<model_triangle_vertex_instance_ref *> *l );
+        //release list returned by getTriangleVertexs()
+        void releaseGetTriangleVertexs( std::list<model_triangle_vertex_instance_ref *> *l );
 
         friend class model_instance;
     };

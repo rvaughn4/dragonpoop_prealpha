@@ -242,6 +242,14 @@ namespace dragonpoop
         this->comps.byownertype->addLeaf( parent_2, ctype, c );
     }
 
+    //add new comp
+    void model::addComp( model_component *c, dpid id, uint16_t ctype, dpid parent_0, dpid parent_1, dpid parent_2, dpid parent_3 )
+    {
+        this->addComp( c, id, ctype, parent_0, parent_1, parent_2 );
+        this->comps.byowner->addLeaf( parent_3, c );
+        this->comps.byownertype->addLeaf( parent_3, ctype, c );
+    }
+
     //find model component by id
     model_component_ref *model::find( dpid id )
     {
@@ -996,7 +1004,7 @@ namespace dragonpoop
 
         id = thd->genId();
         o = new model_triangle_vertex_instance( m, id, instance_id, triangle_vertex_id, triangle_id, vertex_id );
-        this->addComp( o, id, model_component_type_triangle_vertex_instance, instance_id, triangle_vertex_id, triangle_id/*, vertex_id */);
+        this->addComp( o, id, model_component_type_triangle_vertex_instance, instance_id, triangle_vertex_id, triangle_id, vertex_id );
 
         ol = (model_triangle_vertex_instance_writelock *)g.writeLock( o );
         if( !ol )

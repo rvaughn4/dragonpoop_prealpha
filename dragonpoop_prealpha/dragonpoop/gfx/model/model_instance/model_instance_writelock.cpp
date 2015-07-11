@@ -53,4 +53,22 @@ namespace dragonpoop
         model_instance::releaseGetTriangles( l );
     }
 
+    //get triangle vertex instances
+    unsigned int model_instance_writelock::getTriangleVertexs( std::list<model_triangle_vertex_instance_ref *> *l )
+    {
+        return this->t->getTriangleVertexs( l );
+    }
+
+    //get triangle vertex instances by triangle
+    unsigned int model_instance_writelock::getTriangleVertexsByTriangle( dpid triangle_id, std::list<model_triangle_vertex_instance_ref *> *l )
+    {
+        return this->t->getTriangleVertexsByTriangle( triangle_id, l );
+    }
+
+    //release list returned by getTriangleVertexs()
+    void model_instance_writelock::releaseGetTriangleVertexs( std::list<model_triangle_vertex_instance_ref *> *l )
+    {
+        model_instance::releaseGetTriangleVertexs( l );
+    }
+
 };

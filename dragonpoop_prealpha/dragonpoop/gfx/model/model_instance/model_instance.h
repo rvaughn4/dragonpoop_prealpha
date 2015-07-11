@@ -14,6 +14,7 @@ namespace dragonpoop
     class model_readlock;
     class model_group_instance_ref;
     class model_triangle_instance_ref;
+    class model_triangle_vertex_instance_ref;
 
     class model_instance : public model_component
     {
@@ -40,6 +41,7 @@ namespace dragonpoop
         unsigned int getGroupsByParent( dpid parent_id, std::list<model_group_instance_ref *> *l );
         //release list returned by getGroups()
         static void releaseGetGroups( std::list<model_group_instance_ref *> *l );
+
         //create triangle instances
         void makeTriangles( dpthread_lock *thd, model_writelock *ml );
         //destroy triangle instances
@@ -50,6 +52,16 @@ namespace dragonpoop
         unsigned int getTrianglesByGroup( dpid group_id, std::list<model_triangle_instance_ref *> *l );
         //release list returned by getTriangles()
         static void releaseGetTriangles( std::list<model_triangle_instance_ref *> *l );
+        //create triangle vertex instances
+        void makeTriangleVertexs( dpthread_lock *thd, model_writelock *ml );
+        //destroy triangle vertex instances
+        void killTriangleVertexs( void );
+        //get triangle vertex instances
+        unsigned int getTriangleVertexs( std::list<model_triangle_vertex_instance_ref *> *l );
+        //get triangle vertex instances by triangle
+        unsigned int getTriangleVertexsByTriangle( dpid triangle_id, std::list<model_triangle_vertex_instance_ref *> *l );
+        //release list returned by getTriangleVertexs()
+        static void releaseGetTriangleVertexs( std::list<model_triangle_vertex_instance_ref *> *l );
 
     public:
 
