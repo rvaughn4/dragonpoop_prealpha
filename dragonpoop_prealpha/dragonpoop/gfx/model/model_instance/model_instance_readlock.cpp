@@ -72,4 +72,16 @@ namespace dragonpoop
         model_instance::releaseGetTriangleVertexs( l );
     }
 
+    //get vertex instances
+    unsigned int model_instance_readlock::getVertexs( std::list<model_vertex_instance_ref *> *l )
+    {
+        return this->t->getVertexs( l );
+    }
+
+    //release list returned by getVertexs()
+    void model_instance_readlock::releaseGetVertexs( std::list<model_vertex_instance_ref *> *l )
+    {
+        model_instance::releaseGetVertexs( l );
+    }
+
 };
