@@ -17,7 +17,6 @@ namespace dragonpoop
 
     }
 
-
     //get group instances
     unsigned int model_instance_readlock::getGroups( std::list<model_group_instance_ref *> *l )
     {
