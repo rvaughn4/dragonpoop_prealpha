@@ -24,6 +24,7 @@
 #include "model_group_instance/model_group_instances.h"
 #include "model_triangle_instance/model_triangle_instances.h"
 #include "model_triangle_vertex_instance/model_triangle_vertex_instances.h"
+#include "model_vertex_instance/model_vertex_instances.h"
 
 namespace dragonpoop
 {
@@ -1032,6 +1033,42 @@ namespace dragonpoop
 
     //release list returned by getTriangleVertexInstances()
     void model::releaseGetTriangleVertexInstances( std::list<model_triangle_vertex_instance_ref *> *l )
+    {
+        model::releaseGetComponents( (std::list<model_component_ref *> *)l );
+    }
+
+    //create vertex instance
+    model_vertex_instance_ref *model::createVertexInstance( dpthread_lock *thd, model_writelock *m, dpid instance_id, dpid vertex_id )
+    {
+        model_vertex_instance *o;
+        dpid id;
+        shared_obj_guard g;
+        model_vertex_instance_writelock *ol;
+
+        id = thd->genId();
+        o = new model_vertex_instance( m, id, instance_id, vertex_id );
+        this->addComp( o, id, model_component_type_vertex_instance, instance_id, vertex_id );
+
+        ol = (model_vertex_instance_writelock *)g.writeLock( o );
+        if( !ol )
+            return 0;
+        return (model_vertex_instance_ref *)ol->getRef();
+    }
+
+    //find vertex instance
+    model_vertex_instance_ref *model::findVertexInstance( dpid id )
+    {
+        return (model_vertex_instance_ref *)this->find( id, model_component_type_vertex_instance );
+    }
+
+    //get  vertex instances by model instance id
+    unsigned int model::getVertexInstancesByInstance( dpid instance_id, std::list<model_triangle_vertex_instance_ref *> *l )
+    {
+        return this->getComponentsByOwnerAndType( (std::list<model_component_ref *> *)l, instance_id, model_component_type_vertex_instance );
+    }
+
+    //release list returned by getVertexInstances()
+    void model::releaseGetVertexInstances( std::list<model_vertex_instance_ref *> *l )
     {
         model::releaseGetComponents( (std::list<model_component_ref *> *)l );
     }
