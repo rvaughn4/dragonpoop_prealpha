@@ -16,11 +16,15 @@ namespace dragonpoop
     class model_triangle_instance_ref;
     class model_triangle_vertex_instance_ref;
     class model_vertex_instance_ref;
+    class shared_obj_ref;
+    class shared_obj_writelock;
 
     class model_instance : public model_component
     {
 
     private:
+
+        shared_obj_ref *r;
 
     protected:
 
@@ -71,6 +75,12 @@ namespace dragonpoop
         unsigned int getVertexs( std::list<model_vertex_instance_ref *> *l );
         //release list returned by getVertexs()
         static void releaseGetVertexs( std::list<model_vertex_instance_ref *> *l );
+        //returns true if has renderer
+        bool hasRenderer( void );
+        //set renderer
+        void setRenderer( shared_obj_writelock *r );
+        //get renderer
+        shared_obj_ref *getRenderer( void );
 
     public:
 

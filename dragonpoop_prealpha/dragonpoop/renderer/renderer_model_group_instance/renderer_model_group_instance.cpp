@@ -9,19 +9,22 @@
 #include "../../gfx/gfx_writelock.h"
 #include "../../core/core.h"
 #include "../../core/shared_obj/shared_obj_guard.h"
+#include "../../gfx/model/model_group_instance/model_group_instance_writelock.h"
+#include "../../gfx/model/model_group_instance/model_group_instance_ref.h"
 
 namespace dragonpoop
 {
 
     //ctor
-    renderer_model_group_instance::renderer_model_group_instance( gfx_writelock *g, renderer_writelock *r, dpid id, dpid instance_id ) : shared_obj( g->getCore()->getMutexMaster() )
+    renderer_model_group_instance::renderer_model_group_instance( gfx_writelock *g, renderer_writelock *r, model_group_instance_writelock *grp ) : shared_obj( g->getCore()->getMutexMaster() )
     {
         this->g = (gfx_ref *)g->getRef();
         this->r = (renderer_ref *)r->getRef();
         this->c = g->getCore();
-        this->id = id;
-        this->instance_id = instance_id;
+        this->id = grp->getId();
+        this->instance_id = grp->getInstanceId();
         this->bAlive = 1;
+        this->grp = (model_group_instance_ref *)grp->getRef();
     }
 
     //dtor
@@ -35,6 +38,7 @@ namespace dragonpoop
 
         delete this->g;
         delete this->r;
+        delete this->grp;
     }
 
     //return core
@@ -80,7 +84,7 @@ namespace dragonpoop
     }
 
     //run model
-    void renderer_model_group_instance::run( dpthread_lock *thd, renderer_model_group_instance_writelock *m )
+    void renderer_model_group_instance::run( dpthread_lock *thd, renderer_model_group_instance_writelock *m, renderer_writelock *r )
     {
 
     }
@@ -89,6 +93,12 @@ namespace dragonpoop
     dpid renderer_model_group_instance::getInstanceId( void )
     {
         return this->instance_id;
+    }
+
+    //generate group from renderer
+    renderer_model_group_instance *renderer_model_group_instance::genGroup( gfx_writelock *g, renderer_writelock *r, model_group_instance_writelock *grp )
+    {
+        return 0;
     }
 
 };

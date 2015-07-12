@@ -13,6 +13,12 @@ namespace dragonpoop
     class dpthread_lock;
     class dptask_writelock;
     class core;
+    class gfx_writelock;
+    class model_instance_writelock;
+    class renderer_writelock;
+    class renderer_model_instance;
+    class renderer_model_group_instance;
+    class model_group_instance_writelock;
 
     class renderer : public shared_obj
     {
@@ -58,6 +64,10 @@ namespace dragonpoop
         virtual void prepareGuiRender( void ) = 0;
         //flip backbuffer and present scene to screen
         virtual void flipBuffer( void ) = 0;
+        //generate model instance
+        virtual renderer_model_instance *genModel( gfx_writelock *g, renderer_writelock *r, model_instance_writelock *m );
+        //generate model group instance
+        virtual renderer_model_group_instance *genGroup( gfx_writelock *g, renderer_writelock *r, model_group_instance_writelock *grp );
 
     public:
 

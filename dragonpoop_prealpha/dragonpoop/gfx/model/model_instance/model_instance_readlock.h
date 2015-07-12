@@ -53,6 +53,10 @@ namespace dragonpoop
         unsigned int getVertexs( std::list<model_vertex_instance_ref *> *l );
         //release list returned by getVertexs()
         void releaseGetVertexs( std::list<model_vertex_instance_ref *> *l );
+        //returns true if has renderer
+        bool hasRenderer( void );
+        //get renderer
+        shared_obj_ref *getRenderer( void );
 
         friend class model_instance;
     };

@@ -17,6 +17,8 @@ namespace dragonpoop
     class renderer_model_group_instance_writelock;
     class renderer_ref;
     class renderer_writelock;
+    class model_group_instance_ref;
+    class model_group_instance_writelock;
 
     class renderer_model_group_instance : public shared_obj
     {
@@ -28,6 +30,7 @@ namespace dragonpoop
         dpid id, instance_id, parent_id;
         bool bAlive;
         renderer_ref *r;
+        model_group_instance_ref *grp;
 
     protected:
 
@@ -42,14 +45,16 @@ namespace dragonpoop
         //kill model
         void kill( void );
         //run model
-        void run( dpthread_lock *thd, renderer_model_group_instance_writelock *m );
+        void run( dpthread_lock *thd, renderer_model_group_instance_writelock *m, renderer_writelock *r );
         //return instance id
         dpid getInstanceId( void );
+        //generate group from renderer
+        renderer_model_group_instance *genGroup( gfx_writelock *g, renderer_writelock *r, model_group_instance_writelock *grp );
 
     public:
 
         //ctor
-        renderer_model_group_instance( gfx_writelock *g, renderer_writelock *r, dpid id, dpid instance_id );
+        renderer_model_group_instance( gfx_writelock *g, renderer_writelock *r, model_group_instance_writelock *grp );
         //dtor
         virtual ~renderer_model_group_instance( void );
         //return core

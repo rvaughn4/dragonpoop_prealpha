@@ -16,6 +16,7 @@ namespace dragonpoop
     //ctor
     model_instance::model_instance( dpthread_lock *thd, model_writelock *ml, dpid id ) : model_component( ml, id,model_component_type_instance, 0 )
     {
+        this->r = 0;
         this->makeGroups( thd, ml );
         this->makeTriangles( thd, ml );
         this->makeTriangleVertexs( thd, ml );
@@ -25,6 +26,7 @@ namespace dragonpoop
     //dtor
     model_instance::~model_instance( void )
     {
+        delete this->r;
         this->killGroups();
         this->killTriangles();
         this->killTriangleVertexs();
@@ -379,6 +381,35 @@ namespace dragonpoop
     void model_instance::releaseGetVertexs( std::list<model_vertex_instance_ref *> *l )
     {
         model::releaseGetVertexInstances( l );
+    }
+
+    //returns true if has renderer
+    bool model_instance::hasRenderer( void )
+    {
+        if( !this->r || !this->r->isLinked() )
+            return 0;
+        return 1;
+    }
+
+    //set renderer
+    void model_instance::setRenderer( shared_obj_writelock *r )
+    {
+        if( this->r )
+            delete this->r;
+        this->r = r->getRef();
+    }
+
+    //get renderer
+    shared_obj_ref *model_instance::getRenderer( void )
+    {
+        shared_obj_writelock *l;
+        shared_obj_guard o;
+        if( !this->r )
+            return 0;
+        l = o.writeLock( this->r );
+        if( !l )
+            return 0;
+        return l->getRef();
     }
 
 };

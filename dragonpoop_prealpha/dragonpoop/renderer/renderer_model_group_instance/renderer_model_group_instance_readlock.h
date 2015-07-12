@@ -1,6 +1,6 @@
 
-#ifndef dragonpoop_renderer_model_instance_readlock_h
-#define dragonpoop_renderer_model_instance_readlock_h
+#ifndef dragonpoop_renderer_model_group_instance_readlock_h
+#define dragonpoop_renderer_model_group_instance_readlock_h
 
 #include "../../core/shared_obj/shared_obj_readlock.h"
 #include "renderer_model_group_instance.h"

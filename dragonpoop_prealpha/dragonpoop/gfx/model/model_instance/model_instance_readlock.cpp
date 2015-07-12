@@ -83,4 +83,16 @@ namespace dragonpoop
         model_instance::releaseGetVertexs( l );
     }
 
+    //returns true if has renderer
+    bool model_instance_readlock::hasRenderer( void )
+    {
+        return this->t->hasRenderer();
+    }
+
+    //get renderer
+    shared_obj_ref *model_instance_readlock::getRenderer( void )
+    {
+        return this->t->getRenderer();
+    }
+
 };

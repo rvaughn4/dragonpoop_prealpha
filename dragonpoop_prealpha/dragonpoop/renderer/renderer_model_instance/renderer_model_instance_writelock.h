@@ -33,7 +33,7 @@ namespace dragonpoop
         //kill model
         void kill( void );
         //run model
-        void run( dpthread_lock *thd );
+        void run( dpthread_lock *thd, renderer_writelock *r );
 
         friend class renderer_model_instance;
     };

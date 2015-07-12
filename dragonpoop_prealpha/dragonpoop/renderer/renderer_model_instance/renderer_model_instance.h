@@ -4,6 +4,7 @@
 
 #include "../../core/shared_obj/shared_obj.h"
 #include "../../core/dpid/dpid.h"
+#include <list>
 
 namespace dragonpoop
 {
@@ -17,6 +18,12 @@ namespace dragonpoop
     class renderer_model_instance_writelock;
     class renderer_ref;
     class renderer_writelock;
+    class renderer_model_group_instance;
+    class renderer_model_group_instance_ref;
+    class renderer_model_group_instance_writelock;
+    class model_group_instance_writelock;
+    class model_instance_writelock;
+    class model_instance_ref;
 
     class renderer_model_instance : public shared_obj
     {
@@ -28,6 +35,9 @@ namespace dragonpoop
         dpid id;
         bool bAlive;
         renderer_ref *r;
+        model_instance_ref *m;
+        std::list<renderer_model_group_instance *> groups;
+        bool beenAssetSynced;
 
     protected:
 
@@ -41,13 +51,27 @@ namespace dragonpoop
         dpid getId( void );
         //kill model
         void kill( void );
-        //run model
-        void run( dpthread_lock *thd, renderer_model_instance_writelock *m );
+        //sync assets like groups and materials
+        void syncAssets( gfx_writelock *g, renderer_model_instance_writelock *m, renderer_writelock *r, model_instance_writelock *mi );
+        //run model instance
+        void run( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
+        //render model instance
+        void render( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
+        //make groups
+        void makeGroups( gfx_writelock *g, renderer_model_instance_writelock *m, renderer_writelock *r, model_instance_writelock *mi );
+        //kill groups
+        void killGroups( renderer_model_instance_writelock *m, renderer_writelock *r );
+        //run groups
+        void runGroups( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
+        //render groups
+        void renderGroups( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
+        //generate group from renderer
+        renderer_model_group_instance *genGroup( gfx_writelock *g, renderer_writelock *r, model_group_instance_writelock *grp );
 
     public:
 
         //ctor
-        renderer_model_instance( gfx_writelock *g, renderer_writelock *r, dpid id );
+        renderer_model_instance( gfx_writelock *g, renderer_writelock *r, model_instance_writelock *m );
         //dtor
         virtual ~renderer_model_instance( void );
         //return core

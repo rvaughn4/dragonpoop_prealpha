@@ -40,5 +40,17 @@ namespace dragonpoop
     {
         this->t->run( tskl, thd );
     }
-    
+
+    //generate model instance
+    renderer_model_instance *renderer_writelock::genModel( gfx_writelock *g, model_instance_writelock *m )
+    {
+        return this->t->genModel( g, this, m );
+    }
+
+    //generate model group instance
+    renderer_model_group_instance *renderer_writelock::genGroup( gfx_writelock *g, model_group_instance_writelock *grp )
+    {
+        return this->t->genGroup( g, this, grp );
+    }
+
 };

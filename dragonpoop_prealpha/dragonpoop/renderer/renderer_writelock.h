@@ -10,6 +10,12 @@ namespace dragonpoop
     class core;
     class dpthread_lock;
     class dptask_writelock;
+    class gfx_writelock;
+    class model_instance_writelock;
+    class renderer_writelock;
+    class renderer_model_instance;
+    class renderer_model_group_instance;
+    class model_group_instance_writelock;
 
     class renderer_writelock : public shared_obj_writelock
     {
@@ -35,7 +41,11 @@ namespace dragonpoop
         void kill( void );
         //run renderer from task
         void run( dptask_writelock *tskl, dpthread_lock *thd );
-        
+        //generate model instance
+        renderer_model_instance *genModel( gfx_writelock *g, model_instance_writelock *m );
+        //generate model group instance
+        renderer_model_group_instance *genGroup( gfx_writelock *g, model_group_instance_writelock *grp );
+
         friend class renderer;
     };
     

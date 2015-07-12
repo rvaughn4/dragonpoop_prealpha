@@ -9,18 +9,26 @@
 #include "../../gfx/gfx_writelock.h"
 #include "../../core/core.h"
 #include "../../core/shared_obj/shared_obj_guard.h"
+#include "../../gfx/model/model_instance/model_instance_writelock.h"
+#include "../../gfx/model/model_instance/model_instance_ref.h"
+#include "../../gfx/model/model_group_instance/model_group_instance_writelock.h"
+#include "../../gfx/model/model_group_instance/model_group_instance_ref.h"
+#include "../renderer_model_group_instance/renderer_model_group_instance.h"
+#include "../renderer_model_group_instance/renderer_model_group_instance_writelock.h"
 
 namespace dragonpoop
 {
 
     //ctor
-    renderer_model_instance::renderer_model_instance( gfx_writelock *g, renderer_writelock *r, dpid id ) : shared_obj( g->getCore()->getMutexMaster() )
+    renderer_model_instance::renderer_model_instance( gfx_writelock *g, renderer_writelock *r, model_instance_writelock *m ) : shared_obj( g->getCore()->getMutexMaster() )
     {
         this->g = (gfx_ref *)g->getRef();
         this->r = (renderer_ref *)r->getRef();
         this->c = g->getCore();
-        this->id = id;
+        this->id = m->getId();
         this->bAlive = 1;
+        this->m = (model_instance_ref *)m->getRef();
+        this->beenAssetSynced = 0;
     }
 
     //dtor
@@ -34,6 +42,7 @@ namespace dragonpoop
 
         delete this->g;
         delete this->r;
+        delete this->m;
     }
 
     //return core
@@ -78,10 +87,129 @@ namespace dragonpoop
         this->bAlive = 0;
     }
 
+    //sync assets like groups and materials
+    void renderer_model_instance::syncAssets( gfx_writelock *g, renderer_model_instance_writelock *m, renderer_writelock *r, model_instance_writelock *mi )
+    {
+        mi->setRenderer( m );
+        this->makeGroups( g, m, r, mi );
+    }
+
     //run model
-    void renderer_model_instance::run( dpthread_lock *thd, renderer_model_instance_writelock *m )
+    void renderer_model_instance::run( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r )
+    {
+        gfx_writelock *g;
+        model_instance_writelock *mi;
+        shared_obj_guard o0, o1;
+
+        if( !this->beenAssetSynced )
+        {
+            g = (gfx_writelock *)o0.writeLock( this->g );
+            mi = (model_instance_writelock *)o1.writeLock( this->m );
+            if( g && mi )
+            {
+                this->syncAssets( g, m, r, mi );
+                this->beenAssetSynced = 1;
+            }
+        }
+    }
+
+    //render model instance
+    void renderer_model_instance::render( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r )
     {
 
+    }
+
+    //make groups
+    void renderer_model_instance::makeGroups( gfx_writelock *g, renderer_model_instance_writelock *m, renderer_writelock *r, model_instance_writelock *mi )
+    {
+        shared_obj_guard o;
+        model_group_instance_ref *p;
+        model_group_instance_writelock *pl;
+        renderer_model_group_instance *rg;
+        std::list<model_group_instance_ref *> l;
+        std::list<model_group_instance_ref *>::iterator i;
+        dpid pid;
+
+        dpid_zero( &pid );
+        mi->getGroupsByParent( pid, &l );
+
+        for( i = l.begin(); i != l.end(); ++i )
+        {
+            p = *i;
+            pl = (model_group_instance_writelock *)o.writeLock( p );
+            rg = this->genGroup( g, r, pl );
+            if( !rg )
+                continue;
+            this->groups.push_back( rg );
+        }
+
+        mi->releaseGetGroups( &l );
+    }
+
+    //kill groups
+    void renderer_model_instance::killGroups( renderer_model_instance_writelock *m, renderer_writelock *r )
+    {
+        std::list<renderer_model_group_instance *> *l, d;
+        std::list<renderer_model_group_instance *>::iterator i;
+        renderer_model_group_instance *p;
+
+        l = &this->groups;
+        for( i = l->begin(); i != l->end(); ++i )
+        {
+            p = *i;
+            d.push_back( p );
+        }
+        l->clear();
+
+        l = &d;
+        for( i = l->begin(); i != l->end(); ++i )
+        {
+            p = *i;
+            delete p;
+        }
+        l->clear();
+    }
+
+    //run groups
+    void renderer_model_instance::runGroups( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r )
+    {
+        std::list<renderer_model_group_instance *> *l;
+        std::list<renderer_model_group_instance *>::iterator i;
+        renderer_model_group_instance *p;
+        renderer_model_group_instance_writelock *pl;
+        shared_obj_guard o;
+
+        l = &this->groups;
+        for( i = l->begin(); i != l->end(); ++i )
+        {
+            p = *i;
+            pl = (renderer_model_group_instance_writelock *)o.writeLock( p );
+            pl->run( thd, r );
+        }
+    }
+
+    //render groups
+    void renderer_model_instance::renderGroups( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r )
+    {
+        std::list<renderer_model_group_instance *> *l;
+        std::list<renderer_model_group_instance *>::iterator i;
+        renderer_model_group_instance *p;
+        renderer_model_group_instance_writelock *pl;
+        shared_obj_guard o;
+
+        l = &this->groups;
+        for( i = l->begin(); i != l->end(); ++i )
+        {
+            p = *i;
+            pl = (renderer_model_group_instance_writelock *)o.writeLock( p );
+            //pl->run( thd );
+        }
+    }
+
+    //generate group from renderer
+    renderer_model_group_instance *renderer_model_instance::genGroup( gfx_writelock *g, renderer_writelock *r, model_group_instance_writelock *grp )
+    {
+        return r->genGroup( g, grp );
     }
 
 };

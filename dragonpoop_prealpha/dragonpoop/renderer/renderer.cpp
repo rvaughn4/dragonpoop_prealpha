@@ -8,6 +8,8 @@
 #include "renderer_ref.h"
 #include "../core/dpthread/dpthread_lock.h"
 #include "../core/dptaskpool/dptaskpool_writelock.h"
+#include "renderer_model_instance/renderer_model_instance.h"
+#include "renderer_model_group_instance/renderer_model_group_instance.h"
 
 #include <iostream>
 #include <thread>
@@ -128,21 +130,30 @@ namespace dragonpoop
     //init graphics api
     bool renderer::initApi( void )
     {
-        std::cout << "renderer init\r\n";
         return 1;
     }
 
     //deinit graphics api
     void renderer::deinitApi( void )
     {
-        std::cout << "renderer deinit\r\n";
     }
 
     //do background graphics api processing
     bool renderer::runApi( void )
     {
-        std::cout << "r";
         return 1;
+    }
+
+    //generate model instance
+    renderer_model_instance *renderer::genModel( gfx_writelock *g, renderer_writelock *r, model_instance_writelock *m )
+    {
+        return new renderer_model_instance( g, r, m );
+    }
+
+    //generate model group instance
+    renderer_model_group_instance *renderer::genGroup( gfx_writelock *g, renderer_writelock *r, model_group_instance_writelock *grp )
+    {
+        return new renderer_model_group_instance( g, r, grp );
     }
 
 };

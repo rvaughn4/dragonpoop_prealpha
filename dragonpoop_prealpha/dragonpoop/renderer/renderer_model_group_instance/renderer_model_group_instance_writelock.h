@@ -1,6 +1,6 @@
 
-#ifndef dragonpoop_renderer_model_instance_writelock_h
-#define dragonpoop_renderer_model_instance_writelock_h
+#ifndef dragonpoop_renderer_model_group_instance_writelock_h
+#define dragonpoop_renderer_model_group_instance_writelock_h
 
 #include "../../core/shared_obj/shared_obj_writelock.h"
 #include "renderer_model_group_instance.h"
@@ -33,7 +33,7 @@ namespace dragonpoop
         //kill model
         void kill( void );
         //run model
-        void run( dpthread_lock *thd );
+        void run( dpthread_lock *thd, renderer_writelock *r );
         //return instance id
         dpid getInstanceId( void );
 
