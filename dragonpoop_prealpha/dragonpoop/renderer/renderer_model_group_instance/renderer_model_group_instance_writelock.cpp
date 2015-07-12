@@ -35,16 +35,22 @@ namespace dragonpoop
         return this->t->getId();
     }
 
-    //kill model
+    //kill group
     void renderer_model_group_instance_writelock::kill( void )
     {
         this->t->kill();
     }
 
-    //run model
-    void renderer_model_group_instance_writelock::run( dpthread_lock *thd, renderer_writelock *r )
+    //run group
+    void renderer_model_group_instance_writelock::run( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r )
     {
-        this->t->run( thd, this, r );
+        this->t->run( thd, m, this, r );
+    }
+
+    //render group
+    void renderer_model_group_instance_writelock::render( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r )
+    {
+        this->t->render( thd, m, this, r );
     }
 
     //return instance id

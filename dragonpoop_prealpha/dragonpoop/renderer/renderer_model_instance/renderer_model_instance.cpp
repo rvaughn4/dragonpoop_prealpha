@@ -137,7 +137,7 @@ namespace dragonpoop
         {
             p = *i;
             pl = (model_group_instance_writelock *)o.writeLock( p );
-            rg = this->genGroup( g, r, pl );
+            rg = this->genGroup( g, r, mi, pl );
             if( !rg )
                 continue;
             this->groups.push_back( rg );
@@ -183,8 +183,9 @@ namespace dragonpoop
         for( i = l->begin(); i != l->end(); ++i )
         {
             p = *i;
-            pl = (renderer_model_group_instance_writelock *)o.writeLock( p );
-            pl->run( thd, r );
+            pl = (renderer_model_group_instance_writelock *)o.tryWriteLock( p, 100 );
+            if( pl )
+                pl->run( thd, m, r );
         }
     }
 
@@ -201,15 +202,16 @@ namespace dragonpoop
         for( i = l->begin(); i != l->end(); ++i )
         {
             p = *i;
-            pl = (renderer_model_group_instance_writelock *)o.writeLock( p );
-            //pl->run( thd );
+            pl = (renderer_model_group_instance_writelock *)o.tryWriteLock( p, 100 );
+            if( pl )
+                pl->render( thd, m, r );
         }
     }
 
     //generate group from renderer
-    renderer_model_group_instance *renderer_model_instance::genGroup( gfx_writelock *g, renderer_writelock *r, model_group_instance_writelock *grp )
+    renderer_model_group_instance *renderer_model_instance::genGroup( gfx_writelock *g, renderer_writelock *r, model_instance_writelock *m, model_group_instance_writelock *grp )
     {
-        return r->genGroup( g, grp );
+        return r->genGroup( g, m, grp );
     }
 
 };

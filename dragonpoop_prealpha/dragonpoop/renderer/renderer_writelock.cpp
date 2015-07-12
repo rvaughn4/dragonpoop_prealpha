@@ -48,9 +48,9 @@ namespace dragonpoop
     }
 
     //generate model group instance
-    renderer_model_group_instance *renderer_writelock::genGroup( gfx_writelock *g, model_group_instance_writelock *grp )
+    renderer_model_group_instance *renderer_writelock::genGroup( gfx_writelock *g, model_instance_writelock *m, model_group_instance_writelock *grp )
     {
-        return this->t->genGroup( g, this, grp );
+        return this->t->genGroup( g, this, m, grp );
     }
 
 };

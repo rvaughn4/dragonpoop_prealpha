@@ -18,6 +18,7 @@ namespace dragonpoop
     private:
 
         dpid instance_id, group_id, parent_id;
+        shared_obj_ref *r;
 
     protected:
 
@@ -35,6 +36,12 @@ namespace dragonpoop
         dpid getGroupId( void );
         //return partent id
         dpid getParentId( void );
+        //returns true if has renderer
+        bool hasRenderer( void );
+        //set renderer
+        void setRenderer( shared_obj_writelock *r );
+        //get renderer
+        shared_obj_ref *getRenderer( void );
 
     public:
 

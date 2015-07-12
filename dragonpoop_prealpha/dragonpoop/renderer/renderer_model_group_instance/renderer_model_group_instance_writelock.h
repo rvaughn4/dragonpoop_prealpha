@@ -33,7 +33,9 @@ namespace dragonpoop
         //kill model
         void kill( void );
         //run model
-        void run( dpthread_lock *thd, renderer_writelock *r );
+        void run( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
+        //render group
+        void render( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
         //return instance id
         dpid getInstanceId( void );
 

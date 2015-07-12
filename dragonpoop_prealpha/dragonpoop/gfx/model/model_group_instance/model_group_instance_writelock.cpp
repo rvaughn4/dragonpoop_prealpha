@@ -35,4 +35,22 @@ namespace dragonpoop
         return this->t->getParentId();
     }
 
+    //returns true if has renderer
+    bool model_group_instance_writelock::hasRenderer( void )
+    {
+        return this->t->hasRenderer();
+    }
+
+    //set renderer
+    void model_group_instance_writelock::setRenderer( shared_obj_writelock *r )
+    {
+        this->t->setRenderer( r );
+    }
+
+    //get renderer
+    shared_obj_ref *model_group_instance_writelock::getRenderer( void )
+    {
+        return this->t->getRenderer();
+    }
+
 };

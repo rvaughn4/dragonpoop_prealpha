@@ -32,6 +32,10 @@ namespace dragonpoop
         dpid getGroupId( void );
         //return partent id
         dpid getParentId( void );
+        //returns true if has renderer
+        bool hasRenderer( void );
+        //get renderer
+        shared_obj_ref *getRenderer( void );
 
         friend class model_group_instance;
     };

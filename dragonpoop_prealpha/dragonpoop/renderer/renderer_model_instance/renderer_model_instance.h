@@ -66,7 +66,7 @@ namespace dragonpoop
         //render groups
         void renderGroups( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
         //generate group from renderer
-        renderer_model_group_instance *genGroup( gfx_writelock *g, renderer_writelock *r, model_group_instance_writelock *grp );
+        renderer_model_group_instance *genGroup( gfx_writelock *g, renderer_writelock *r, model_instance_writelock *m, model_group_instance_writelock *grp );
 
     public:
 

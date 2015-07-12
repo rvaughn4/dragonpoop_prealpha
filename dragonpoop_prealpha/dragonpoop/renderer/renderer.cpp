@@ -9,7 +9,13 @@
 #include "../core/dpthread/dpthread_lock.h"
 #include "../core/dptaskpool/dptaskpool_writelock.h"
 #include "renderer_model_instance/renderer_model_instance.h"
+#include "renderer_model_instance/renderer_model_instance_ref.h"
+#include "renderer_model_instance/renderer_model_instance_writelock.h"
 #include "renderer_model_group_instance/renderer_model_group_instance.h"
+#include "../core/shared_obj/shared_obj_guard.h"
+#include "../gfx/gfx_writelock.h"
+#include "../gfx/model/model_instance/model_instance_ref.h"
+#include "../gfx/model/model_instance/model_instance_writelock.h"
 
 #include <iostream>
 #include <thread>
@@ -151,9 +157,113 @@ namespace dragonpoop
     }
 
     //generate model group instance
-    renderer_model_group_instance *renderer::genGroup( gfx_writelock *g, renderer_writelock *r, model_group_instance_writelock *grp )
+    renderer_model_group_instance *renderer::genGroup( gfx_writelock *g, renderer_writelock *r, model_instance_writelock *m, model_group_instance_writelock *grp )
     {
-        return new renderer_model_group_instance( g, r, grp );
+        return new renderer_model_group_instance( g, r, m, grp );
+    }
+
+    //make model instances
+    void renderer::makeModels( gfx_writelock *g, renderer_writelock *r )
+    {
+        shared_obj_guard o;
+        model_instance_ref *p;
+        model_instance_writelock *pl;
+        renderer_model_instance *rg;
+        std::list<model_instance_ref *> l;
+        std::list<model_instance_ref *>::iterator i;
+
+        //g->getInstances( &l );
+
+        for( i = l.begin(); i != l.end(); ++i )
+        {
+            p = *i;
+            pl = (model_instance_writelock *)o.tryWriteLock( p, 100 );
+            if( !pl )
+                continue;
+            if( pl->hasRenderer() )
+                continue;
+            rg = this->genModel( g, r, pl );
+            if( !rg )
+                continue;
+            this->models.push_back( rg );
+        }
+
+       // g->releaseGetInstances( &l );
+    }
+
+    //kill model instances
+    void renderer::killModels( void )
+    {
+        std::list<renderer_model_instance *> *l, d;
+        std::list<renderer_model_instance *>::iterator i;
+        renderer_model_instance *p;
+
+        l = &this->models;
+        for( i = l->begin(); i != l->end(); ++i )
+        {
+            p = *i;
+            d.push_back( p );
+        }
+        l->clear();
+
+        l = &d;
+        for( i = l->begin(); i != l->end(); ++i )
+        {
+            p = *i;
+            delete p;
+        }
+        l->clear();
+    }
+
+    //run model instances
+    void renderer::runModels( dpthread_lock *thd, renderer_writelock *r )
+    {
+        std::list<renderer_model_instance *> *l, d;
+        std::list<renderer_model_instance *>::iterator i;
+        renderer_model_instance *p;
+        renderer_model_instance_writelock *pl;
+        shared_obj_guard o;
+
+        l = &this->models;
+        for( i = l->begin(); i != l->end(); ++i )
+        {
+            p = *i;
+            pl = (renderer_model_instance_writelock *)o.tryWriteLock( p, 100 );
+            if( !pl )
+                continue;
+            pl->run( thd, r );
+            if( !pl->isAlive() )
+                d.push_back( p );
+        }
+        o.unlock();
+
+        l = &d;
+        for( i = l->begin(); i != l->end(); ++i )
+        {
+            p = *i;
+            delete p;
+        }
+        l->clear();
+    }
+
+    //render model instances
+    void renderer::renderModels( dpthread_lock *thd, renderer_writelock *r )
+    {
+        std::list<renderer_model_instance *> *l, d;
+        std::list<renderer_model_instance *>::iterator i;
+        renderer_model_instance *p;
+        renderer_model_instance_writelock *pl;
+        shared_obj_guard o;
+
+        l = &this->models;
+        for( i = l->begin(); i != l->end(); ++i )
+        {
+            p = *i;
+            pl = (renderer_model_instance_writelock *)o.tryWriteLock( p, 100 );
+            if( pl )
+                pl->render( thd, r );
+        }
+        o.unlock();
     }
 
 };

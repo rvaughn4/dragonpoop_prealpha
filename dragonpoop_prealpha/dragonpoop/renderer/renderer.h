@@ -29,6 +29,7 @@ namespace dragonpoop
         renderer_task *gtsk;
         core *c;
         std::atomic<bool> bDoRun, bIsRun;
+        std::list<renderer_model_instance *> models;
 
     protected:
 
@@ -67,7 +68,15 @@ namespace dragonpoop
         //generate model instance
         virtual renderer_model_instance *genModel( gfx_writelock *g, renderer_writelock *r, model_instance_writelock *m );
         //generate model group instance
-        virtual renderer_model_group_instance *genGroup( gfx_writelock *g, renderer_writelock *r, model_group_instance_writelock *grp );
+        virtual renderer_model_group_instance *genGroup( gfx_writelock *g, renderer_writelock *r, model_instance_writelock *m, model_group_instance_writelock *grp );
+        //make model instances
+        void makeModels( gfx_writelock *g, renderer_writelock *r );
+        //kill model instances
+        void killModels( void );
+        //run model instances
+        void runModels( dpthread_lock *thd, renderer_writelock *r );
+        //render model instances
+        void renderModels( dpthread_lock *thd, renderer_writelock *r );
 
     public:
 

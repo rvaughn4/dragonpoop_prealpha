@@ -44,7 +44,7 @@ namespace dragonpoop
         //generate model instance
         renderer_model_instance *genModel( gfx_writelock *g, model_instance_writelock *m );
         //generate model group instance
-        renderer_model_group_instance *genGroup( gfx_writelock *g, model_group_instance_writelock *grp );
+        renderer_model_group_instance *genGroup( gfx_writelock *g, model_instance_writelock *m, model_group_instance_writelock *grp );
 
         friend class renderer;
     };

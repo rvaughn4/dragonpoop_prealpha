@@ -34,5 +34,17 @@ namespace dragonpoop
     {
         return this->t->getParentId();
     }
-    
+
+    //returns true if has renderer
+    bool model_group_instance_readlock::hasRenderer( void )
+    {
+        return this->t->hasRenderer();
+    }
+
+    //get renderer
+    shared_obj_ref *model_group_instance_readlock::getRenderer( void )
+    {
+        return this->t->getRenderer();
+    }
+
 };

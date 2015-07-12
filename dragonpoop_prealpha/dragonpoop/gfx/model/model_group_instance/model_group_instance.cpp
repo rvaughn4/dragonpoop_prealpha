@@ -63,4 +63,33 @@ namespace dragonpoop
         return this->parent_id;
     }
 
+    //returns true if has renderer
+    bool model_group_instance::hasRenderer( void )
+    {
+        if( !this->r || !this->r->isLinked() )
+            return 0;
+        return 1;
+    }
+
+    //set renderer
+    void model_group_instance::setRenderer( shared_obj_writelock *r )
+    {
+        if( this->r )
+            delete this->r;
+        this->r = r->getRef();
+    }
+
+    //get renderer
+    shared_obj_ref *model_group_instance::getRenderer( void )
+    {
+        shared_obj_writelock *l;
+        shared_obj_guard o;
+        if( !this->r )
+            return 0;
+        l = o.writeLock( this->r );
+        if( !l )
+            return 0;
+        return l->getRef();
+    }
+
 };
