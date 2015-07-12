@@ -18,6 +18,7 @@ namespace dragonpoop
     {
         this->g = (gfx_ref *)g->getRef();
         this->r = (renderer_ref *)r->getRef();
+        this->c = g->getCore();
         this->id = id;
         this->bAlive = 1;
     }
