@@ -14,6 +14,7 @@
 #include "renderer_model_group_instance/renderer_model_group_instance.h"
 #include "../core/shared_obj/shared_obj_guard.h"
 #include "../gfx/gfx_writelock.h"
+#include "../gfx/gfx_ref.h"
 #include "../gfx/model/model_instance/model_instance_ref.h"
 #include "../gfx/model/model_instance/model_instance_writelock.h"
 
@@ -38,6 +39,7 @@ namespace dragonpoop
     renderer::~renderer( void )
     {
         this->_kill();
+        this->killModels();
         delete this->tsk;
         delete this->gtsk;
     }
@@ -95,8 +97,13 @@ namespace dragonpoop
     }
 
     //run renderer from task
-    void renderer::run( dptask_writelock *tskl, dpthread_lock *thd )
+    void renderer::run( dptask_writelock *tskl, dpthread_lock *thd, renderer_writelock *r )
     {
+        uint64_t t;
+        gfx_writelock *g;
+        gfx_ref *gr;
+        shared_obj_guard o;
+
         if( this->bIsRun )
         {
             if( !this->bDoRun )
@@ -107,6 +114,17 @@ namespace dragonpoop
                 return;
             }
 
+            t = thd->getTicks();
+            if( t - this->lastMakeModel > 300 )
+            {
+                gr = this->getCore()->getGfx();
+                g = (gfx_writelock *)o.writeLock( gr );
+                delete gr;
+                this->makeModels( g, r );
+                this->lastMakeModel = t;
+            }
+            this->runModels( thd, r );
+
             if( !this->runApi() )
                 this->bDoRun = 0;
             else
@@ -115,6 +133,8 @@ namespace dragonpoop
 #define randcolor (float)rand() / (float)RAND_MAX
                 this->clearScreen( randcolor, randcolor, randcolor );
                 this->prepareWorldRender();
+                this->renderModels( thd, r );
+
                 this->prepareGuiRender();
                 this->flipBuffer();
             }

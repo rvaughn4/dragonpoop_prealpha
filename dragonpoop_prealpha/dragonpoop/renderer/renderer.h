@@ -30,6 +30,7 @@ namespace dragonpoop
         core *c;
         std::atomic<bool> bDoRun, bIsRun;
         std::list<renderer_model_instance *> models;
+        uint64_t lastMakeModel;
 
     protected:
 
@@ -42,7 +43,7 @@ namespace dragonpoop
         //stop renderer task
         void kill( void );
         //run renderer from task
-        void run( dptask_writelock *tskl, dpthread_lock *thd );
+        void run( dptask_writelock *tskl, dpthread_lock *thd, renderer_writelock *r );
         //init graphics api
         virtual bool initApi( void );
         //deinit graphics api

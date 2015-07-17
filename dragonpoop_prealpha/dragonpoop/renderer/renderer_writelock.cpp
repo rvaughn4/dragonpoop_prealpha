@@ -38,7 +38,7 @@ namespace dragonpoop
     //run renderer from task
     void renderer_writelock::run( dptask_writelock *tskl, dpthread_lock *thd )
     {
-        this->t->run( tskl, thd );
+        this->t->run( tskl, thd, this );
     }
 
     //generate model instance
