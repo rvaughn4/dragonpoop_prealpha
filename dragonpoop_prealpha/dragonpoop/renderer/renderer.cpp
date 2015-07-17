@@ -172,7 +172,7 @@ namespace dragonpoop
         std::list<model_instance_ref *> l;
         std::list<model_instance_ref *>::iterator i;
 
-        //g->getInstances( &l );
+        g->getInstances( &l );
 
         for( i = l.begin(); i != l.end(); ++i )
         {
@@ -188,7 +188,7 @@ namespace dragonpoop
             this->models.push_back( rg );
         }
 
-       // g->releaseGetInstances( &l );
+        g->releaseGetInstances( &l );
     }
 
     //kill model instances

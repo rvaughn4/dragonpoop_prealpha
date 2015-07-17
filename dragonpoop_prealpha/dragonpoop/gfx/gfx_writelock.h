@@ -4,6 +4,7 @@
 
 #include "../core/shared_obj/shared_obj_writelock.h"
 #include "../core/dpid/dpid.h"
+#include <list>
 
 namespace dragonpoop
 {
@@ -11,6 +12,7 @@ namespace dragonpoop
     class core;
     class dpthread_lock;
     class model_ref;
+    class model_instance_ref;
 
     class gfx_writelock : public shared_obj_writelock
     {
@@ -48,6 +50,10 @@ namespace dragonpoop
         model_ref *createModel( dpthread_lock *thd, dpid id );
         //create model having id and name
         model_ref *createModel( dpthread_lock *thd, dpid id, const char *cname );
+        //get model instances
+        unsigned int getInstances( std::list<model_instance_ref *> *l );
+        //release list returned by getInstances()
+        void releaseGetInstances( std::list<model_instance_ref *> *l );
 
         friend class gfx;
     };

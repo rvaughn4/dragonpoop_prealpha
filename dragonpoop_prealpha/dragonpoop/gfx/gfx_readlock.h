@@ -3,11 +3,13 @@
 #define dragonpoop_gfx_readlock_h
 
 #include "../core/shared_obj/shared_obj_readlock.h"
+#include <list>
 
 namespace dragonpoop
 {
     class gfx;
     class core;
+    class model_instance_ref;
 
     class gfx_readlock : public shared_obj_readlock
     {
@@ -29,6 +31,10 @@ namespace dragonpoop
         bool isRunning( void );
         //return core
         core *getCore( void );
+        //get model instances
+        unsigned int getInstances( std::list<model_instance_ref *> *l );
+        //release list returned by getInstances()
+        void releaseGetInstances( std::list<model_instance_ref *> *l );
 
         friend class gfx;
     };

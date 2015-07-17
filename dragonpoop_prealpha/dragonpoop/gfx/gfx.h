@@ -17,6 +17,7 @@ namespace dragonpoop
     class model;
     class gfx_writelock;
     class model_ref;
+    class model_instance_ref;
 
     class gfx : public shared_obj
     {
@@ -61,6 +62,10 @@ namespace dragonpoop
         model_ref *createModel( dpthread_lock *thd, gfx_writelock *g, dpid id );
         //create model having id and name
         model_ref *createModel( dpthread_lock *thd, gfx_writelock *g, dpid id, const char *cname );
+        //get model instances
+        unsigned int getInstances( std::list<model_instance_ref *> *l );
+        //release list returned by getInstances()
+        static void releaseGetInstances( std::list<model_instance_ref *> *l );
 
     public:
 

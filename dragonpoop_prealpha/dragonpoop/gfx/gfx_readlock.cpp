@@ -29,4 +29,16 @@ namespace dragonpoop
         return this->t->getCore();
     }
 
+    //get model instances
+    unsigned int gfx_readlock::getInstances( std::list<model_instance_ref *> *l )
+    {
+        return this->t->getInstances( l );
+    }
+
+    //release list returned by getInstances()
+    void gfx_readlock::releaseGetInstances( std::list<model_instance_ref *> *l )
+    {
+        gfx::releaseGetInstances( l );
+    }
+
 };

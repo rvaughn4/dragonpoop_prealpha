@@ -15,6 +15,7 @@
 #include "model/model_ref.h"
 #include "model/model_writelock.h"
 #include "model/model_readlock.h"
+#include "model/model_instance/model_instance_ref.h"
 
 #include <iostream>
 
@@ -233,6 +234,44 @@ namespace dragonpoop
         if( !ml )
             return 0;
         return (model_ref *)ml->getRef();
+    }
+
+    //get model instances
+    unsigned int gfx::getInstances( std::list<model_instance_ref *> *ll )
+    {
+        std::list<model *> *l;
+        std::list<model *>::iterator i;
+        model *p;
+        unsigned int r;
+        shared_obj_guard o;
+        model_readlock *pl;
+
+        l = &this->models;
+        r = 0;
+        for( i = l->begin(); i != l->end(); ++i )
+        {
+            p = *i;
+            pl = (model_readlock *)o.readLock( p );
+            if( !pl )
+                continue;
+            r += pl->getInstances( ll );
+        }
+
+        return r;
+    }
+
+    //release list returned by getInstances()
+    void gfx::releaseGetInstances( std::list<model_instance_ref *> *l )
+    {
+        std::list<model_instance_ref *>::iterator i;
+        model_instance_ref *p;
+
+        for( i = l->begin(); i != l->end(); ++i )
+        {
+            p = *i;
+            delete p;
+        }
+        l->clear();
     }
 
 };
