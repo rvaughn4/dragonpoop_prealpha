@@ -12,6 +12,7 @@ namespace dragonpoop
     class model_vertex_instance_ref;
     class model_vertex_instance_readlock;
     class model_vertex_instance_writelock;
+    class model_writelock;
 
     class model_vertex_instance : public model_component
     {
@@ -36,9 +37,9 @@ namespace dragonpoop
         //return vertex id
         dpid getVertexId( void );
         //get vertex data
-        void getVertex( dpvertex *v );
+        void getVertex( model_writelock *ml, dpvertex *v );
         //sync vertex
-        void sync( void );
+        void sync( model_writelock *ml );
 
     public:
 

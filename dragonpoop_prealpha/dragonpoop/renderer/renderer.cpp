@@ -14,7 +14,9 @@
 #include "renderer_model_group_instance/renderer_model_group_instance.h"
 #include "../core/shared_obj/shared_obj_guard.h"
 #include "../gfx/gfx_writelock.h"
+#include "../gfx/gfx_readlock.h"
 #include "../gfx/gfx_ref.h"
+#include "../gfx/gfx.h"
 #include "../gfx/model/model_instance/model_instance_ref.h"
 #include "../gfx/model/model_instance/model_instance_writelock.h"
 
@@ -25,9 +27,10 @@ namespace dragonpoop
 {
 
     //ctor
-    renderer::renderer( core *c, dptaskpool_writelock *tp ) : shared_obj( c->getMutexMaster() )
+    renderer::renderer( core *c, gfx_writelock *g, dptaskpool_writelock *tp ) : shared_obj( c->getMutexMaster() )
     {
         this->c = c;
+        this->g = (gfx_ref *)g->getRef();
         this->bDoRun = 1;
         this->bIsRun = 0;
         this->gtsk = new renderer_task( this );
@@ -42,6 +45,7 @@ namespace dragonpoop
         this->killModels();
         delete this->tsk;
         delete this->gtsk;
+        delete this->g;
     }
 
     //stop task and deinit api
@@ -100,9 +104,6 @@ namespace dragonpoop
     void renderer::run( dptask_writelock *tskl, dpthread_lock *thd, renderer_writelock *r )
     {
         uint64_t t;
-        gfx_writelock *g;
-        gfx_ref *gr;
-        shared_obj_guard o;
 
         if( this->bIsRun )
         {
@@ -115,12 +116,9 @@ namespace dragonpoop
             }
 
             t = thd->getTicks();
-            if( t - this->lastMakeModel > 300 )
+            if( t - this->lastMakeModel > 1000 )
             {
-                gr = this->getCore()->getGfx();
-                g = (gfx_writelock *)o.writeLock( gr );
-                delete gr;
-                this->makeModels( g, r );
+                this->makeModels( r );
                 this->lastMakeModel = t;
             }
             this->runModels( thd, r );
@@ -183,32 +181,41 @@ namespace dragonpoop
     }
 
     //make model instances
-    void renderer::makeModels( gfx_writelock *g, renderer_writelock *r )
+    void renderer::makeModels( renderer_writelock *r )
     {
-        shared_obj_guard o;
+        shared_obj_guard o, og;
         model_instance_ref *p;
         model_instance_writelock *pl;
         renderer_model_instance *rg;
         std::list<model_instance_ref *> l;
         std::list<model_instance_ref *>::iterator i;
+        gfx_readlock *gr;
+        gfx_writelock *gwr;
 
-        g->getInstances( &l );
+        gr = (gfx_readlock *)og.tryReadLock( this->g, 10 );
+        if( !gr )
+            return;
+
+        gr->getInstances( &l );
 
         for( i = l.begin(); i != l.end(); ++i )
         {
             p = *i;
-            pl = (model_instance_writelock *)o.tryWriteLock( p, 100 );
+            pl = (model_instance_writelock *)o.tryWriteLock( p, 10 );
             if( !pl )
                 continue;
             if( pl->hasRenderer() )
                 continue;
-            rg = this->genModel( g, r, pl );
+            gwr = (gfx_writelock *)og.tryWriteLock( this->g, 10 );
+            if( !gwr )
+                continue;
+            rg = this->genModel( gwr, r, pl );
             if( !rg )
                 continue;
             this->models.push_back( rg );
         }
 
-        g->releaseGetInstances( &l );
+        gfx::releaseGetInstances( &l );
     }
 
     //kill model instances
@@ -248,7 +255,7 @@ namespace dragonpoop
         for( i = l->begin(); i != l->end(); ++i )
         {
             p = *i;
-            pl = (renderer_model_instance_writelock *)o.tryWriteLock( p, 100 );
+            pl = (renderer_model_instance_writelock *)o.tryWriteLock( p, 10 );
             if( !pl )
                 continue;
             pl->run( thd, r );
@@ -279,7 +286,7 @@ namespace dragonpoop
         for( i = l->begin(); i != l->end(); ++i )
         {
             p = *i;
-            pl = (renderer_model_instance_writelock *)o.tryWriteLock( p, 100 );
+            pl = (renderer_model_instance_writelock *)o.tryWriteLock( p, 10 );
             if( pl )
                 pl->render( thd, r );
         }

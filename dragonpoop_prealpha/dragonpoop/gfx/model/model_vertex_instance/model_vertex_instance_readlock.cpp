@@ -30,9 +30,9 @@ namespace dragonpoop
     }
 
     //get vertex data
-    void model_vertex_instance_readlock::getVertex( dpvertex *v )
+    void model_vertex_instance_readlock::getVertex( model_writelock *ml, dpvertex *v )
     {
-        this->t->getVertex( v );
+        this->t->getVertex( ml, v );
     }
 
 };

@@ -30,15 +30,15 @@ namespace dragonpoop
     }
 
     //get vertex data
-    void model_vertex_instance_writelock::getVertex( dpvertex *v )
+    void model_vertex_instance_writelock::getVertex( model_writelock *ml, dpvertex *v )
     {
-        this->t->getVertex( v );
+        this->t->getVertex( ml, v );
     }
 
     //sync vertex
-    void model_vertex_instance_writelock::sync( void )
+    void model_vertex_instance_writelock::sync( model_writelock *ml )
     {
-        this->t->sync();
+        this->t->sync( ml );
     }
 
 };

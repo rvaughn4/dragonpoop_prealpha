@@ -114,7 +114,9 @@ namespace dragonpoop
         model_group_instance_readlock *gl;
         shared_obj_guard o;
 
-        gl = (model_group_instance_readlock *)o.readLock( this->grp );
+        gl = (model_group_instance_readlock *)o.tryReadLock( this->grp, 50 );
+        if( !gl )
+            return;
         this->vb.clear();
         gl->getVertexes( &this->vb );
 

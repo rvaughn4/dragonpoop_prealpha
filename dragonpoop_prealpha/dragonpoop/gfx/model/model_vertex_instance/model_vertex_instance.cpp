@@ -6,7 +6,7 @@
 #include "../model_Vertex/model_vertex_ref.h"
 #include "../model_Vertex/model_vertex_readlock.h"
 #include "../model_ref.h"
-#include "../model_readlock.h"
+#include "../model_writelock.h"
 
 namespace dragonpoop
 {
@@ -16,7 +16,7 @@ namespace dragonpoop
     {
         this->instance_id = instance_id;
         this->vertex_id = vertex_id;
-        this->sync();
+        this->sync( ml );
     }
 
     //dtor
@@ -62,24 +62,19 @@ namespace dragonpoop
     }
 
     //get vertex data
-    void model_vertex_instance::getVertex( dpvertex *v )
+    void model_vertex_instance::getVertex( model_writelock *ml, dpvertex *v )
     {
         v->start.pos = this->pos[ 0 ];
         v->end.pos = this->pos[ 1 ];
     }
 
     //sync vertex
-    void model_vertex_instance::sync( void )
+    void model_vertex_instance::sync( model_writelock *ml )
     {
         model_vertex_ref *v;
         model_vertex_readlock *vl;
         shared_obj_guard o;
-        model_ref *m;
-        model_readlock *ml;
 
-        m = this->getModel();
-        ml = (model_readlock *)o.readLock( m );
-        delete m;
         v = ml->findVertex( this->getVertexId() );
         if( !v )
             return;

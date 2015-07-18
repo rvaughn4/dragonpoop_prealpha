@@ -6,7 +6,7 @@
 #include "../model_triangle_vertex_instance/model_triangle_vertex_instance_ref.h"
 #include "../model_triangle_vertex_instance/model_triangle_vertex_instance_readlock.h"
 #include "../model_ref.h"
-#include "../model_readlock.h"
+#include "../model_writelock.h"
 
 namespace dragonpoop
 {
@@ -68,19 +68,13 @@ namespace dragonpoop
     }
 
     //get vertexes
-    void model_triangle_instance::getVertexes( dpvertexindex_buffer *b )
+    void model_triangle_instance::getVertexes( model_writelock *ml, dpvertexindex_buffer *b )
     {
         std::list<model_triangle_vertex_instance_ref *> l;
         std::list<model_triangle_vertex_instance_ref *>::iterator i;
         model_triangle_vertex_instance_ref *p;
         model_triangle_vertex_instance_readlock *pl;
-        shared_obj_guard o, om;
-        model_ref *m;
-        model_readlock *ml;
-
-        m = this->getModel();
-        ml = (model_readlock *)om.readLock( m );
-        delete m;
+        shared_obj_guard o;
 
         ml->getTriangleVertexInstancesByInstanceAndTriangle( this->getInstanceId(), this->getTriangleId(), &l );
 
@@ -88,7 +82,7 @@ namespace dragonpoop
         {
             p = *i;
             pl = (model_triangle_vertex_instance_readlock *)o.readLock( p );
-            pl->getVertex( b );
+            pl->getVertex( ml, b );
         }
 
         ml->releaseGetTriangleVertexInstances( &l );

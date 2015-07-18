@@ -25,12 +25,17 @@ namespace dragonpoop
     //ctor
     gfx::gfx( core *c, dptaskpool_writelock *tp ) : shared_obj( c->getMutexMaster() )
     {
+        gfx_writelock *l;
+
         this->c = c;
         this->r = 0;
         this->gtsk = new gfx_task( this );
         this->tsk = new dptask( c->getMutexMaster(), this->gtsk, 100, 0 );
         tp->addTask( this->tsk );
-        this->r = new openglx_1o5_renderer( c, tp );
+
+        l = (gfx_writelock *)this->writeLock();
+        this->r = new openglx_1o5_renderer( c, l, tp );
+        delete l;
     }
 
     //dtor

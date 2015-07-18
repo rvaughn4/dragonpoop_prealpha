@@ -6,7 +6,7 @@
 #include "../model_vertex_instance/model_vertex_instance_ref.h"
 #include "../model_vertex_instance/model_vertex_instance_readlock.h"
 #include "../model_ref.h"
-#include "../model_readlock.h"
+#include "../model_writelock.h"
 #include "../model_triangle_vertex/model_triangle_vertex_ref.h"
 #include "../model_triangle_vertex/model_triangle_vertex_readlock.h"
 
@@ -20,7 +20,7 @@ namespace dragonpoop
         this->triangle_id = triangle_id;
         this->vertex_id = vertex_id;
         this->triangle_vertex_id = triangle_vertex_id;
-        this->sync();
+        this->sync( ml );
     }
 
     //dtor
@@ -78,20 +78,14 @@ namespace dragonpoop
     }
 
     //get vertexes
-    void model_triangle_vertex_instance::getVertex( dpvertexindex_buffer *b )
+    void model_triangle_vertex_instance::getVertex( model_writelock *ml, dpvertexindex_buffer *b )
     {
         std::list<model_vertex_instance_ref *> l;
         std::list<model_vertex_instance_ref *>::iterator i;
         model_vertex_instance_ref *p;
         model_vertex_instance_readlock *pl;
         shared_obj_guard o, om;
-        model_ref *m;
-        model_readlock *ml;
         dpvertex v;
-
-        m = this->getModel();
-        ml = (model_readlock *)om.readLock( m );
-        delete m;
 
         ml->getVertexInstancesByInstanceAndVertex( this->getInstanceId(), this->getVertexId(), &l );
 
@@ -108,8 +102,8 @@ namespace dragonpoop
             v.start.normal = this->norm[ 0 ];
             v.end.normal = this->norm[ 1 ];
 
-            pl->getVertex( &v );
-            b->addVertex( &v, pl->getVertexId() );
+            pl->getVertex( ml, &v );
+           // b->addVertex( &v, pl->getVertexId() );
         }
 
         ml->releaseGetVertexInstances( &l );
@@ -117,17 +111,12 @@ namespace dragonpoop
 
 
     //sync vertex
-    void model_triangle_vertex_instance::sync( void )
+    void model_triangle_vertex_instance::sync( model_writelock *ml )
     {
         model_triangle_vertex_ref *v;
         model_triangle_vertex_readlock *vl;
         shared_obj_guard o;
-        model_ref *m;
-        model_readlock *ml;
 
-        m = this->getModel();
-        ml = (model_readlock *)o.readLock( m );
-        delete m;
         v = ml->findTriangleVertex( this->getTriangleVertexId() );
         if( !v )
             return;

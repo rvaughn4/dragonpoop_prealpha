@@ -6,7 +6,7 @@
 #include "../model_triangle_instance/model_triangle_instance_ref.h"
 #include "../model_triangle_instance/model_triangle_instance_readlock.h"
 #include "../model_ref.h"
-#include "../model_readlock.h"
+#include "../model_writelock.h"
 
 namespace dragonpoop
 {
@@ -17,6 +17,7 @@ namespace dragonpoop
         this->instance_id = instance_id;
         this->group_id = group_id;
         this->parent_id = parent_id;
+        this->sync( ml );
     }
 
     //dtor
@@ -99,17 +100,19 @@ namespace dragonpoop
     //get vertexes
     void model_group_instance::getVertexes( dpvertexindex_buffer *b )
     {
+        b->copy( &this->vb );
+    }
+
+    //sync group
+    void model_group_instance::sync( model_writelock *ml )
+    {
         std::list<model_triangle_instance_ref *> l;
         std::list<model_triangle_instance_ref *>::iterator i;
         model_triangle_instance_ref *p;
         model_triangle_instance_readlock *pl;
-        shared_obj_guard o, om;
-        model_ref *m;
-        model_readlock *ml;
+        shared_obj_guard o;
 
-        m = this->getModel();
-        ml = (model_readlock *)om.readLock( m );
-        delete m;
+        this->vb.clear();
 
         ml->getTriangleInstancesByInstanceAndGroup( this->getInstanceId(), this->getGroupId(), &l );
 
@@ -117,7 +120,7 @@ namespace dragonpoop
         {
             p = *i;
             pl = (model_triangle_instance_readlock *)o.readLock( p );
-            pl->getVertexes( b );
+            pl->getVertexes( ml, &this->vb );
         }
 
         ml->releaseGetTriangleInstances( &l );

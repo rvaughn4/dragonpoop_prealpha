@@ -40,6 +40,8 @@ namespace dragonpoop
         void makeGroups( dpthread_lock *thd, model_writelock *ml );
         //destroy group instances
         void killGroups( void );
+        //sync group instances
+        void syncGroups( model_writelock *ml );
         //get group instances
         unsigned int getGroups( std::list<model_group_instance_ref *> *l );
         //get group instances by parent
@@ -57,7 +59,7 @@ namespace dragonpoop
         //destroy triangle vertex instances
         void killTriangleVertexs( void );
         //sync traingle vertexs
-        void syncTriangleVertexs( void );
+        void syncTriangleVertexs( model_writelock *ml );
         //get triangle vertex instances
         unsigned int getTriangleVertexs( std::list<model_triangle_vertex_instance_ref *> *l );
         //get triangle vertex instances by triangle
@@ -67,7 +69,7 @@ namespace dragonpoop
         //destroy vertex instances
         void killVertexs( void );
         //sync vertexes
-        void syncVertexs( void );
+        void syncVertexs( model_writelock *ml );
         //get vertex instances
         unsigned int getVertexs( std::list<model_vertex_instance_ref *> *l );
         //returns true if has renderer

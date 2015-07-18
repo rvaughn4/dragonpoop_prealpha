@@ -10,6 +10,7 @@ namespace dragonpoop
     class model_group_instance;
     class model_group_instance_ref;
     class dpvertexindex_buffer;
+    class model_writelock;
 
     class model_group_instance_writelock : public model_component_writelock
     {
@@ -41,6 +42,8 @@ namespace dragonpoop
         shared_obj_ref *getRenderer( void );
         //get vertexes
         void getVertexes( dpvertexindex_buffer *b );
+        //sync group
+        void sync( model_writelock *ml );
 
         friend class model_group_instance;
     };

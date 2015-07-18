@@ -10,7 +10,7 @@ namespace dragonpoop
 {
 
     //ctor
-    openglx_1o5_renderer::openglx_1o5_renderer( core *c, dptaskpool_writelock *tp ) : renderer( c, tp )
+    openglx_1o5_renderer::openglx_1o5_renderer( core *c, gfx_writelock *g, dptaskpool_writelock *tp ) : renderer( c, g, tp )
     {
         memset( &this->gl, 0, sizeof( this->gl ) );
     }

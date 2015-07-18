@@ -42,15 +42,15 @@ namespace dragonpoop
     }
 
     //get vertexes
-    void model_triangle_vertex_instance_writelock::getVertex( dpvertexindex_buffer *b )
+    void model_triangle_vertex_instance_writelock::getVertex( model_writelock *ml, dpvertexindex_buffer *b )
     {
-        this->t->getVertex( b );
+        this->t->getVertex( ml, b );
     }
 
     //sync vertex
-    void model_triangle_vertex_instance_writelock::sync( void )
+    void model_triangle_vertex_instance_writelock::sync( model_writelock *ml )
     {
-        this->t->sync();
+        this->t->sync( ml );
     }
 
 };

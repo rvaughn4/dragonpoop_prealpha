@@ -4,6 +4,7 @@
 
 #include "../model_component/model_component_type.h"
 #include "../model_component/model_component.h"
+#include "../../dpvertex/dpvertexes.h"
 
 namespace dragonpoop
 {
@@ -11,7 +12,7 @@ namespace dragonpoop
     class model_group_instance_ref;
     class model_group_instance_readlock;
     class model_group_instance_writelock;
-    class dpvertexindex_buffer;
+    class model_writelock;
 
     class model_group_instance : public model_component
     {
@@ -20,6 +21,7 @@ namespace dragonpoop
 
         dpid instance_id, group_id, parent_id;
         shared_obj_ref *r;
+        dpvertexindex_buffer vb;
 
     protected:
 
@@ -45,6 +47,8 @@ namespace dragonpoop
         shared_obj_ref *getRenderer( void );
         //get vertexes
         void getVertexes( dpvertexindex_buffer *b );
+        //sync group
+        void sync( model_writelock *ml );
 
     public:
 

@@ -36,9 +36,9 @@ namespace dragonpoop
         //return triangle vertex id
         dpid getTriangleVertexId( void );
         //get vertexes
-        void getVertex( dpvertexindex_buffer *b );
+        void getVertex( model_writelock *ml, dpvertexindex_buffer *b );
         //sync vertex
-        void sync( void );
+        void sync( model_writelock *ml );
 
         friend class model_triangle_vertex_instance;
     };

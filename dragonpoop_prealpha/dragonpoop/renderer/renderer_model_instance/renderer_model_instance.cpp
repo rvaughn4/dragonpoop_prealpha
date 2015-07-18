@@ -113,6 +113,12 @@ namespace dragonpoop
                 this->beenAssetSynced = 1;
             }
         }
+
+        if( !this->beenUpdated )
+        {
+            this->syncGroups( thd, m, r );
+            this->beenUpdated = 1;
+        }
     }
 
     //render model instance

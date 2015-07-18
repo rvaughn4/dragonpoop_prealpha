@@ -9,12 +9,14 @@
 #include "../model_triangle_vertex/model_triangle_vertexes.h"
 #include "../model_vertex_instance/model_vertex_instances.h"
 #include "../model_vertex/model_vertexes.h"
+#include "../../../renderer/renderer_model_instance/renderer_model_instance_ref.h"
+#include "../../../renderer/renderer_model_instance/renderer_model_instance_readlock.h"
 
 namespace dragonpoop
 {
 
     //ctor
-    model_instance::model_instance( dpthread_lock *thd, model_writelock *ml, dpid id ) : model_component( ml, id,model_component_type_instance, 200 )
+    model_instance::model_instance( dpthread_lock *thd, model_writelock *ml, dpid id ) : model_component( ml, id,model_component_type_instance, 1000 )
     {
         this->r = 0;
         this->makeGroups( thd, ml );
@@ -54,8 +56,19 @@ namespace dragonpoop
     //do background processing
     void model_instance::onRun( dpthread_lock *thd, gfx_writelock *g, model_writelock *m, model_component_writelock *l )
     {
-        this->syncTriangleVertexs();
-        this->syncVertexs();
+        renderer_model_instance_readlock *rl;
+        shared_obj_guard o;
+
+        this->syncTriangleVertexs( m );
+        this->syncVertexs( m );
+        this->syncGroups( m );
+
+        if( !this->r )
+            return;
+        rl = (renderer_model_instance_readlock *)o.readLock( this->r );
+        if( !rl )
+            return;
+        rl->update();
     }
 
     //create group instances
@@ -97,6 +110,27 @@ namespace dragonpoop
             p = *i;
             pl = (model_group_instance_writelock *)o.writeLock( p );
             pl->kill();
+        }
+
+        model_instance::releaseGetGroups( &l );
+    }
+
+    //sync group instances
+    void model_instance::syncGroups( model_writelock *ml )
+    {
+        std::list<model_group_instance_ref *> l;
+        std::list<model_group_instance_ref *>::iterator i;
+        model_group_instance_ref *p;
+        model_group_instance_writelock *pl;
+        shared_obj_guard o;
+
+        this->getGroups( &l );
+
+        for( i = l.begin(); i != l.end(); ++i )
+        {
+            p = *i;
+            pl = (model_group_instance_writelock *)o.writeLock( p );
+            pl->sync( ml );
         }
 
         model_instance::releaseGetGroups( &l );
@@ -275,7 +309,7 @@ namespace dragonpoop
     }
 
     //sync triangle vertex instances
-    void model_instance::syncTriangleVertexs( void )
+    void model_instance::syncTriangleVertexs( model_writelock *ml )
     {
         std::list<model_triangle_vertex_instance_ref *> l;
         std::list<model_triangle_vertex_instance_ref *>::iterator i;
@@ -289,7 +323,7 @@ namespace dragonpoop
         {
             p = *i;
             pl = (model_triangle_vertex_instance_writelock *)o.writeLock( p );
-            pl->sync();
+            pl->sync( ml );
         }
 
         model_instance::releaseGetTriangleVertexs( &l );
@@ -382,7 +416,7 @@ namespace dragonpoop
     }
 
     //sync vertex instances
-    void model_instance::syncVertexs( void )
+    void model_instance::syncVertexs( model_writelock *ml )
     {
         std::list<model_vertex_instance_ref *> l;
         std::list<model_vertex_instance_ref *>::iterator i;
@@ -396,7 +430,7 @@ namespace dragonpoop
         {
             p = *i;
             pl = (model_vertex_instance_writelock *)o.writeLock( p );
-            pl->sync();
+            pl->sync( ml );
         }
 
         model_instance::releaseGetVertexs( &l );

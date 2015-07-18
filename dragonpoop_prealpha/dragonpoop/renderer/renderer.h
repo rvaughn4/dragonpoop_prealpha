@@ -19,6 +19,8 @@ namespace dragonpoop
     class renderer_model_instance;
     class renderer_model_group_instance;
     class model_group_instance_writelock;
+    class gfx_ref;
+    class gfx_writelock;
 
     class renderer : public shared_obj
     {
@@ -28,6 +30,7 @@ namespace dragonpoop
         dptask *tsk;
         renderer_task *gtsk;
         core *c;
+        gfx_ref *g;
         std::atomic<bool> bDoRun, bIsRun;
         std::list<renderer_model_instance *> models;
         uint64_t lastMakeModel;
@@ -71,7 +74,7 @@ namespace dragonpoop
         //generate model group instance
         virtual renderer_model_group_instance *genGroup( gfx_writelock *g, renderer_writelock *r, model_instance_writelock *m, model_group_instance_writelock *grp );
         //make model instances
-        void makeModels( gfx_writelock *g, renderer_writelock *r );
+        void makeModels( renderer_writelock *r );
         //kill model instances
         void killModels( void );
         //run model instances
@@ -82,7 +85,7 @@ namespace dragonpoop
     public:
 
         //ctor
-        renderer( core *c, dptaskpool_writelock *tp );
+        renderer( core *c, gfx_writelock *g, dptaskpool_writelock *tp );
         //dtor
         virtual ~renderer( void );
         //returns true if running

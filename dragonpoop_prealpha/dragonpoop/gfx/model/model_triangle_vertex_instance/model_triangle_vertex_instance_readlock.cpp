@@ -42,9 +42,9 @@ namespace dragonpoop
     }
 
     //get vertexes
-    void model_triangle_vertex_instance_readlock::getVertex( dpvertexindex_buffer *b )
+    void model_triangle_vertex_instance_readlock::getVertex( model_writelock *ml, dpvertexindex_buffer *b )
     {
-        this->t->getVertex( b );
+        this->t->getVertex( ml, b );
     }
 
 };

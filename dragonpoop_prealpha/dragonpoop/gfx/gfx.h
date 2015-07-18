@@ -64,8 +64,6 @@ namespace dragonpoop
         model_ref *createModel( dpthread_lock *thd, gfx_writelock *g, dpid id, const char *cname );
         //get model instances
         unsigned int getInstances( std::list<model_instance_ref *> *l );
-        //release list returned by getInstances()
-        static void releaseGetInstances( std::list<model_instance_ref *> *l );
 
     public:
 
@@ -77,6 +75,8 @@ namespace dragonpoop
         bool isRunning( void );
         //return core
         core *getCore( void );
+        //release list returned by getInstances()
+        static void releaseGetInstances( std::list<model_instance_ref *> *l );
 
         friend class gfx_readlock;
         friend class gfx_writelock;

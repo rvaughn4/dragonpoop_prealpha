@@ -77,7 +77,7 @@ namespace dragonpoop
     public:
 
         //ctor
-        openglx_1o5_renderer( core *c, dptaskpool_writelock *tp );
+        openglx_1o5_renderer( core *c, gfx_writelock *g, dptaskpool_writelock *tp );
         //dtor
         virtual ~openglx_1o5_renderer( void );
 

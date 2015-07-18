@@ -59,4 +59,10 @@ namespace dragonpoop
         this->t->getVertexes( b );
     }
 
+    //sync group
+    void model_group_instance_writelock::sync( model_writelock *ml )
+    {
+        this->t->sync( ml );
+    }
+
 };
