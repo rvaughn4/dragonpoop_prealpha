@@ -36,11 +36,11 @@ namespace dragonpoop
         //get buffer
         dpvertex *getBuffer( void );
         //add vertex
-        void addVertex( dpvertex *v );
+        uint16_t addVertex( dpvertex *v );
         //clear
         void clear( void );
-        //find vertex offset using vertex id
-        uint16_t findVertex( dpid id );
+        //find vertex that matches vertex given
+        bool findVertex( dpvertex *v, uint16_t *p_offset );
         
     };
     

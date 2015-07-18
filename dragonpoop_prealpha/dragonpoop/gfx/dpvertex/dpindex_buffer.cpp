@@ -54,14 +54,6 @@ namespace dragonpoop
     }
 
     //add index
-    void dpindex_buffer::addIndex( uint16_t i )
-    {
-        dpindex b;
-        b.i = i;
-        this->addIndex( &b );
-    }
-
-    //add index
     void dpindex_buffer::addIndex( dpindex *i )
     {
         unsigned int nc, nm;
@@ -88,9 +80,18 @@ namespace dragonpoop
     }
 
     //add index by vertex id
-    void dpindex_buffer::addIndex( dpvertex_buffer *vb, dpid id )
+    void dpindex_buffer::addIndex( dpvertex_buffer *vb, dpvertex *v, dpid id )
     {
-        this->addIndex( vb->findVertex( id ) );
+        dpindex i;
+
+        i.id = id;
+
+        if( vb->findVertex( v, &i.i ) )
+            this->addIndex( &i );
+        else
+            i.i = vb->addVertex( v );
+
+        this->addIndex( &i );
     }
 
     //clear

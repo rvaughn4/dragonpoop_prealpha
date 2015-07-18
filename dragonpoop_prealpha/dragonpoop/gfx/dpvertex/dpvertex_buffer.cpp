@@ -55,7 +55,7 @@ namespace dragonpoop
     }
 
     //add index
-    void dpvertex_buffer::addVertex( dpvertex *i )
+    uint16_t dpvertex_buffer::addVertex( dpvertex *i )
     {
         unsigned int nc, nm;
         dpvertex *nb;
@@ -66,7 +66,7 @@ namespace dragonpoop
             nm = nc * 2 + 3;
             nb = (dpvertex *)malloc( sizeof(dpvertex *) * nm );
             if( !nb )
-                return;
+                return 0;
             if( this->buffer.ptr )
             {
                 memcpy( nb, this->buffer.ptr, sizeof(dpvertex *) * this->buffer.cnt );
@@ -77,8 +77,9 @@ namespace dragonpoop
         }
 
         this->buffer.ptr[ nc - 1 ] = *i;
-        this->t->addLeaf( i->id, (uint16_t)( nc - 1 ) );
+        this->t->addLeaf( i, (uint16_t)( nc - 1 ) );
         this->buffer.cnt = nc;
+        return (uint16_t)( nc - 1 );
     }
 
     //clear
@@ -92,10 +93,10 @@ namespace dragonpoop
         this->t->clear();
     }
 
-    //find vertex offset using vertex id
-    uint16_t dpvertex_buffer::findVertex( dpid id )
+    //find vertex that matches vertex given
+    bool dpvertex_buffer::findVertex( dpvertex *v, uint16_t *p_offset )
     {
-        return this->t->findLeaf( id );
+        return this->t->findLeaf( v, p_offset );
     }
 
 };

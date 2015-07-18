@@ -4,6 +4,7 @@
 
 #include "dpindex.h"
 #include "../../core/dpid/dpid.h"
+#include "dpvertex.h"
 
 namespace dragonpoop
 {
@@ -36,11 +37,9 @@ namespace dragonpoop
         //get buffer
         dpindex *getBuffer( void );
         //add index
-        void addIndex( uint16_t i );
-        //add index
         void addIndex( dpindex *i );
-        //add index by vertex id
-        void addIndex( dpvertex_buffer *vb, dpid id );
+        //add index by vertex
+        void addIndex( dpvertex_buffer *vb, dpvertex *v, dpid id );
         //clear
         void clear( void );
 

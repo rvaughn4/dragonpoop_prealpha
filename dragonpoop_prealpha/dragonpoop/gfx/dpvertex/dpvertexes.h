@@ -16,5 +16,6 @@
 #include "dpvertex_buffer_indextree.h"
 #include "dpvertex_buffer.h"
 #include "dpindex_buffer.h"
+#include "dpvertexindex_buffer.h"
 
 #endif

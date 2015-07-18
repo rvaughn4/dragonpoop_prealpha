@@ -17,27 +17,36 @@ namespace dragonpoop
     }
 
     //find leaf
-    uint16_t dpvertex_buffer_indextree::findLeaf( dpid id )
+    bool dpvertex_buffer_indextree::findLeaf( dpvertex *v, uint16_t *p_offset )
     {
         union
         {
             uint64_t r;
             void *rp;
         };
-        rp = this->dpid_bytetree::findLeaf( id );
-        return (uint16_t)r;
+        rp = this->bytetree::findLeaf( (char *)v, sizeof(dpvertex) );
+
+        if( !r )
+            return 0;
+        r--;
+        if( p_offset )
+            *p_offset = r;
+
+        return 1;
     }
 
     //add leaf
-    void dpvertex_buffer_indextree::addLeaf( dpid id, uint16_t i )
+    void dpvertex_buffer_indextree::addLeaf( dpvertex *v, uint16_t offset )
     {
         union
         {
             uint64_t r;
             void *rp;
         };
-        r = i;
-        this->dpid_bytetree::addLeaf( id, rp );
+
+        r = offset + 1;
+
+        this->bytetree::addLeaf( (char *)v, sizeof(dpvertex), rp );
     }
 
 };

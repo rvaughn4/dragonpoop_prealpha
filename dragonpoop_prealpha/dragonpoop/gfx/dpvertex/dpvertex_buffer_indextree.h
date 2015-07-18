@@ -3,12 +3,14 @@
 #define dragonpoop_dpvertex_buffer_indextree_h
 
 #include "../../core/bytetree/dpid_bytetree.h"
+#include "dpindex.h"
+#include "dpvertex.h"
 #include <stdint.h>
 
 namespace dragonpoop
 {
 
-    class dpvertex_buffer_indextree : public dpid_bytetree
+    class dpvertex_buffer_indextree : public bytetree
     {
     private:
 
@@ -21,9 +23,9 @@ namespace dragonpoop
         //dtor
         virtual ~dpvertex_buffer_indextree( void );
         //find leaf
-        uint16_t findLeaf( dpid id );
+        bool findLeaf( dpvertex *v, uint16_t *p_offset );
         //add leaf
-        void addLeaf( dpid id, uint16_t i );
+        void addLeaf( dpvertex *v, uint16_t offset );
         
     };
     

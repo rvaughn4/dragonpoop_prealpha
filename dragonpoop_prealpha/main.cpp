@@ -37,11 +37,11 @@ namespace dragonpoop
             ms3d_model_loader::save( th, ml, "o1.ms3d" );
             mi = ml->createInstance( th );
 
-            ml->clear();
-            ms3d_model_loader::load( th, ml, "o1.ms3d" );
-            ms3d_model_loader::save( th, ml, "o2.ms3d" );
+            //ml->clear();
+         //   ms3d_model_loader::load( th, ml, "o1.ms3d" );
+         //   ms3d_model_loader::save( th, ml, "o2.ms3d" );
 
-            ml->kill();
+          //  ml->kill();
             tl->kill();
             delete mr;
             delete mi;
