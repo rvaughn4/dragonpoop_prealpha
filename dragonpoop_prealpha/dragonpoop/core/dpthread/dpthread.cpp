@@ -366,16 +366,15 @@ namespace dragonpoop
         dptask_ref *r;
         dptask_writelock *rl;
         shared_obj_guard g;
-        uint64_t td;
-        unsigned int wait_add;
+        uint64_t td, lowest_delay;
 
-        wait_add = 0;
+        lowest_delay = 3000;
         while( t->trun )
         {
             tl = t->lock();
             if( !tl )
             {
-                std::this_thread::sleep_for( std::chrono::milliseconds( 3 ) );
+                std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
                 continue;
             }
 
@@ -396,9 +395,9 @@ namespace dragonpoop
                     r = t->popBeenRan();
                 }
                 delete tl;
-                std::this_thread::sleep_for( std::chrono::milliseconds( 1 + wait_add ) );
-                if( wait_add < 50 )
-                    wait_add++;
+                std::this_thread::sleep_for( std::chrono::milliseconds( lowest_delay ) );
+                if( lowest_delay < 1000 )
+                    lowest_delay += 3 + lowest_delay / 2;
                 t->getTaskFromPool();
                 continue;
             }
@@ -419,6 +418,11 @@ namespace dragonpoop
                 continue;
             }
 
+            td = rl->getDelay();
+            if( td < 3 )
+                td = 3;
+            if( lowest_delay > td )
+                lowest_delay = td;
             td = t->ticks - rl->getLastTime();
             if( td < rl->getDelay() )
             {
@@ -441,7 +445,6 @@ namespace dragonpoop
             t->dumpTaskToPool();
             t->pushBeenRan( r );
             g.unlock();
-            wait_add = 0;
 
             delete tl;
         }
