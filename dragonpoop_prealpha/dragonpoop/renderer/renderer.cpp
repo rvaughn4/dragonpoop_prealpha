@@ -34,7 +34,7 @@ namespace dragonpoop
         this->bDoRun = 1;
         this->bIsRun = 0;
         this->gtsk = new renderer_task( this );
-        this->tsk = new dptask( c->getMutexMaster(), this->gtsk, 3, 1 );
+        this->tsk = new dptask( c->getMutexMaster(), this->gtsk, 20, 1 );
         tp->addTask( this->tsk );
     }
 

@@ -7,6 +7,7 @@
 #include "../shared_obj/shared_obj_guard.h"
 #include <stdlib.h>
 #include <string.h>
+#include <chrono>
 
 namespace dragonpoop
 {
@@ -242,17 +243,12 @@ namespace dragonpoop
         return 0;
     }
 
-    //handle task pool
-    void dpthread::handlePool( void )
+    //get new task from pool
+    void dpthread::getTaskFromPool( void )
     {
         dptask_ref *t;
-        dptask_readlock *tl;
         dptaskpool_writelock *tpl;
-        shared_obj_guard g, g0;
-
-        this->tp_new_cnt++;
-        if( this->tp_new_cnt < 20 )
-            return;
+        shared_obj_guard g;
 
         if( !this->tp )
             return;
@@ -262,26 +258,38 @@ namespace dragonpoop
 
         t = tpl->p->popTask();
         this->pushToRun( t );
+    }
 
-        if( this->ticks - this->tp_dump_cnt < 1000 )
+    //dump old task back to pool
+    void dpthread::dumpTaskToPool( void )
+    {
+        dptask_ref *t;
+        dptask_readlock *tl;
+        dptaskpool_writelock *tpl;
+        shared_obj_guard g, g0;
+
+        if( !this->tp )
             return;
-        this->tp_dump_cnt = this->ticks;
+        tpl = (dptaskpool_writelock *)g.tryWriteLock( this->tp, 3 );
+        if( !tpl )
+            return;
 
         t = this->popBeenRan();
-        while( t )
+        if( !t )
+            return;
+
+        tl = (dptask_readlock *)g0.tryReadLock( t, 3 );
+        if( !tl )
         {
-            tl = (dptask_readlock *)g0.readLock( t );
-            if( tl )
-            {
-                if( tl->isSingleThread() )
-                    this->pushToRun( t );
-                else
-                    tpl->p->pushTask( t );
-            }
-            else
-                tpl->p->pushTask( t );
-            t = this->popBeenRan();
+            tpl->p->pushTask( t );
+            return;
         }
+        if( tl->isSingleThread() )
+        {
+            this->pushToRun( t );
+            return;
+        }
+        tpl->p->pushTask( t );
     }
 
     //delete all tasks (or throw them on pool)
@@ -358,19 +366,25 @@ namespace dragonpoop
         dptask_ref *r;
         dptask_writelock *rl;
         shared_obj_guard g;
+        uint64_t td;
+        unsigned int wait_add;
 
+        wait_add = 0;
         while( t->trun )
         {
             tl = t->lock();
             if( !tl )
             {
-                std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
+                std::this_thread::sleep_for( std::chrono::milliseconds( 3 ) );
                 continue;
             }
-            t->handlePool();
 
-            t->epoch = std::chrono::seconds( std::chrono::seconds( std::time( 0 ) ) ).count();
-            t->ticks = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+            std::chrono::time_point<std::chrono::steady_clock> tp_now;
+            tp_now = std::chrono::steady_clock::now();
+            std::chrono::steady_clock::duration d_s = tp_now.time_since_epoch();
+
+            t->ticks = d_s.count() * 1000 * std::chrono::steady_clock::period::num / std::chrono::steady_clock::period::den;
+            t->epoch = d_s.count() * std::chrono::steady_clock::period::num / std::chrono::steady_clock::period::den;
 
             r = t->popToRun();
             if( !r )
@@ -382,7 +396,10 @@ namespace dragonpoop
                     r = t->popBeenRan();
                 }
                 delete tl;
-                std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
+                std::this_thread::sleep_for( std::chrono::milliseconds( 1 + wait_add ) );
+                if( wait_add < 50 )
+                    wait_add++;
+                t->getTaskFromPool();
                 continue;
             }
 
@@ -399,16 +416,15 @@ namespace dragonpoop
                 t->pushBeenRan( r );
                 delete tl;
                 g.unlock();
-                std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
                 continue;
             }
 
-            if( rl->getLastTime() + rl->getDelay() > t->ticks )
+            td = t->ticks - rl->getLastTime();
+            if( td < rl->getDelay() )
             {
                 t->pushBeenRan( r );
                 delete tl;
                 g.unlock();
-                std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
                 continue;
             }
 
@@ -417,17 +433,17 @@ namespace dragonpoop
                 delete tl;
                 g.unlock();
                 delete r;
-                std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
                 continue;
             }
 
             rl->run( rl, tl );
             rl->setLastTime( t->ticks );
+            t->dumpTaskToPool();
             t->pushBeenRan( r );
             g.unlock();
+            wait_add = 0;
 
             delete tl;
-            std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
         }
     }
 

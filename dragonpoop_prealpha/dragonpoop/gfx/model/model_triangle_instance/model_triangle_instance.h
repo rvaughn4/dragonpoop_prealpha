@@ -4,6 +4,7 @@
 
 #include "../model_component/model_component_type.h"
 #include "../model_component/model_component.h"
+#include "../../dpvertex/dpvertexes.h"
 
 namespace dragonpoop
 {
@@ -14,12 +15,19 @@ namespace dragonpoop
     class dpvertexindex_buffer;
     class model_writelock;
 
+    struct model_triangle_instance_vert
+    {
+        dpid vertex_id, triagnle_vertex_id, joint_id;
+        dpvertex data;
+    };
+
     class model_triangle_instance : public model_component
     {
 
     private:
 
         dpid instance_id, triangle_id, group_id;
+        model_triangle_instance_vert vert[ 3 ];
 
     protected:
 
@@ -39,6 +47,8 @@ namespace dragonpoop
         dpid getGroupId( void );
         //get vertexes
         void getVertexes( model_writelock *ml, dpvertexindex_buffer *b );
+        //sync triangle
+        void sync( model_writelock *ml );
 
     public:
 

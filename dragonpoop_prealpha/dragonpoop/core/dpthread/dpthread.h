@@ -49,10 +49,12 @@ namespace dragonpoop
         void pushBeenRan( dptask_ref *t );
         //get and remove task from beenran
         dptask_ref *popBeenRan( void );
-        //handle task pool
-        void handlePool( void );
         //delete all tasks (or throw them on pool)
         void deleteTasks( void );
+        //get new task from pool
+        void getTaskFromPool( void );
+        //dump old task back to pool
+        void dumpTaskToPool( void );
 
     protected:
 

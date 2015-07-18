@@ -64,12 +64,12 @@ namespace dragonpoop
         if( !this->buffer.ptr || nc >= this->buffer.max )
         {
             nm = nc * 2 + 3;
-            nb = (dpvertex *)malloc( sizeof(dpvertex *) * nm );
+            nb = (dpvertex *)malloc( sizeof(dpvertex) * nm );
             if( !nb )
                 return 0;
             if( this->buffer.ptr )
             {
-                memcpy( nb, this->buffer.ptr, sizeof(dpvertex *) * this->buffer.cnt );
+                memcpy( nb, this->buffer.ptr, sizeof(dpvertex) * this->buffer.cnt );
                 free( this->buffer.ptr );
             }
             this->buffer.ptr = nb;

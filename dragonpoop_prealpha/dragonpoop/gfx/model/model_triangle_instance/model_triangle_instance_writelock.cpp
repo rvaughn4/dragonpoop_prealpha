@@ -41,4 +41,10 @@ namespace dragonpoop
         this->t->getVertexes( ml, b );
     }
 
+    //sync triangle
+    void model_triangle_instance_writelock::sync( model_writelock *ml )
+    {
+        this->t->sync( ml );
+    }
+
 };

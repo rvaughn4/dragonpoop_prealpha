@@ -6,6 +6,7 @@
 #include "../../../core/shared_obj/shared_obj_guard.h"
 #include "../../../core/dpid/dpid.h"
 #include <string>
+#include <atomic>
 
 namespace dragonpoop
 {
@@ -27,7 +28,7 @@ namespace dragonpoop
         dpid id;
         bool bAlive;
         uint16_t ctype;
-        uint64_t run_wait, last_run;
+        std::atomic<uint64_t> run_wait, last_run;
         std::string scomment;
 
     protected:

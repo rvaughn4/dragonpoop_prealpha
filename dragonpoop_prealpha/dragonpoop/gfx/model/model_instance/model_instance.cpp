@@ -16,7 +16,7 @@ namespace dragonpoop
 {
 
     //ctor
-    model_instance::model_instance( dpthread_lock *thd, model_writelock *ml, dpid id ) : model_component( ml, id,model_component_type_instance, 1000 )
+    model_instance::model_instance( dpthread_lock *thd, model_writelock *ml, dpid id ) : model_component( ml, id,model_component_type_instance, 2000 )
     {
         this->r = 0;
         this->makeGroups( thd, ml );
@@ -59,13 +59,12 @@ namespace dragonpoop
         renderer_model_instance_readlock *rl;
         shared_obj_guard o;
 
-        this->syncTriangleVertexs( m );
-        this->syncVertexs( m );
+        this->syncTriangles( m );
         this->syncGroups( m );
 
         if( !this->r )
             return;
-        rl = (renderer_model_instance_readlock *)o.readLock( this->r );
+        rl = (renderer_model_instance_readlock *)o.tryReadLock( this->r, 100 );
         if( !rl )
             return;
         rl->update();
@@ -222,6 +221,27 @@ namespace dragonpoop
         model_instance::releaseGetTriangles( &l );
     }
 
+    //sync triangle instances
+    void model_instance::syncTriangles( model_writelock *ml )
+    {
+        std::list<model_triangle_instance_ref *> l;
+        std::list<model_triangle_instance_ref *>::iterator i;
+        model_triangle_instance_ref *p;
+        model_triangle_instance_writelock *pl;
+        shared_obj_guard o;
+
+        this->getTriangles( &l );
+
+        for( i = l.begin(); i != l.end(); ++i )
+        {
+            p = *i;
+            pl = (model_triangle_instance_writelock *)o.writeLock( p );
+            pl->sync( ml );
+        }
+
+        model_instance::releaseGetTriangles( &l );
+    }
+
     //get triangle instances
     unsigned int model_instance::getTriangles( std::list<model_triangle_instance_ref *> *l )
     {
@@ -308,27 +328,6 @@ namespace dragonpoop
         model_instance::releaseGetTriangleVertexs( &l );
     }
 
-    //sync triangle vertex instances
-    void model_instance::syncTriangleVertexs( model_writelock *ml )
-    {
-        std::list<model_triangle_vertex_instance_ref *> l;
-        std::list<model_triangle_vertex_instance_ref *>::iterator i;
-        model_triangle_vertex_instance_ref *p;
-        model_triangle_vertex_instance_writelock *pl;
-        shared_obj_guard o;
-
-        this->getTriangleVertexs( &l );
-
-        for( i = l.begin(); i != l.end(); ++i )
-        {
-            p = *i;
-            pl = (model_triangle_vertex_instance_writelock *)o.writeLock( p );
-            pl->sync( ml );
-        }
-
-        model_instance::releaseGetTriangleVertexs( &l );
-    }
-
     //get triangle vertex instances
     unsigned int model_instance::getTriangleVertexs( std::list<model_triangle_vertex_instance_ref *> *l )
     {
@@ -410,27 +409,6 @@ namespace dragonpoop
             p = *i;
             pl = (model_vertex_instance_writelock *)o.writeLock( p );
             pl->kill();
-        }
-
-        model_instance::releaseGetVertexs( &l );
-    }
-
-    //sync vertex instances
-    void model_instance::syncVertexs( model_writelock *ml )
-    {
-        std::list<model_vertex_instance_ref *> l;
-        std::list<model_vertex_instance_ref *>::iterator i;
-        model_vertex_instance_ref *p;
-        model_vertex_instance_writelock *pl;
-        shared_obj_guard o;
-
-        this->getVertexs( &l );
-
-        for( i = l.begin(); i != l.end(); ++i )
-        {
-            p = *i;
-            pl = (model_vertex_instance_writelock *)o.writeLock( p );
-            pl->sync( ml );
         }
 
         model_instance::releaseGetVertexs( &l );

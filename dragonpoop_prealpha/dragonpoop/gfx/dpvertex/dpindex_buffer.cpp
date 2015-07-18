@@ -63,12 +63,12 @@ namespace dragonpoop
         if( !this->buffer.ptr || nc >= this->buffer.max )
         {
             nm = nc * 2 + 3;
-            nb = (dpindex *)malloc( sizeof(dpindex *) * nm );
+            nb = (dpindex *)malloc( sizeof(dpindex) * nm );
             if( !nb )
                 return;
             if( this->buffer.ptr )
             {
-                memcpy( nb, this->buffer.ptr, sizeof(dpindex *) * this->buffer.cnt );
+                memcpy( nb, this->buffer.ptr, sizeof(dpindex) * this->buffer.cnt );
                 free( this->buffer.ptr );
             }
             this->buffer.ptr = nb;

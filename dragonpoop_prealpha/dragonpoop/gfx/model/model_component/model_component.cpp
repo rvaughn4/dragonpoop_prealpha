@@ -9,6 +9,8 @@
 #include "../../../core/dpthread/dpthread_lock.h"
 #include "../../../core/shared_obj/shared_obj_guard.h"
 
+#include <iostream>
+
 namespace dragonpoop
 {
 
@@ -88,14 +90,16 @@ namespace dragonpoop
     //run model
     void model_component::run( dpthread_lock *thd, gfx_writelock *g, model_writelock *m, model_component_writelock *l )
     {
-        uint64_t t;
+        uint64_t t, td;
 
         if( !this->run_wait )
             return;
 
         t = thd->getTicks();
-        if( t - this->last_run < this->run_wait )
+        td = t - this->last_run;
+        if( td < this->run_wait )
             return;
+        std::cout << td << "\r\n";
 
         this->last_run = t;
         this->onRun( thd, g, m, l );
