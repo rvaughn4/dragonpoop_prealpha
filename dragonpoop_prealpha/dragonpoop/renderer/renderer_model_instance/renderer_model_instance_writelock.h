@@ -36,6 +36,8 @@ namespace dragonpoop
         void run( dpthread_lock *thd, renderer_writelock *r );
         //render model
         void render( dpthread_lock *thd, renderer_writelock *r );
+        //forces an update to happen next run cycle
+        void update( void );
 
         friend class renderer_model_instance;
     };

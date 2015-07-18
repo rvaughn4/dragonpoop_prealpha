@@ -29,6 +29,7 @@ namespace dragonpoop
         this->bAlive = 1;
         this->m = (model_instance_ref *)m->getRef();
         this->beenAssetSynced = 0;
+        this->beenUpdated = 1;
     }
 
     //dtor
@@ -92,6 +93,7 @@ namespace dragonpoop
     {
         mi->setRenderer( m );
         this->makeGroups( g, m, r, mi );
+        this->update();
     }
 
     //run model
@@ -189,6 +191,25 @@ namespace dragonpoop
         }
     }
 
+    //run groups
+    void renderer_model_instance::syncGroups( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r )
+    {
+        std::list<renderer_model_group_instance *> *l;
+        std::list<renderer_model_group_instance *>::iterator i;
+        renderer_model_group_instance *p;
+        renderer_model_group_instance_writelock *pl;
+        shared_obj_guard o;
+
+        l = &this->groups;
+        for( i = l->begin(); i != l->end(); ++i )
+        {
+            p = *i;
+            pl = (renderer_model_group_instance_writelock *)o.tryWriteLock( p, 100 );
+            if( pl )
+                pl->sync( thd, m, r );
+        }
+    }
+
     //render groups
     void renderer_model_instance::renderGroups( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r )
     {
@@ -212,6 +233,12 @@ namespace dragonpoop
     renderer_model_group_instance *renderer_model_instance::genGroup( gfx_writelock *g, renderer_writelock *r, model_instance_writelock *m, model_group_instance_writelock *grp )
     {
         return r->genGroup( g, m, grp );
+    }
+
+    //forces an update to happen next run cycle
+    void renderer_model_instance::update( void )
+    {
+        this->beenUpdated = 0;
     }
 
 };

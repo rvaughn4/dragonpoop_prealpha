@@ -10,6 +10,7 @@
 #include "../../core/core.h"
 #include "../../core/shared_obj/shared_obj_guard.h"
 #include "../../gfx/model/model_group_instance/model_group_instance_writelock.h"
+#include "../../gfx/model/model_group_instance/model_group_instance_readlock.h"
 #include "../../gfx/model/model_group_instance/model_group_instance_ref.h"
 #include "../../gfx/model/model_instance/model_instance_writelock.h"
 #include "../../gfx/model/model_instance/model_instance_ref.h"
@@ -105,6 +106,19 @@ namespace dragonpoop
                 this->beenAssetSynced = 1;
             }
         }
+    }
+
+    //run group
+    void renderer_model_group_instance::sync( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_model_group_instance_writelock *grp, renderer_writelock *r )
+    {
+        model_group_instance_readlock *gl;
+        shared_obj_guard o;
+
+        gl = (model_group_instance_readlock *)o.readLock( this->grp );
+        this->vb.clear();
+        gl->getVertexes( &this->vb );
+
+        this->syncGroups( thd, m, r );
     }
 
     //render group
@@ -203,6 +217,25 @@ namespace dragonpoop
             pl = (renderer_model_group_instance_writelock *)o.tryWriteLock( p, 100 );
             if( pl )
                 pl->run( thd, m, r );
+        }
+    }
+
+    //sync groups
+    void renderer_model_group_instance::syncGroups( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r )
+    {
+        std::list<renderer_model_group_instance *> *l;
+        std::list<renderer_model_group_instance *>::iterator i;
+        renderer_model_group_instance *p;
+        renderer_model_group_instance_writelock *pl;
+        shared_obj_guard o;
+
+        l = &this->groups;
+        for( i = l->begin(); i != l->end(); ++i )
+        {
+            p = *i;
+            pl = (renderer_model_group_instance_writelock *)o.tryWriteLock( p, 100 );
+            if( pl )
+                pl->sync( thd, m, r );
         }
     }
 

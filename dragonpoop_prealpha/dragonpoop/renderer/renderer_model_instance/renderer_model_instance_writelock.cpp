@@ -52,4 +52,9 @@ namespace dragonpoop
         this->t->render( thd, this, r );
     }
 
+    //forces an update to happen next run cycle
+    void renderer_model_instance_writelock::update( void )
+    {
+        this->t->update();
+    }
 };

@@ -30,6 +30,8 @@ namespace dragonpoop
         bool isAlive( void );
         //get id
         dpid getId( void );
+        //forces an update to happen next run cycle
+        void update( void );
 
         friend class renderer_model_instance;
     };

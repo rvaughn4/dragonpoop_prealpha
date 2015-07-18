@@ -37,7 +37,7 @@ namespace dragonpoop
         renderer_ref *r;
         model_instance_ref *m;
         std::list<renderer_model_group_instance *> groups;
-        bool beenAssetSynced;
+        bool beenAssetSynced, beenUpdated;
 
     protected:
 
@@ -61,12 +61,16 @@ namespace dragonpoop
         void makeGroups( gfx_writelock *g, renderer_model_instance_writelock *m, renderer_writelock *r, model_instance_writelock *mi );
         //kill groups
         void killGroups( renderer_model_instance_writelock *m, renderer_writelock *r );
+        //sync groups
+        void syncGroups( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
         //run groups
         void runGroups( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
         //render groups
         void renderGroups( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
         //generate group from renderer
         renderer_model_group_instance *genGroup( gfx_writelock *g, renderer_writelock *r, model_instance_writelock *m, model_group_instance_writelock *grp );
+        //forces an update to happen next run cycle
+        void update( void );
 
     public:
 

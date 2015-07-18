@@ -4,6 +4,7 @@
 
 #include "../../core/shared_obj/shared_obj.h"
 #include "../../core/dpid/dpid.h"
+#include "../../gfx/dpvertex/dpvertexes.h"
 
 namespace dragonpoop
 {
@@ -38,6 +39,7 @@ namespace dragonpoop
         model_instance_ref *m;
         bool beenAssetSynced;
         std::list<renderer_model_group_instance *> groups;
+        dpvertexindex_buffer vb;
 
     protected:
 
@@ -51,8 +53,10 @@ namespace dragonpoop
         dpid getId( void );
         //kill model
         void kill( void );
-        //run model
+        //run group
         void run( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_model_group_instance_writelock *grp, renderer_writelock *r );
+        //sync group
+        void sync( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_model_group_instance_writelock *grp, renderer_writelock *r );
         //render group
         void render( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_model_group_instance_writelock *grp, renderer_writelock *r );
         //return instance id
@@ -67,6 +71,8 @@ namespace dragonpoop
         void killGroups( renderer_model_instance_writelock *m, renderer_writelock *r );
         //run groups
         void runGroups( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
+        //sync groups
+        void syncGroups( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
         //render groups
         void renderGroups( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
 

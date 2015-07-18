@@ -47,6 +47,12 @@ namespace dragonpoop
         this->t->run( thd, m, this, r );
     }
 
+    //sync group
+    void renderer_model_group_instance_writelock::sync( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r )
+    {
+        this->t->sync( thd, m, this, r );
+    }
+
     //render group
     void renderer_model_group_instance_writelock::render( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r )
     {

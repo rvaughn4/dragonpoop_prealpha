@@ -34,4 +34,10 @@ namespace dragonpoop
         return this->t->getId();
     }
 
+    //forces an update to happen next run cycle
+    void renderer_model_instance_readlock::update( void )
+    {
+        this->t->update();
+    }
+
 };
