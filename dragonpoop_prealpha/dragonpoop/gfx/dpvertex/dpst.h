@@ -7,10 +7,12 @@
 namespace dragonpoop
 {
 
+#pragma pack( 1 )
     struct dpst
     {
         float s, t;
     };
+#pragma pack( )
 
 };
 

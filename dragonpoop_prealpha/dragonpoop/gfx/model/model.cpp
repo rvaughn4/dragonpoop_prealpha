@@ -1067,6 +1067,12 @@ namespace dragonpoop
         return this->getComponentsByOwnerAndType( (std::list<model_component_ref *> *)l, instance_id, model_component_type_vertex_instance );
     }
 
+    //get  vertex instances by model instance and vertex id
+    unsigned int model::getVertexInstancesByInstanceAndVertex( dpid instance_id, dpid vertex_id, std::list<model_vertex_instance_ref *> *l )
+    {
+        return this->getComponentsByTwoOwnersAndType( (std::list<model_component_ref *> *)l, instance_id, vertex_id, model_component_type_vertex_instance );
+    }
+
     //release list returned by getVertexInstances()
     void model::releaseGetVertexInstances( std::list<model_vertex_instance_ref *> *l )
     {

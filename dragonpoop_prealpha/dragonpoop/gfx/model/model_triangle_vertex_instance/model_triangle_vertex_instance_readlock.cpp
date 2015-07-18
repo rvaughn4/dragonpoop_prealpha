@@ -41,4 +41,10 @@ namespace dragonpoop
         return this->t->getTriangleVertexId();
     }
 
+    //get vertexes
+    void model_triangle_vertex_instance_readlock::getVertex( dpvertexindex_buffer *b )
+    {
+        this->t->getVertex( b );
+    }
+
 };

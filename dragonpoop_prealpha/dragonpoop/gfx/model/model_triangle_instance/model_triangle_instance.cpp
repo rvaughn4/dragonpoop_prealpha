@@ -3,6 +3,10 @@
 #include "model_triangle_instance_readlock.h"
 #include "model_triangle_instance_writelock.h"
 #include "model_triangle_instance_ref.h"
+#include "../model_triangle_vertex_instance/model_triangle_vertex_instance_ref.h"
+#include "../model_triangle_vertex_instance/model_triangle_vertex_instance_readlock.h"
+#include "../model_ref.h"
+#include "../model_readlock.h"
 
 namespace dragonpoop
 {
@@ -61,6 +65,33 @@ namespace dragonpoop
     dpid model_triangle_instance::getGroupId( void )
     {
         return this->group_id;
+    }
+
+    //get vertexes
+    void model_triangle_instance::getVertexes( dpvertexindex_buffer *b )
+    {
+        std::list<model_triangle_vertex_instance_ref *> l;
+        std::list<model_triangle_vertex_instance_ref *>::iterator i;
+        model_triangle_vertex_instance_ref *p;
+        model_triangle_vertex_instance_readlock *pl;
+        shared_obj_guard o, om;
+        model_ref *m;
+        model_readlock *ml;
+
+        m = this->getModel();
+        ml = (model_readlock *)om.readLock( m );
+        delete m;
+
+        ml->getTriangleVertexInstancesByInstanceAndTriangle( this->getInstanceId(), this->getTriangleId(), &l );
+
+        for( i = l.begin(); i != l.end(); ++i )
+        {
+            p = *i;
+            pl = (model_triangle_vertex_instance_readlock *)o.readLock( p );
+            pl->getVertex( b );
+        }
+
+        ml->releaseGetTriangleVertexInstances( &l );
     }
 
 };

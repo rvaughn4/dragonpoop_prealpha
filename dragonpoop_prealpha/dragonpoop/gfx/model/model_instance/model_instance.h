@@ -44,9 +44,6 @@ namespace dragonpoop
         unsigned int getGroups( std::list<model_group_instance_ref *> *l );
         //get group instances by parent
         unsigned int getGroupsByParent( dpid parent_id, std::list<model_group_instance_ref *> *l );
-        //release list returned by getGroups()
-        static void releaseGetGroups( std::list<model_group_instance_ref *> *l );
-
         //create triangle instances
         void makeTriangles( dpthread_lock *thd, model_writelock *ml );
         //destroy triangle instances
@@ -55,26 +52,24 @@ namespace dragonpoop
         unsigned int getTriangles( std::list<model_triangle_instance_ref *> *l );
         //get triangle instances by group
         unsigned int getTrianglesByGroup( dpid group_id, std::list<model_triangle_instance_ref *> *l );
-        //release list returned by getTriangles()
-        static void releaseGetTriangles( std::list<model_triangle_instance_ref *> *l );
         //create triangle vertex instances
         void makeTriangleVertexs( dpthread_lock *thd, model_writelock *ml );
         //destroy triangle vertex instances
         void killTriangleVertexs( void );
+        //sync traingle vertexs
+        void syncTriangleVertexs( void );
         //get triangle vertex instances
         unsigned int getTriangleVertexs( std::list<model_triangle_vertex_instance_ref *> *l );
         //get triangle vertex instances by triangle
         unsigned int getTriangleVertexsByTriangle( dpid triangle_id, std::list<model_triangle_vertex_instance_ref *> *l );
-        //release list returned by getTriangleVertexs()
-        static void releaseGetTriangleVertexs( std::list<model_triangle_vertex_instance_ref *> *l );
         //create vertex instances
         void makeVertexs( dpthread_lock *thd, model_writelock *ml );
         //destroy vertex instances
         void killVertexs( void );
+        //sync vertexes
+        void syncVertexs( void );
         //get vertex instances
         unsigned int getVertexs( std::list<model_vertex_instance_ref *> *l );
-        //release list returned by getVertexs()
-        static void releaseGetVertexs( std::list<model_vertex_instance_ref *> *l );
         //returns true if has renderer
         bool hasRenderer( void );
         //set renderer
@@ -88,6 +83,14 @@ namespace dragonpoop
         model_instance( dpthread_lock *thd, model_writelock *ml, dpid id );
         //dtor
         virtual ~model_instance( void );
+        //release list returned by getGroups()
+        static void releaseGetGroups( std::list<model_group_instance_ref *> *l );
+        //release list returned by getTriangles()
+        static void releaseGetTriangles( std::list<model_triangle_instance_ref *> *l );
+        //release list returned by getTriangleVertexs()
+        static void releaseGetTriangleVertexs( std::list<model_triangle_vertex_instance_ref *> *l );
+        //release list returned by getVertexs()
+        static void releaseGetVertexs( std::list<model_vertex_instance_ref *> *l );
 
         friend class model_instance_readlock;
         friend class model_instance_writelock;

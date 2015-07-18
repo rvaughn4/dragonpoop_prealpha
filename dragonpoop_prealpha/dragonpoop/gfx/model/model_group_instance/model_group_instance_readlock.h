@@ -9,6 +9,7 @@ namespace dragonpoop
 
     class model_group_instance;
     class model_group_instance_ref;
+    class dpvertexindex_buffer;
 
     class model_group_instance_readlock : public model_component_readlock
     {
@@ -36,6 +37,8 @@ namespace dragonpoop
         bool hasRenderer( void );
         //get renderer
         shared_obj_ref *getRenderer( void );
+        //get vertexes
+        void getVertexes( dpvertexindex_buffer *b );
 
         friend class model_group_instance;
     };

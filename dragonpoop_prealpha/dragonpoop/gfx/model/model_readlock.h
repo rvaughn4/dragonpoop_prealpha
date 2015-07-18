@@ -180,6 +180,8 @@ namespace dragonpoop
         model_vertex_instance_ref *findVertexInstance( dpid id );
         //get  vertex instances by model instance id
         unsigned int getVertexInstancesByInstance( dpid instance_id, std::list<model_vertex_instance_ref *> *l );
+        //get  vertex instances by model instance and vertex id
+        unsigned int getVertexInstancesByInstanceAndVertex( dpid instance_id, dpid vertex_id, std::list<model_vertex_instance_ref *> *l );
         //release list returned by getVertexInstances()
         void releaseGetVertexInstances( std::list<model_vertex_instance_ref *> *l );
 

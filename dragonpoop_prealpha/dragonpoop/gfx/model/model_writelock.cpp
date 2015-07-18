@@ -569,6 +569,12 @@ namespace dragonpoop
         return this->t->getVertexInstancesByInstance( instance_id, l );
     }
 
+    //get  vertex instances by model instance and vertex id
+    unsigned int model_writelock::getVertexInstancesByInstanceAndVertex( dpid instance_id, dpid vertex_id, std::list<model_vertex_instance_ref *> *l )
+    {
+        return this->t->getVertexInstancesByInstanceAndVertex( instance_id, vertex_id, l );
+    }
+
     //release list returned by getVertexInstances()
     void model_writelock::releaseGetVertexInstances( std::list<model_vertex_instance_ref *> *l )
     {

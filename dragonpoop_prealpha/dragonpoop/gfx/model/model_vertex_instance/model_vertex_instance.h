@@ -4,6 +4,7 @@
 
 #include "../model_component/model_component_type.h"
 #include "../model_component/model_component.h"
+#include "../../dpvertex/dpvertexes.h"
 
 namespace dragonpoop
 {
@@ -18,6 +19,7 @@ namespace dragonpoop
     private:
 
         dpid instance_id, vertex_id;
+        dpxyzw pos[ 2 ];
 
     protected:
 
@@ -33,6 +35,10 @@ namespace dragonpoop
         dpid getInstanceId( void );
         //return vertex id
         dpid getVertexId( void );
+        //get vertex data
+        void getVertex( dpvertex *v );
+        //sync vertex
+        void sync( void );
 
     public:
 

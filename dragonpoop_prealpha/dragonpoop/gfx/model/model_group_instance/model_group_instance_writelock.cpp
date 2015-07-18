@@ -53,4 +53,10 @@ namespace dragonpoop
         return this->t->getRenderer();
     }
 
+    //get vertexes
+    void model_group_instance_writelock::getVertexes( dpvertexindex_buffer *b )
+    {
+        this->t->getVertexes( b );
+    }
+
 };

@@ -29,4 +29,10 @@ namespace dragonpoop
         return this->t->getVertexId();
     }
 
+    //get vertex data
+    void model_vertex_instance_readlock::getVertex( dpvertex *v )
+    {
+        this->t->getVertex( v );
+    }
+
 };

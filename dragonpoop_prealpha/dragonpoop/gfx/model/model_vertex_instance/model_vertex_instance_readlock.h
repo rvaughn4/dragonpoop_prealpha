@@ -9,6 +9,7 @@ namespace dragonpoop
 
     class model_vertex_instance;
     class model_vertex_instance_ref;
+    class dpvertex;
 
     class model_vertex_instance_readlock : public model_component_readlock
     {
@@ -30,6 +31,8 @@ namespace dragonpoop
         dpid getInstanceId( void );
         //return vertex id
         dpid getVertexId( void );
+        //get vertex data
+        void getVertex( dpvertex *v );
 
         friend class model_vertex_instance;
     };

@@ -9,6 +9,7 @@ namespace dragonpoop
 
     class model_triangle_vertex_instance;
     class model_triangle_vertex_instance_ref;
+    class dpvertexindex_buffer;
 
     class model_triangle_vertex_instance_writelock : public model_component_writelock
     {
@@ -34,6 +35,10 @@ namespace dragonpoop
         dpid getVertexId( void );
         //return triangle vertex id
         dpid getTriangleVertexId( void );
+        //get vertexes
+        void getVertex( dpvertexindex_buffer *b );
+        //sync vertex
+        void sync( void );
 
         friend class model_triangle_vertex_instance;
     };

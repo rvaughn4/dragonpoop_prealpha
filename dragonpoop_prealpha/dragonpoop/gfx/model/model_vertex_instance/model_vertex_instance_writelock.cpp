@@ -29,4 +29,16 @@ namespace dragonpoop
         return this->t->getVertexId();
     }
 
+    //get vertex data
+    void model_vertex_instance_writelock::getVertex( dpvertex *v )
+    {
+        this->t->getVertex( v );
+    }
+
+    //sync vertex
+    void model_vertex_instance_writelock::sync( void )
+    {
+        this->t->sync();
+    }
+
 };

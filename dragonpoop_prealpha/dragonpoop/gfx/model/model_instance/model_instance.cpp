@@ -14,7 +14,7 @@ namespace dragonpoop
 {
 
     //ctor
-    model_instance::model_instance( dpthread_lock *thd, model_writelock *ml, dpid id ) : model_component( ml, id,model_component_type_instance, 0 )
+    model_instance::model_instance( dpthread_lock *thd, model_writelock *ml, dpid id ) : model_component( ml, id,model_component_type_instance, 200 )
     {
         this->r = 0;
         this->makeGroups( thd, ml );
@@ -54,7 +54,8 @@ namespace dragonpoop
     //do background processing
     void model_instance::onRun( dpthread_lock *thd, gfx_writelock *g, model_writelock *m, model_component_writelock *l )
     {
-
+        this->syncTriangleVertexs();
+        this->syncVertexs();
     }
 
     //create group instances
@@ -273,6 +274,27 @@ namespace dragonpoop
         model_instance::releaseGetTriangleVertexs( &l );
     }
 
+    //sync triangle vertex instances
+    void model_instance::syncTriangleVertexs( void )
+    {
+        std::list<model_triangle_vertex_instance_ref *> l;
+        std::list<model_triangle_vertex_instance_ref *>::iterator i;
+        model_triangle_vertex_instance_ref *p;
+        model_triangle_vertex_instance_writelock *pl;
+        shared_obj_guard o;
+
+        this->getTriangleVertexs( &l );
+
+        for( i = l.begin(); i != l.end(); ++i )
+        {
+            p = *i;
+            pl = (model_triangle_vertex_instance_writelock *)o.writeLock( p );
+            pl->sync();
+        }
+
+        model_instance::releaseGetTriangleVertexs( &l );
+    }
+
     //get triangle vertex instances
     unsigned int model_instance::getTriangleVertexs( std::list<model_triangle_vertex_instance_ref *> *l )
     {
@@ -354,6 +376,27 @@ namespace dragonpoop
             p = *i;
             pl = (model_vertex_instance_writelock *)o.writeLock( p );
             pl->kill();
+        }
+
+        model_instance::releaseGetVertexs( &l );
+    }
+
+    //sync vertex instances
+    void model_instance::syncVertexs( void )
+    {
+        std::list<model_vertex_instance_ref *> l;
+        std::list<model_vertex_instance_ref *>::iterator i;
+        model_vertex_instance_ref *p;
+        model_vertex_instance_writelock *pl;
+        shared_obj_guard o;
+
+        this->getVertexs( &l );
+
+        for( i = l.begin(); i != l.end(); ++i )
+        {
+            p = *i;
+            pl = (model_vertex_instance_writelock *)o.writeLock( p );
+            pl->sync();
         }
 
         model_instance::releaseGetVertexs( &l );

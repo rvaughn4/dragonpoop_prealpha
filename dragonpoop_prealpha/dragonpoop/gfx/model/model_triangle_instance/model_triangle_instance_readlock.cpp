@@ -35,4 +35,10 @@ namespace dragonpoop
         return this->t->getGroupId();
     }
 
+    //get vertexes
+    void model_triangle_instance_readlock::getVertexes( dpvertexindex_buffer *b )
+    {
+        this->t->getVertexes( b );
+    }
+
 };

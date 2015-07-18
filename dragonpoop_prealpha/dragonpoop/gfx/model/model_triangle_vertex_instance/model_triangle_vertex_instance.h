@@ -4,6 +4,7 @@
 
 #include "../model_component/model_component_type.h"
 #include "../model_component/model_component.h"
+#include "../../dpvertex/dpvertexes.h"
 
 namespace dragonpoop
 {
@@ -11,6 +12,7 @@ namespace dragonpoop
     class model_triangle_vertex_instance_ref;
     class model_triangle_vertex_instance_readlock;
     class model_triangle_vertex_instance_writelock;
+    class dpvertexindex_buffer;
 
     class model_triangle_vertex_instance : public model_component
     {
@@ -18,6 +20,8 @@ namespace dragonpoop
     private:
 
         dpid instance_id, triangle_id, vertex_id, triangle_vertex_id;
+        dpxyzw norm[ 2 ];
+        dpst texcoords[ 2 ];
 
     protected:
 
@@ -37,6 +41,10 @@ namespace dragonpoop
         dpid getVertexId( void );
         //return triangle vertex id
         dpid getTriangleVertexId( void );
+        //get vertexes
+        void getVertex( dpvertexindex_buffer *b );
+        //sync vertex
+        void sync( void );
 
     public:
 

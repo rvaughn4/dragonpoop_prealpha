@@ -41,4 +41,16 @@ namespace dragonpoop
         return this->t->getTriangleVertexId();
     }
 
+    //get vertexes
+    void model_triangle_vertex_instance_writelock::getVertex( dpvertexindex_buffer *b )
+    {
+        this->t->getVertex( b );
+    }
+
+    //sync vertex
+    void model_triangle_vertex_instance_writelock::sync( void )
+    {
+        this->t->sync();
+    }
+
 };
