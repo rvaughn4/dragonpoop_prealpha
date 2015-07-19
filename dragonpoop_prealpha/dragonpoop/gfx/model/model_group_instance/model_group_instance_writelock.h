@@ -44,6 +44,10 @@ namespace dragonpoop
         void getVertexes( dpvertexindex_buffer *b );
         //sync group
         void sync( model_writelock *ml );
+        //return material id
+        dpid getMaterialId( void );
+        //returns true if has material
+        bool hasMaterial( void );
 
         friend class model_group_instance;
     };

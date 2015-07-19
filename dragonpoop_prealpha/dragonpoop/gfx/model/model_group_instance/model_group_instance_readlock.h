@@ -39,6 +39,10 @@ namespace dragonpoop
         shared_obj_ref *getRenderer( void );
         //get vertexes
         void getVertexes( dpvertexindex_buffer *b );
+        //return material id
+        dpid getMaterialId( void );
+        //returns true if has material
+        bool hasMaterial( void );
 
         friend class model_group_instance;
     };

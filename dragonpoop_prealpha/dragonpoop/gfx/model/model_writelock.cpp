@@ -462,9 +462,9 @@ namespace dragonpoop
     }
 
     //create group instance
-    model_group_instance_ref *model_writelock::createGroupInstance( dpthread_lock *thd, dpid instance_id, dpid group_id, dpid parent_id )
+    model_group_instance_ref *model_writelock::createGroupInstance( dpthread_lock *thd, dpid instance_id, dpid group_id, dpid parent_id, dpid material_id )
     {
-        return this->t->createGroupInstance( thd, this, instance_id, group_id, parent_id );
+        return this->t->createGroupInstance( thd, this, instance_id, group_id, parent_id, material_id );
     }
 
     //find group instance

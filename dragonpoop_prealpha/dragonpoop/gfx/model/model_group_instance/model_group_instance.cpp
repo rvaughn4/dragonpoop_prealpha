@@ -12,11 +12,12 @@ namespace dragonpoop
 {
 
     //ctor
-    model_group_instance::model_group_instance( model_writelock *ml, dpid id, dpid instance_id, dpid group_id, dpid parent_id ) : model_component( ml, id,model_component_type_group_instance, 0 )
+    model_group_instance::model_group_instance( model_writelock *ml, dpid id, dpid instance_id, dpid group_id, dpid parent_id, dpid material_id ) : model_component( ml, id,model_component_type_group_instance, 0 )
     {
         this->instance_id = instance_id;
         this->group_id = group_id;
         this->parent_id = parent_id;
+        this->material_id = material_id;
         this->sync( ml );
     }
 
@@ -124,6 +125,18 @@ namespace dragonpoop
         }
 
         ml->releaseGetTriangleInstances( &l );
+    }
+
+    //return material id
+    dpid model_group_instance::getMaterialId( void )
+    {
+        return this->material_id;
+    }
+
+    //returns true if has material
+    bool model_group_instance::hasMaterial( void )
+    {
+        return !dpid_isZero( &this->material_id );
     }
 
 };

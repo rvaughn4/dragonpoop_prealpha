@@ -195,7 +195,7 @@ namespace dragonpoop
         //release list returned by getInstances()
         void releaseGetInstances( std::list<model_instance_ref *> *l );
         //create group instance
-        model_group_instance_ref *createGroupInstance( dpthread_lock *thd, dpid instance_id, dpid group_id, dpid parent_id );
+        model_group_instance_ref *createGroupInstance( dpthread_lock *thd, dpid instance_id, dpid group_id, dpid parent_id, dpid material_id );
         //find group instance
         model_group_instance_ref *findGroupInstance( dpid id );
         //get group instances by model instance id

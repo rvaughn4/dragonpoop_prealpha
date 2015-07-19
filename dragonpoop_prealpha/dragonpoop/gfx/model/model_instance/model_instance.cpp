@@ -82,7 +82,7 @@ namespace dragonpoop
         {
             p = *i;
             pl = (model_group_readlock *)o.readLock( p );
-            r = ml->createGroupInstance( thd, this->getId(), pl->getId(), pl->getParentId() );
+            r = ml->createGroupInstance( thd, this->getId(), pl->getId(), pl->getParentId(), pl->getMaterialId() );
             delete r;
         }
 

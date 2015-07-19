@@ -912,7 +912,7 @@ namespace dragonpoop
     }
 
     //create group instance
-    model_group_instance_ref *model::createGroupInstance( dpthread_lock *thd, model_writelock *m, dpid instance_id, dpid group_id, dpid parent_id )
+    model_group_instance_ref *model::createGroupInstance( dpthread_lock *thd, model_writelock *m, dpid instance_id, dpid group_id, dpid parent_id, dpid material_id )
     {
         model_group_instance *o;
         dpid id;
@@ -920,7 +920,7 @@ namespace dragonpoop
         model_group_instance_writelock *ol;
 
         id = thd->genId();
-        o = new model_group_instance( m, id, instance_id, group_id, parent_id );
+        o = new model_group_instance( m, id, instance_id, group_id, parent_id, material_id );
         this->addComp( o, id, model_component_type_group_instance, instance_id, group_id, parent_id );
 
         ol = (model_group_instance_writelock *)g.writeLock( o );

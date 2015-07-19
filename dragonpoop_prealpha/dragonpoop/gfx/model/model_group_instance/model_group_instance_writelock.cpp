@@ -65,4 +65,16 @@ namespace dragonpoop
         this->t->sync( ml );
     }
 
+    //return material id
+    dpid model_group_instance_writelock::getMaterialId( void )
+    {
+        return this->t->getMaterialId();
+    }
+
+    //returns true if has material
+    bool model_group_instance_writelock::hasMaterial( void )
+    {
+        return this->t->hasMaterial();
+    }
+
 };

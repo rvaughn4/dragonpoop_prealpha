@@ -19,7 +19,7 @@ namespace dragonpoop
 
     private:
 
-        dpid instance_id, group_id, parent_id;
+        dpid instance_id, group_id, parent_id, material_id;
         shared_obj_ref *r;
         dpvertexindex_buffer vb;
 
@@ -49,11 +49,15 @@ namespace dragonpoop
         void getVertexes( dpvertexindex_buffer *b );
         //sync group
         void sync( model_writelock *ml );
+        //return material id
+        dpid getMaterialId( void );
+        //returns true if has material
+        bool hasMaterial( void );
 
     public:
 
         //ctor
-        model_group_instance( model_writelock *ml, dpid id, dpid instance_id, dpid group_id, dpid parent_id );
+        model_group_instance( model_writelock *ml, dpid id, dpid instance_id, dpid group_id, dpid parent_id, dpid material_id );
         //dtor
         virtual ~model_group_instance( void );
 
