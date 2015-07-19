@@ -7,8 +7,6 @@
 namespace dragonpoop
 {
 
-    class dpvertex_buffer_indextree;
-
     class dpvertex_buffer
     {
 
@@ -19,7 +17,6 @@ namespace dragonpoop
             dpvertex *ptr;
             unsigned int cnt, max;
         } buffer;
-        dpvertex_buffer_indextree *t;
 
     protected:
 
@@ -39,9 +36,7 @@ namespace dragonpoop
         uint16_t addVertex( dpvertex *v );
         //clear
         void clear( void );
-        //find vertex that matches vertex given
-        bool findVertex( dpvertex *v, uint16_t *p_offset );
-        
+
     };
     
 };

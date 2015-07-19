@@ -53,4 +53,10 @@ namespace dragonpoop
         return this->t->genGroup( g, this, m, grp );
     }
 
+    //render model group
+    void renderer_writelock::renderGroup( renderer_model_instance_readlock *ml, renderer_model_group_instance_readlock *gl )
+    {
+        this->t->renderGroup( this, ml, gl );
+    }
+
 };

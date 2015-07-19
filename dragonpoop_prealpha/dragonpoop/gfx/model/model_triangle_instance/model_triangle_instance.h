@@ -18,7 +18,7 @@ namespace dragonpoop
     struct model_triangle_instance_vert
     {
         dpid vertex_id, triagnle_vertex_id, joint_id;
-        dpvertex data;
+        dpvertex orig_data, trans_data;
     };
 
     class model_triangle_instance : public model_component
@@ -28,6 +28,7 @@ namespace dragonpoop
 
         dpid instance_id, triangle_id, group_id;
         model_triangle_instance_vert vert[ 3 ];
+        bool isLoaded;
 
     protected:
 

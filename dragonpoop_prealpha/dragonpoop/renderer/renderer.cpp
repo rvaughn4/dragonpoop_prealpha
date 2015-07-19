@@ -11,7 +11,10 @@
 #include "renderer_model_instance/renderer_model_instance.h"
 #include "renderer_model_instance/renderer_model_instance_ref.h"
 #include "renderer_model_instance/renderer_model_instance_writelock.h"
+#include "renderer_model_instance/renderer_model_instance_readlock.h"
 #include "renderer_model_group_instance/renderer_model_group_instance.h"
+#include "renderer_model_group_instance/renderer_model_group_instance_ref.h"
+#include "renderer_model_group_instance/renderer_model_group_instance_readlock.h"
 #include "../core/shared_obj/shared_obj_guard.h"
 #include "../gfx/gfx_writelock.h"
 #include "../gfx/gfx_readlock.h"
@@ -19,9 +22,8 @@
 #include "../gfx/gfx.h"
 #include "../gfx/model/model_instance/model_instance_ref.h"
 #include "../gfx/model/model_instance/model_instance_writelock.h"
-
-#include <iostream>
 #include <thread>
+#include <random>
 
 namespace dragonpoop
 {
@@ -34,7 +36,7 @@ namespace dragonpoop
         this->bDoRun = 1;
         this->bIsRun = 0;
         this->gtsk = new renderer_task( this );
-        this->tsk = new dptask( c->getMutexMaster(), this->gtsk, 20, 1 );
+        this->tsk = new dptask( c->getMutexMaster(), this->gtsk, 30, 1 );
         tp->addTask( this->tsk );
     }
 
@@ -104,6 +106,7 @@ namespace dragonpoop
     void renderer::run( dptask_writelock *tskl, dpthread_lock *thd, renderer_writelock *r )
     {
         uint64_t t;
+        unsigned int w, h;
 
         if( this->bIsRun )
         {
@@ -116,7 +119,7 @@ namespace dragonpoop
             }
 
             t = thd->getTicks();
-            if( t - this->lastMakeModel > 1000 )
+            if( t - this->lastMakeModel > 200 )
             {
                 this->makeModels( r );
                 this->lastMakeModel = t;
@@ -127,10 +130,13 @@ namespace dragonpoop
                 this->bDoRun = 0;
             else
             {
-                this->setViewport( this->getWidth(), this->getHeight() );
+                w = this->getWidth();
+                h = this->getHeight();
+
+                this->setViewport( w, h );
 #define randcolor (float)rand() / (float)RAND_MAX
                 this->clearScreen( randcolor, randcolor, randcolor );
-                this->prepareWorldRender();
+                this->prepareWorldRender( w, h );
                 this->renderModels( thd, r );
 
                 this->prepareGuiRender();
@@ -279,18 +285,24 @@ namespace dragonpoop
         std::list<renderer_model_instance *> *l, d;
         std::list<renderer_model_instance *>::iterator i;
         renderer_model_instance *p;
-        renderer_model_instance_writelock *pl;
+        renderer_model_instance_readlock *pl;
         shared_obj_guard o;
 
         l = &this->models;
         for( i = l->begin(); i != l->end(); ++i )
         {
             p = *i;
-            pl = (renderer_model_instance_writelock *)o.tryWriteLock( p, 10 );
+            pl = (renderer_model_instance_readlock *)o.tryReadLock( p, 10 );
             if( pl )
                 pl->render( thd, r );
         }
         o.unlock();
+    }
+
+    //render model group
+    void renderer::renderGroup( renderer_writelock *r, renderer_model_instance_readlock *ml, renderer_model_group_instance_readlock *gl )
+    {
+        
     }
 
 };

@@ -16,13 +16,11 @@ namespace dragonpoop
 {
 
     //ctor
-    model_instance::model_instance( dpthread_lock *thd, model_writelock *ml, dpid id ) : model_component( ml, id,model_component_type_instance, 2000 )
+    model_instance::model_instance( dpthread_lock *thd, model_writelock *ml, dpid id ) : model_component( ml, id,model_component_type_instance, 1000 )
     {
         this->r = 0;
         this->makeGroups( thd, ml );
         this->makeTriangles( thd, ml );
-        this->makeTriangleVertexs( thd, ml );
-        this->makeVertexs( thd, ml );
     }
 
     //dtor
@@ -31,8 +29,6 @@ namespace dragonpoop
         delete this->r;
         this->killGroups();
         this->killTriangles();
-        this->killTriangleVertexs();
-        this->killVertexs();
     }
 
     //generate read lock
@@ -64,7 +60,7 @@ namespace dragonpoop
 
         if( !this->r )
             return;
-        rl = (renderer_model_instance_readlock *)o.tryReadLock( this->r, 100 );
+        rl = (renderer_model_instance_readlock *)o.tryReadLock( this->r, 20 );
         if( !rl )
             return;
         rl->update();
@@ -128,8 +124,9 @@ namespace dragonpoop
         for( i = l.begin(); i != l.end(); ++i )
         {
             p = *i;
-            pl = (model_group_instance_writelock *)o.writeLock( p );
-            pl->sync( ml );
+            pl = (model_group_instance_writelock *)o.tryWriteLock( p, 30 );
+            if( pl )
+                pl->sync( ml );
         }
 
         model_instance::releaseGetGroups( &l );
@@ -282,160 +279,6 @@ namespace dragonpoop
     void model_instance::releaseGetTriangles( std::list<model_triangle_instance_ref *> *l )
     {
         model::releaseGetTriangleInstances( l );
-    }
-
-    //create triangle vertex instances
-    void model_instance::makeTriangleVertexs( dpthread_lock *thd, model_writelock *ml )
-    {
-        std::list<model_triangle_vertex_ref *> l;
-        std::list<model_triangle_vertex_ref *>::iterator i;
-        model_triangle_vertex_ref *p;
-        model_triangle_vertex_readlock *pl;
-        model_triangle_vertex_instance_ref *r;
-        shared_obj_guard o;
-
-        ml->getTriangleVertexes( &l );
-
-        for( i = l.begin(); i != l.end(); ++i )
-        {
-            p = *i;
-            pl = (model_triangle_vertex_readlock *)o.readLock( p );
-            r = ml->createTriangleVertexInstance( thd, this->getId(), pl->getId(), pl->getTriangleId(), pl->getVertexId() );
-            delete r;
-        }
-
-        ml->releaseGetTriangleVertexes( &l );
-    }
-
-    //destroy triangle vertex instances
-    void model_instance::killTriangleVertexs( void )
-    {
-        std::list<model_triangle_vertex_instance_ref *> l;
-        std::list<model_triangle_vertex_instance_ref *>::iterator i;
-        model_triangle_vertex_instance_ref *p;
-        model_triangle_vertex_instance_writelock *pl;
-        shared_obj_guard o;
-
-        this->getTriangleVertexs( &l );
-
-        for( i = l.begin(); i != l.end(); ++i )
-        {
-            p = *i;
-            pl = (model_triangle_vertex_instance_writelock *)o.writeLock( p );
-            pl->kill();
-        }
-
-        model_instance::releaseGetTriangleVertexs( &l );
-    }
-
-    //get triangle vertex instances
-    unsigned int model_instance::getTriangleVertexs( std::list<model_triangle_vertex_instance_ref *> *l )
-    {
-        model_readlock *ml;
-        model_ref *m;
-        shared_obj_guard o;
-
-        m = this->getModel();
-        if( !m )
-            return 0;
-        ml = (model_readlock *)o.readLock( m );
-        delete m;
-        if( !ml )
-            return 0;
-
-        return ml->getTriangleVertexInstancesByInstance( this->getId(), l );
-    }
-
-    //get triangle vertex instances by triangle
-    unsigned int model_instance::getTriangleVertexsByTriangle( dpid triangle_id, std::list<model_triangle_vertex_instance_ref *> *l )
-    {
-        model_readlock *ml;
-        model_ref *m;
-        shared_obj_guard o;
-
-        m = this->getModel();
-        if( !m )
-            return 0;
-        ml = (model_readlock *)o.readLock( m );
-        delete m;
-        if( !ml )
-            return 0;
-
-        return ml->getTriangleVertexInstancesByInstanceAndTriangle( this->getId(), triangle_id, l );
-    }
-
-    //release list returned by getTriangleVertexs()
-    void model_instance::releaseGetTriangleVertexs( std::list<model_triangle_vertex_instance_ref *> *l )
-    {
-        model::releaseGetTriangleVertexInstances( l );
-    }
-
-    //create vertex instances
-    void model_instance::makeVertexs( dpthread_lock *thd, model_writelock *ml )
-    {
-        std::list<model_vertex_ref *> l;
-        std::list<model_vertex_ref *>::iterator i;
-        model_vertex_ref *p;
-        model_vertex_readlock *pl;
-        model_vertex_instance_ref *r;
-        shared_obj_guard o;
-
-        ml->getVertexes( &l );
-
-        for( i = l.begin(); i != l.end(); ++i )
-        {
-            p = *i;
-            pl = (model_vertex_readlock *)o.readLock( p );
-            r = ml->createVertexInstance( thd, this->getId(), pl->getId() );
-            delete r;
-        }
-
-        ml->releaseGetVertexes( &l );
-    }
-
-    //destroy vertex instances
-    void model_instance::killVertexs( void )
-    {
-        std::list<model_vertex_instance_ref *> l;
-        std::list<model_vertex_instance_ref *>::iterator i;
-        model_vertex_instance_ref *p;
-        model_vertex_instance_writelock *pl;
-        shared_obj_guard o;
-
-        this->getVertexs( &l );
-
-        for( i = l.begin(); i != l.end(); ++i )
-        {
-            p = *i;
-            pl = (model_vertex_instance_writelock *)o.writeLock( p );
-            pl->kill();
-        }
-
-        model_instance::releaseGetVertexs( &l );
-    }
-
-    //get vertex instances
-    unsigned int model_instance::getVertexs( std::list<model_vertex_instance_ref *> *l )
-    {
-        model_readlock *ml;
-        model_ref *m;
-        shared_obj_guard o;
-
-        m = this->getModel();
-        if( !m )
-            return 0;
-        ml = (model_readlock *)o.readLock( m );
-        delete m;
-        if( !ml )
-            return 0;
-
-        return ml->getVertexInstancesByInstance( this->getId(), l );
-    }
-
-    //release list returned by getVertexs()
-    void model_instance::releaseGetVertexs( std::list<model_vertex_instance_ref *> *l )
-    {
-        model::releaseGetVertexInstances( l );
     }
 
     //returns true if has renderer

@@ -56,7 +56,7 @@ namespace dragonpoop
         //run model instance
         void run( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
         //render model instance
-        void render( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
+        void render( dpthread_lock *thd, renderer_model_instance_readlock *m, renderer_writelock *r );
         //make groups
         void makeGroups( gfx_writelock *g, renderer_model_instance_writelock *m, renderer_writelock *r, model_instance_writelock *mi );
         //kill groups
@@ -66,7 +66,7 @@ namespace dragonpoop
         //run groups
         void runGroups( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
         //render groups
-        void renderGroups( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
+        void renderGroups( dpthread_lock *thd, renderer_model_instance_readlock *m, renderer_writelock *r );
         //generate group from renderer
         renderer_model_group_instance *genGroup( gfx_writelock *g, renderer_writelock *r, model_instance_writelock *m, model_group_instance_writelock *grp );
         //forces an update to happen next run cycle

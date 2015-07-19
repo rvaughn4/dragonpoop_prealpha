@@ -7,6 +7,10 @@
 #include "../model_triangle_vertex_instance/model_triangle_vertex_instance_readlock.h"
 #include "../model_ref.h"
 #include "../model_writelock.h"
+#include "../model_triangle_vertex/model_triangle_vertex_ref.h"
+#include "../model_triangle_vertex/model_triangle_vertex_readlock.h"
+#include "../model_vertex/model_vertex_ref.h"
+#include "../model_vertex/model_vertex_readlock.h"
 
 namespace dragonpoop
 {
@@ -17,6 +21,7 @@ namespace dragonpoop
         this->instance_id = instance_id;
         this->triangle_id = triangle_id;
         this->group_id = group_id;
+        this->isLoaded = 0;
         this->sync( ml );
     }
 
@@ -77,14 +82,73 @@ namespace dragonpoop
         for( i = 0; i < 3; i++ )
         {
             v = &this->vert[ i ];
-            b->addVertex( &v->data, v->vertex_id );
+            b->addVertex( &v->trans_data, v->vertex_id );
         }
     }
 
     //sync triangle
     void model_triangle_instance::sync( model_writelock *ml )
     {
+        std::list<model_triangle_vertex_ref *> tl;
+        std::list<model_triangle_vertex_ref *>::iterator ti;
+        model_triangle_vertex_ref *tv;
+        model_triangle_vertex_readlock *tvl;
+        shared_obj_guard o;
+        unsigned int i;
+        model_triangle_instance_vert *p;
+        model_vertex_ref *v;
+        model_vertex_readlock *vl;
 
+        if( !this->isLoaded )
+        {
+
+            ml->getTriangleVertexesByTriangle( &tl, this->getTriangleId() );
+
+            for( i = 0, ti = tl.begin(); ti != tl.end(); ++ti, i++ )
+            {
+                tv = *ti;
+                tvl = (model_triangle_vertex_readlock *)o.tryReadLock( tv, 100 );
+                if( !tvl )
+                    continue;
+                if( i >= 3 )
+                    continue;
+                p = &this->vert[ i ];
+                p->vertex_id = tvl->getVertexId();
+                p->triagnle_vertex_id = tvl->getId();
+                tvl->getNormal( &p->orig_data.start.normal );
+                tvl->getNormal( &p->orig_data.end.normal );
+                tvl->getTexcoord( 0, &p->orig_data.start.texcoords[ 0 ] );
+                tvl->getTexcoord( 1, &p->orig_data.start.texcoords[ 1 ] );
+                tvl->getTexcoord( 0, &p->orig_data.end.texcoords[ 0 ] );
+                tvl->getTexcoord( 1, &p->orig_data.end.texcoords[ 1 ] );
+            }
+
+            ml->releaseGetTriangleVertexes( &tl );
+
+            for( i = 0; i < 3; i++ )
+            {
+                p = &this->vert[ i ];
+                v = ml->findVertex( p->vertex_id );
+                if( !v )
+                    continue;
+                vl = (model_vertex_readlock *)o.tryReadLock( v, 100 );
+                delete v;
+                if( !vl )
+                    continue;
+                
+                //            p->joint_id =
+                vl->getPosition( &p->orig_data.start.pos );
+                vl->getPosition( &p->orig_data.end.pos );
+            }
+
+            this->isLoaded = 1;
+        }
+
+        for( i = 0; i < 3; i++ )
+        {
+            p = &this->vert[ i ];
+            p->trans_data = p->orig_data;
+        }
     }
 
 };

@@ -4,6 +4,9 @@
 #include "openglx_1o5_renderer_writelock.h"
 #include "openglx_1o5_renderer_ref.h"
 #include "../../core/core.h"
+#include "../renderer_model_group_instance/renderer_model_group_instance_readlock.h"
+#include "../renderer_model_instance/renderer_model_instance_readlock.h"
+
 #include <iostream>
 
 namespace dragonpoop
@@ -148,7 +151,12 @@ namespace dragonpoop
         //get window position
         XGetGeometry( this->gl.dpy, this->gl.win, &winDummy, &this->gl.x, &this->gl.y, &this->gl.width, &this->gl.height, &borderDummy, &this->gl.depth );
 
-        //initGL();
+        glEnable( GL_DEPTH_TEST );
+        glDepthFunc( GL_LEQUAL );
+        glShadeModel(GL_SMOOTH);
+        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+        glDisable(GL_CULL_FACE);
+
         return 1;
     }
 
@@ -248,10 +256,17 @@ namespace dragonpoop
     }
 
     //prepare for rendering world
-    void openglx_1o5_renderer::prepareWorldRender( void )
+    void openglx_1o5_renderer::prepareWorldRender( unsigned int w, unsigned int h )
     {
+        float fw, fh;
+
+        fw = w * 0.5f;
+        fh = h * 0.5f;
+
         glClearDepth( 1.0f );
         glClear( GL_DEPTH_BUFFER_BIT );
+
+        this->world_m.setPerspective( -1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 100.0f, 45.0f );
     }
 
     //prepare for rendering gui
@@ -265,6 +280,48 @@ namespace dragonpoop
     void openglx_1o5_renderer::flipBuffer( void )
     {
         glXSwapBuffers( this->gl.dpy, this->gl.win );
+    }
+
+    //render model group
+    void openglx_1o5_renderer::renderGroup( renderer_writelock *r, renderer_model_instance_readlock *ml, renderer_model_group_instance_readlock *gl )
+    {
+        dpvertexindex_buffer *vb;
+        dpindex *ip, *i;
+        dpvertex *vp, *v;
+        unsigned int is, vs, vi, ii;
+
+        vb = gl->getBuffer();
+        ip = vb->getIndexBuffer( &is );
+        vp = vb->getVertexBuffer( &vs );
+
+        glMatrixMode( GL_PROJECTION_MATRIX );
+        glLoadIdentity();
+        glMatrixMode( GL_MODELVIEW_MATRIX );
+        glLoadMatrixf( this->world_m.getRaw4by4() );
+
+        glTranslatef( 0, 0, -5.0f );
+
+        static float rr;
+        rr += 1.0f;
+
+        glRotatef( rr, 0.25f, 0.5f, 1.0f );
+
+        glBegin( GL_TRIANGLES );
+
+        for( ii = 0; ii < is; ii++ )
+        {
+            i = &ip[ ii ];
+            vi = i->i;
+            if( vi >= vs )
+                continue;
+            v = &vp[ vi ];
+
+            glTexCoord2f( v->start.texcoords[ 0 ].s, v->start.texcoords[ 0 ].t );
+            glNormal3f( v->start.normal.x, v->start.normal.y, v->start.normal.z );
+            glVertex3f( v->start.pos.x, v->start.pos.y, v->start.pos.z );
+        }
+
+        glEnd();
     }
 
 };

@@ -8,6 +8,8 @@
 namespace dragonpoop
 {
 
+    class dpvertexindex_buffer;
+    
     class renderer_model_group_instance_writelock : public shared_obj_writelock
     {
 
@@ -36,10 +38,10 @@ namespace dragonpoop
         void run( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
         //sync group
         void sync( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
-        //render group
-        void render( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
         //return instance id
         dpid getInstanceId( void );
+        //returns pointer to vertex buffer
+        dpvertexindex_buffer *getBuffer( void );
 
         friend class renderer_model_group_instance;
     };

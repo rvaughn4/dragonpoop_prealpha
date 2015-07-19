@@ -16,6 +16,8 @@ namespace dragonpoop
     class renderer_model_instance;
     class renderer_model_group_instance;
     class model_group_instance_writelock;
+    class renderer_model_instance_readlock;
+    class renderer_model_group_instance_readlock;
 
     class renderer_writelock : public shared_obj_writelock
     {
@@ -45,6 +47,8 @@ namespace dragonpoop
         renderer_model_instance *genModel( gfx_writelock *g, model_instance_writelock *m );
         //generate model group instance
         renderer_model_group_instance *genGroup( gfx_writelock *g, model_instance_writelock *m, model_group_instance_writelock *grp );
+        //render model group
+        void renderGroup( renderer_model_instance_readlock *ml, renderer_model_group_instance_readlock *gl );
 
         friend class renderer;
     };

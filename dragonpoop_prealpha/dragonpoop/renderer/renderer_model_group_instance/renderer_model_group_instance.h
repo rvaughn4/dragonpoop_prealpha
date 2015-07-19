@@ -21,6 +21,7 @@ namespace dragonpoop
     class model_group_instance_ref;
     class model_group_instance_writelock;
     class renderer_model_instance_writelock;
+    class renderer_model_instance_readlock;
     class model_instance_ref;
     class model_instance_readlock;
     class model_instance_writelock;
@@ -58,7 +59,7 @@ namespace dragonpoop
         //sync group
         void sync( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_model_group_instance_writelock *grp, renderer_writelock *r );
         //render group
-        void render( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_model_group_instance_writelock *grp, renderer_writelock *r );
+        void render( dpthread_lock *thd, renderer_model_instance_readlock *m, renderer_model_group_instance_readlock *grp, renderer_writelock *r );
         //return instance id
         dpid getInstanceId( void );
         //generate group from renderer
@@ -74,7 +75,9 @@ namespace dragonpoop
         //sync groups
         void syncGroups( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
         //render groups
-        void renderGroups( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r );
+        void renderGroups( dpthread_lock *thd, renderer_model_instance_readlock *m, renderer_writelock *r );
+        //returns pointer to vertex buffer
+        dpvertexindex_buffer *getBuffer( void );
 
     public:
 

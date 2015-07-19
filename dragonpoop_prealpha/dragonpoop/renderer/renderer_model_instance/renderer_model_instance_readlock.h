@@ -32,6 +32,8 @@ namespace dragonpoop
         dpid getId( void );
         //forces an update to happen next run cycle
         void update( void );
+        //render model
+        void render( dpthread_lock *thd, renderer_writelock *r );
 
         friend class renderer_model_instance;
     };

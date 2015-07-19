@@ -43,16 +43,6 @@ namespace dragonpoop
         unsigned int getTrianglesByGroup( dpid group_id, std::list<model_triangle_instance_ref *> *l );
         //release list returned by getTriangles()
         void releaseGetTriangles( std::list<model_triangle_instance_ref *> *l );
-        //get triangle vertex instances
-        unsigned int getTriangleVertexs( std::list<model_triangle_vertex_instance_ref *> *l );
-        //get triangle vertex instances by triangle
-        unsigned int getTriangleVertexsByTriangle( dpid triangle_id, std::list<model_triangle_vertex_instance_ref *> *l );
-        //release list returned by getTriangleVertexs()
-        void releaseGetTriangleVertexs( std::list<model_triangle_vertex_instance_ref *> *l );
-        //get vertex instances
-        unsigned int getVertexs( std::list<model_vertex_instance_ref *> *l );
-        //release list returned by getVertexs()
-        void releaseGetVertexs( std::list<model_vertex_instance_ref *> *l );
         //returns true if has renderer
         bool hasRenderer( void );
         //get renderer

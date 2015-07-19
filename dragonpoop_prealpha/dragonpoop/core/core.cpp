@@ -18,7 +18,7 @@ namespace dragonpoop
 
         this->bIsRun = 1;
         this->mm = new dpmutex_master();
-        this->tp = new dptaskpool( this->mm, 4 );
+        this->tp = new dptaskpool( this->mm, 2 );
 
         tpl = (dptaskpool_writelock *)g.writeLock( this->tp );
         this->g = new gfx( this, tpl );

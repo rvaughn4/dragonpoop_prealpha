@@ -85,11 +85,7 @@ namespace dragonpoop
         dpindex i;
 
         i.id = id;
-
-        if( vb->findVertex( v, &i.i ) )
-            this->addIndex( &i );
-        else
-            i.i = vb->addVertex( v );
+        i.i = vb->addVertex( v );
 
         this->addIndex( &i );
     }

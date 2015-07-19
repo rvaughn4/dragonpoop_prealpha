@@ -21,6 +21,8 @@ namespace dragonpoop
     class model_group_instance_writelock;
     class gfx_ref;
     class gfx_writelock;
+    class renderer_model_instance_readlock;
+    class renderer_model_group_instance_readlock;
 
     class renderer : public shared_obj
     {
@@ -64,7 +66,7 @@ namespace dragonpoop
         //clear screen with color
         virtual void clearScreen( float r, float g, float b ) = 0;
         //prepare for rendering world
-        virtual void prepareWorldRender( void ) = 0;
+        virtual void prepareWorldRender( unsigned int w, unsigned int h ) = 0;
         //prepare for rendering gui
         virtual void prepareGuiRender( void ) = 0;
         //flip backbuffer and present scene to screen
@@ -81,6 +83,8 @@ namespace dragonpoop
         void runModels( dpthread_lock *thd, renderer_writelock *r );
         //render model instances
         void renderModels( dpthread_lock *thd, renderer_writelock *r );
+        //render model group
+        virtual void renderGroup( renderer_writelock *r, renderer_model_instance_readlock *ml, renderer_model_group_instance_readlock *gl );
 
     public:
 

@@ -9,6 +9,7 @@
 #include <GL/glu.h>
 #include <X11/extensions/xf86vmode.h>
 #include <X11/keysym.h>
+#include "../../gfx/dpmatrix/dpmatrix.h"
 
 namespace dragonpoop
 {
@@ -38,6 +39,7 @@ namespace dragonpoop
     private:
 
         openglx_1o5_stuffs gl;
+        dpmatrix world_m, local_m;
 
     protected:
 
@@ -68,11 +70,13 @@ namespace dragonpoop
         //clear screen with color
         virtual void clearScreen( float r, float g, float b );
         //prepare for rendering world
-        virtual void prepareWorldRender( void );
+        virtual void prepareWorldRender( unsigned int w, unsigned int h );
         //prepare for rendering gui
         virtual void prepareGuiRender( void );
         //flip backbuffer and present scene to screen
         virtual void flipBuffer( void );
+        //render model group
+        virtual void renderGroup( renderer_writelock *r, renderer_model_instance_readlock *ml, renderer_model_group_instance_readlock *gl );
 
     public:
 

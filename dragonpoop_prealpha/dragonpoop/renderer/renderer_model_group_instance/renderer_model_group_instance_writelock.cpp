@@ -53,16 +53,16 @@ namespace dragonpoop
         this->t->sync( thd, m, this, r );
     }
 
-    //render group
-    void renderer_model_group_instance_writelock::render( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_writelock *r )
-    {
-        this->t->render( thd, m, this, r );
-    }
-
     //return instance id
     dpid renderer_model_group_instance_writelock::getInstanceId( void )
     {
         return this->t->getInstanceId();
+    }
+
+    //returns pointer to vertex buffer
+    dpvertexindex_buffer *renderer_model_group_instance_writelock::getBuffer( void )
+    {
+        return this->t->getBuffer();
     }
 
 };

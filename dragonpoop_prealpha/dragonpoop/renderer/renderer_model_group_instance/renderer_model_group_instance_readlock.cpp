@@ -40,5 +40,17 @@ namespace dragonpoop
     {
         return this->t->getInstanceId();
     }
-    
+
+    //render group
+    void renderer_model_group_instance_readlock::render( dpthread_lock *thd, renderer_model_instance_readlock *m, renderer_writelock *r )
+    {
+        this->t->render( thd, m, this, r );
+    }
+
+    //returns pointer to vertex buffer
+    dpvertexindex_buffer *renderer_model_group_instance_readlock::getBuffer( void )
+    {
+        return this->t->getBuffer();
+    }
+
 };

@@ -1,6 +1,5 @@
 
 #include "dpvertex_buffer.h"
-#include "dpvertex_buffer_indextree.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -13,14 +12,12 @@ namespace dragonpoop
         this->buffer.cnt = 0;
         this->buffer.max = 0;
         this->buffer.ptr = 0;
-        this->t = new dpvertex_buffer_indextree();
     }
 
     //dtor
     dpvertex_buffer::~dpvertex_buffer( void )
     {
         this->clear();
-        delete this->t;
     }
 
     //copy
@@ -77,7 +74,6 @@ namespace dragonpoop
         }
 
         this->buffer.ptr[ nc - 1 ] = *i;
-        this->t->addLeaf( i, (uint16_t)( nc - 1 ) );
         this->buffer.cnt = nc;
         return (uint16_t)( nc - 1 );
     }
@@ -90,13 +86,6 @@ namespace dragonpoop
         this->buffer.cnt = 0;
         this->buffer.max = 0;
         this->buffer.ptr = 0;
-        this->t->clear();
-    }
-
-    //find vertex that matches vertex given
-    bool dpvertex_buffer::findVertex( dpvertex *v, uint16_t *p_offset )
-    {
-        return this->t->findLeaf( v, p_offset );
     }
 
 };
