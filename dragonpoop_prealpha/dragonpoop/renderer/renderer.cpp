@@ -134,8 +134,7 @@ namespace dragonpoop
                 h = this->getHeight();
 
                 this->setViewport( w, h );
-#define randcolor (float)rand() / (float)RAND_MAX
-                this->clearScreen( randcolor, randcolor, randcolor );
+                this->clearScreen( 0.75f, 0.8f, 1.0f );
                 this->prepareWorldRender( w, h );
                 this->renderModels( thd, r );
 

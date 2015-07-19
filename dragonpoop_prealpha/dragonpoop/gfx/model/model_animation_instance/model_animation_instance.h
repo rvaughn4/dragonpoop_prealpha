@@ -18,6 +18,13 @@ namespace dragonpoop
     private:
 
         dpid instance_id, animation_id;
+        uint64_t t_start, t_max, t_delay;
+        bool bIsPlaying, bIsRepeat;
+
+        //find last frame time
+        void findMaxTime( void );
+        //get props from animation
+        void findProps( void );
 
     protected:
 

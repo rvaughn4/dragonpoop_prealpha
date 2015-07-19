@@ -46,7 +46,7 @@ namespace dragonpoop
     //init graphics api
     bool openglx_1o5_renderer::initApi( void )
     {
-        if( !this->makeWindow( (char *)"hello!", 1024, 728, 32, 0 ) )
+        if( !this->makeWindow( (char *)"Dragonpoop: its as smooth as silk!", 1024, 728, 32, 0 ) )
             return 0;
 
         return 1;
@@ -195,22 +195,20 @@ namespace dragonpoop
         switch (event.type)
         {
             case Expose:
-                if ( event.xexpose.count != 0 )
+                if( event.xexpose.count != 0 )
                     break;
-                //drawGLScene();
                 break;
             case ConfigureNotify:
-                /* call resizeGLScene only if our window-size changed */
-                if ((event.xconfigure.width != this->gl.width) ||
-                    (event.xconfigure.height != this->gl.height))
+                if(
+                    ( event.xconfigure.width != this->gl.width )
+                ||
+                    ( event.xconfigure.height != this->gl.height )
+                   )
                 {
                     this->gl.width = event.xconfigure.width;
                     this->gl.height = event.xconfigure.height;
-                    printf("Resize event\n");
-                    // resizeGLScene(event.xconfigure.width, event.xconfigure.height);
                 }
                 break;
-                /* exit in case of a mouse button press */
             case ButtonPress:
                 break;
             case KeyPress:
@@ -227,10 +225,7 @@ namespace dragonpoop
                 break;
             case ClientMessage:
                 if( (Atom)event.xclient.data.l[0] == this->gl.wm_delete_window )
-                {
-                    printf("Exiting sanely...\n");
                     this->getCore()->kill();
-                }
                 break;
             default:
                 break;
@@ -316,7 +311,7 @@ namespace dragonpoop
         static float rr;
         rr += 1.0f;
 
-        glRotatef( rr, 0.25f, 0.5f, 1.0f );
+        glRotatef( rr, 0.0f, 1.0f, 0.0f );
 
         glBegin( GL_TRIANGLES );
 

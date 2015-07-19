@@ -12,6 +12,7 @@ namespace dragonpoop
     {
         this->instance_id = instance_id;
         this->animation_id = animation_id;
+        this->findMaxTime();
     }
 
     //dtor
@@ -54,6 +55,19 @@ namespace dragonpoop
     dpid model_animation_instance::getAnimationId( void )
     {
         return this->animation_id;
+    }
+
+    //find last frame time
+    void model_animation_instance::findMaxTime( void )
+    {
+    }
+
+    //get props from animation
+    void model_animation_instance::findProps( void )
+    {
+        model_animation_ref *r;
+        model_animation_readlock *rl;
+        shared_obj_guard o;
     }
 
 };
