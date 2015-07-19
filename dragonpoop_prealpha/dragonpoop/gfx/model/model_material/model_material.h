@@ -4,8 +4,7 @@
 
 #include "../model_component/model_component_type.h"
 #include "../model_component/model_component.h"
-#include "../../dpvertex/dpvertexes.h"
-#include <string>
+#include "../../dpbitmap/dpbitmap.h"
 
 namespace dragonpoop
 {
@@ -22,6 +21,7 @@ namespace dragonpoop
         std::string sname;
         dprgba diffuse, ambient, emmissive, specular;
         float shine, opacity, glow;
+        dpbitmap *bmDiffuse, *bmAlpha, *bmBump, *bmSpec;
 
     protected:
 
@@ -65,6 +65,30 @@ namespace dragonpoop
         float getOpacity( void );
         //get glow
         float getGlow( void );
+        //returns true if has diffuse texture
+        bool hasDiffuseTexture( void );
+        //returns true if has alpha mask texture
+        bool hasAlphaMaskTexture( void );
+        //returns true if has bump map texture
+        bool hasBumpMapTexture( void );
+        //returns true if has spec map texture
+        bool hasSpecularMapTexture( void );
+        //copy diffuse texture, returns false is none exist
+        bool getDiffuseTexture( dpbitmap *c );
+        //copy alpha texture, returns false is none exist
+        bool getAlphaMapTexture( dpbitmap *c );
+        //copy bump map texture, returns false is none exist
+        bool getBumpMapTexture( dpbitmap *c );
+        //copy specular texture, returns false is none exist
+        bool getSpecularMapTexture( dpbitmap *c );
+        //set diffuse texture
+        void setDiffuseTexture( dpbitmap *c );
+        //set alpha texture
+        void setAlphaMapTexture( dpbitmap *c );
+        //set bump map texture
+        void setBumpMapTexture( dpbitmap *c );
+        //set specular texture
+        void setSpecularMapTexture( dpbitmap *c );
 
     public:
 

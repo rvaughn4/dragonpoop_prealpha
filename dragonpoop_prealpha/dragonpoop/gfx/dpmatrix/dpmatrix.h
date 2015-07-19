@@ -1,6 +1,6 @@
 
-#ifndef dragonpoop_dpmatrixes_h
-#define dragonpoop_dpmatrixes_h
+#ifndef dragonpoop_dpmatrix_h
+#define dragonpoop_dpmatrix_h
 
 #include "../dpvertex/dpvertexes.h"
 

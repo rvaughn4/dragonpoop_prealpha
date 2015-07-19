@@ -101,4 +101,76 @@ namespace dragonpoop
         return this->t->getOpacity();
     }
 
+    //returns true if has diffuse texture
+    bool model_material_writelock::hasDiffuseTexture( void )
+    {
+        return this->t->hasDiffuseTexture();
+    }
+
+    //returns true if has alpha mask texture
+    bool model_material_writelock::hasAlphaMaskTexture( void )
+    {
+        return this->t->hasAlphaMaskTexture();
+    }
+
+    //returns true if has bump map texture
+    bool model_material_writelock::hasBumpMapTexture( void )
+    {
+        return this->t->hasBumpMapTexture();
+    }
+
+    //returns true if has spec map texture
+    bool model_material_writelock::hasSpecularMapTexture( void )
+    {
+        return this->t->hasSpecularMapTexture();
+    }
+
+    //copy diffuse texture, returns false is none exist
+    bool model_material_writelock::getDiffuseTexture( dpbitmap *c )
+    {
+        return this->t->getDiffuseTexture( c );
+    }
+
+    //copy alpha texture, returns false is none exist
+    bool model_material_writelock::getAlphaMapTexture( dpbitmap *c )
+    {
+        return this->t->getAlphaMapTexture( c );
+    }
+
+    //copy bump map texture, returns false is none exist
+    bool model_material_writelock::getBumpMapTexture( dpbitmap *c )
+    {
+        return this->t->getBumpMapTexture( c );
+    }
+
+    //copy specular texture, returns false is none exist
+    bool model_material_writelock::getSpecularMapTexture( dpbitmap *c )
+    {
+        return this->t->getSpecularMapTexture( c );
+    }
+
+    //set diffuse texture
+    void model_material_writelock::setDiffuseTexture( dpbitmap *c )
+    {
+        this->t->setDiffuseTexture( c );
+    }
+
+    //set alpha texture
+    void model_material_writelock::setAlphaMapTexture( dpbitmap *c )
+    {
+        this->t->setAlphaMapTexture( c );
+    }
+
+    //set bump map texture
+    void model_material_writelock::setBumpMapTexture( dpbitmap *c )
+    {
+        this->t->setBumpMapTexture( c );
+    }
+
+    //set specular texture
+    void model_material_writelock::setSpecularMapTexture( dpbitmap *c )
+    {
+        this->t->setSpecularMapTexture( c );
+    }
+
 };
