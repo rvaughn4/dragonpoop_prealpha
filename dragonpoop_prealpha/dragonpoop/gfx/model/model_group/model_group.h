@@ -19,7 +19,7 @@ namespace dragonpoop
     private:
 
         std::string sname;
-        dpid parent_id;
+        dpid parent_id, material_id;
 
     protected:
 
@@ -39,6 +39,12 @@ namespace dragonpoop
         void getName( std::string *s );
         //set name
         void setName( std::string *s );
+        //set material id
+        void setMaterialId( dpid id );
+        //get material id
+        dpid getMaterialId( void );
+        //returns true if has material
+        bool hasMaterial( void );
 
     public:
 

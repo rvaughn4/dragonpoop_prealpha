@@ -151,11 +151,19 @@ namespace dragonpoop
         //get window position
         XGetGeometry( this->gl.dpy, this->gl.win, &winDummy, &this->gl.x, &this->gl.y, &this->gl.width, &this->gl.height, &borderDummy, &this->gl.depth );
 
+        glDisable(GL_CULL_FACE);
+
+        glShadeModel( GL_SMOOTH );
+        glClearColor( 0.0f, 0.0f, 0.0f, 0.5f );
+        glClearDepth( 1.0f );
         glEnable( GL_DEPTH_TEST );
         glDepthFunc( GL_LEQUAL );
-        glShadeModel(GL_SMOOTH);
-        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-        glDisable(GL_CULL_FACE);
+        glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
+        glMatrixMode( GL_PROJECTION );
+        glLoadIdentity();
+        glMatrixMode( GL_MODELVIEW );
+        glLoadIdentity();
+        glEnable( GL_TEXTURE_2D );
 
         return 1;
     }

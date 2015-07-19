@@ -67,6 +67,7 @@ namespace dragonpoop
         l.createFrames();
         l.createJoints();
         l.createFrameJoints();
+        l.createMaterials();
         l.createVertexes();
         l.createGroups();
         l.createTriangles();
@@ -88,6 +89,7 @@ namespace dragonpoop
         l.convertAnimation();
         l.convertJoints();
         l.convertFrameJoints();
+        l.convertMaterials();
         l.convertVertexes();
         l.convertGroups();
         l.convertTriangles();
@@ -844,6 +846,7 @@ namespace dragonpoop
         ms3d_model_material_m *v;
         dprgba c;
         std::string s;
+        dpbitmap b;
 
         e = (unsigned int)this->mats.size();
         for( i = 0; i < e; i++ )
@@ -892,6 +895,23 @@ namespace dragonpoop
 
             s.assign( (char *)v->f.name, sizeof(v->f.name) );
             rl->setName( &s );
+
+            b.reset();
+            s.assign( (char *)v->f.tex_filename, sizeof(v->f.tex_filename) );
+            s.assign( "monster.bmp" );
+            if( s.length() < 1 )
+                continue;
+            if( !b.loadFile( s.c_str() ) )
+                continue;
+            rl->setDiffuseTexture( &b );
+
+            b.reset();
+            s.assign( (char *)v->f.alpha_filename, sizeof(v->f.alpha_filename) );
+            if( s.length() < 1 )
+                continue;
+            if( !b.loadFile( s.c_str() ) )
+                continue;
+            rl->setAlphaMapTexture( &b );
         }
     }
 
@@ -1089,6 +1109,9 @@ namespace dragonpoop
             s.assign( (char *)v->f.name, sizeof( v->f.name ) );
             rl->setName( &s );
             v->id = rl->getId();
+
+            if( v->e.index >= 0 && v->e.index < this->mats.size() )
+                rl->setMaterialId( this->mats[ v->e.index ].id );
 
             delete r;
         }

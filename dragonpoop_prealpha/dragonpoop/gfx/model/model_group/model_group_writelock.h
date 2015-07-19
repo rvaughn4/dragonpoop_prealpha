@@ -34,6 +34,12 @@ namespace dragonpoop
         void getName( std::string *s );
         //set name
         void setName( std::string *s );
+        //set material id
+        void setMaterialId( dpid id );
+        //get material id
+        dpid getMaterialId( void );
+        //returns true if has material
+        bool hasMaterial( void );
 
         friend class model_group;
     };

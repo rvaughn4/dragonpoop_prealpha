@@ -14,6 +14,7 @@ namespace dragonpoop
     model_group::model_group( model_writelock *ml, dpid id, dpid parent_id ) : model_component( ml, id, model_component_type_group, 0 )
     {
         this->parent_id = parent_id;
+        dpid_zero( &this->material_id );
     }
 
     //dtor
@@ -86,6 +87,24 @@ namespace dragonpoop
     void model_group::setName( std::string *s )
     {
         this->sname = *s;
+    }
+
+    //set material id
+    void model_group::setMaterialId( dpid id )
+    {
+        this->material_id = id;
+    }
+
+    //get material id
+    dpid model_group::getMaterialId( void )
+    {
+        return this->material_id;
+    }
+
+    //returns true if has material
+    bool model_group::hasMaterial( void )
+    {
+        return !dpid_isZero( &this->material_id );
     }
 
 };

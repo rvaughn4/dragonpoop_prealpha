@@ -41,4 +41,22 @@ namespace dragonpoop
         return this->t->setName( s );
     }
 
+    //set material id
+    void model_group_writelock::setMaterialId( dpid id )
+    {
+        this->t->setMaterialId( id );
+    }
+
+    //get material id
+    dpid model_group_writelock::getMaterialId( void )
+    {
+        return this->t->getMaterialId();
+    }
+
+    //returns true if has material
+    bool model_group_writelock::hasMaterial( void )
+    {
+        return this->t->hasMaterial();
+    }
+
 };

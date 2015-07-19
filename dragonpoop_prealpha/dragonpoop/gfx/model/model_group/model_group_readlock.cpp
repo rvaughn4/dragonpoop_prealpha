@@ -35,4 +35,15 @@ namespace dragonpoop
         return this->t->getName( s );
     }
 
+    //get material id
+    dpid model_group_readlock::getMaterialId( void )
+    {
+        return this->t->getMaterialId();
+    }
+
+    //returns true if has material
+    bool model_group_readlock::hasMaterial( void )
+    {
+        return this->t->hasMaterial();
+    }
 };
