@@ -27,8 +27,6 @@ namespace dragonpoop
     class model_instance_ref;
     class model_group_instance_ref;
     class model_triangle_instance_ref;
-    class model_triangle_vertex_instance_ref;
-    class model_vertex_instance_ref;
 
     class model_writelock : public shared_obj_writelock
     {
@@ -214,26 +212,6 @@ namespace dragonpoop
         unsigned int getTriangleInstancesByInstanceAndGroup( dpid instance_id, dpid group_id, std::list<model_triangle_instance_ref *> *l );
         //release list returned by getTriangleInstances()
         void releaseGetTriangleInstances( std::list<model_triangle_instance_ref *> *l );
-        //create triangle vertex instance
-        model_triangle_vertex_instance_ref *createTriangleVertexInstance( dpthread_lock *thd, dpid instance_id, dpid traingle_vertex_id, dpid triangle_id, dpid vertex_id );
-        //find triangle vertex instance
-        model_triangle_vertex_instance_ref *findTriangleVertexInstance( dpid id );
-        //get triangle vertex instances by model instance id
-        unsigned int getTriangleVertexInstancesByInstance( dpid instance_id, std::list<model_triangle_vertex_instance_ref *> *l );
-        //get triangle vertex instances by model instance id and parent triangle id
-        unsigned int getTriangleVertexInstancesByInstanceAndTriangle( dpid instance_id, dpid triangle_id, std::list<model_triangle_vertex_instance_ref *> *l );
-        //release list returned by getTriangleVertexInstances()
-        void releaseGetTriangleVertexInstances( std::list<model_triangle_vertex_instance_ref *> *l );
-        //create vertex instance
-        model_vertex_instance_ref *createVertexInstance( dpthread_lock *thd, dpid instance_id, dpid vertex_id );
-        //find vertex instance
-        model_vertex_instance_ref *findVertexInstance( dpid id );
-        //get  vertex instances by model instance id
-        unsigned int getVertexInstancesByInstance( dpid instance_id, std::list<model_vertex_instance_ref *> *l );
-        //get  vertex instances by model instance and vertex id
-        unsigned int getVertexInstancesByInstanceAndVertex( dpid instance_id, dpid vertex_id, std::list<model_vertex_instance_ref *> *l );
-        //release list returned by getVertexInstances()
-        void releaseGetVertexInstances( std::list<model_vertex_instance_ref *> *l );
 
         friend class model;
     };

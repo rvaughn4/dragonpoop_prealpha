@@ -3,6 +3,7 @@
 #define dragonpoop_openglx_1o5_renderer_model_group_instance_h
 
 #include "../../renderer_model_group_instance/renderer_model_group_instance.h"
+#include "../../../gfx/dpbitmap/dpbitmap.h"
 
 namespace dragonpoop
 {
@@ -12,6 +13,7 @@ namespace dragonpoop
     class openglx_1o5_renderer_model_group_instance_writelock;
     class openglx_1o5_renderer_model_group_instance_readlock;
     class openglx_1o5_renderer_model_group_instance_ref;
+    class model_material_readlock;
 
     typedef renderer_model_instance_writelock openglx_1o5_renderer_model_instance_writelock;
 
@@ -21,6 +23,13 @@ namespace dragonpoop
     private:
 
         openglx_1o5_renderer_ref *r;
+        unsigned int tex_diffuse, tex_alpha;
+        bool bTexLoaded;
+
+        //create texture based on bitmap
+        void makeGlTex( unsigned int *p_tex, dpbitmap *bm );
+        //release texture
+        void killGltex( unsigned int *p_tex );
 
     protected:
 
@@ -31,9 +40,9 @@ namespace dragonpoop
         //generate ref
         virtual shared_obj_ref *genRef( shared_obj *p, std::shared_ptr<shared_obj_refkernal> *k );
         //called after run
-        virtual void onRun( dpthread_lock *thd, openglx_1o5_renderer_model_instance_writelock *m, openglx_1o5_renderer_model_group_instance_writelock *grp, openglx_1o5_renderer_writelock *r );
+        virtual void onRun( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_model_group_instance_writelock *grp, renderer_writelock *r );
         //called after sync
-        virtual void onSync( dpthread_lock *thd, openglx_1o5_renderer_model_instance_writelock *m, openglx_1o5_renderer_model_group_instance_writelock *grp, openglx_1o5_renderer_writelock *r );
+        virtual void onSync( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_model_group_instance_writelock *grp, renderer_writelock *r, model_material_readlock *mat );
 
     public:
 

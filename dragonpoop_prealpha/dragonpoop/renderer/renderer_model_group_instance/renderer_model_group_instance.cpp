@@ -14,6 +14,10 @@
 #include "../../gfx/model/model_group_instance/model_group_instance_ref.h"
 #include "../../gfx/model/model_instance/model_instance_writelock.h"
 #include "../../gfx/model/model_instance/model_instance_ref.h"
+#include "../../gfx/model/model_material/model_material_ref.h"
+#include "../../gfx/model/model_material/model_material_readlock.h"
+#include "../../gfx/model/model_ref.h"
+#include "../../gfx/model/model_readlock.h"
 
 namespace dragonpoop
 {
@@ -21,6 +25,10 @@ namespace dragonpoop
     //ctor
     renderer_model_group_instance::renderer_model_group_instance( gfx_writelock *g, renderer_writelock *r, model_instance_writelock *m, model_group_instance_writelock *grp ) : shared_obj( g->getCore()->getMutexMaster() )
     {
+        model_ref *mr;
+        model_readlock *ml;
+        shared_obj_guard o;
+
         this->g = (gfx_ref *)g->getRef();
         this->r = (renderer_ref *)r->getRef();
         this->c = g->getCore();
@@ -30,6 +38,16 @@ namespace dragonpoop
         this->bAlive = 1;
         this->beenAssetSynced = 0;
         this->grp = (model_group_instance_ref *)grp->getRef();
+
+        this->mat = 0;
+        mr = m->getModel();
+        if( !mr )
+            return;
+        ml = (model_readlock *)o.readLock( mr );
+        delete mr;
+        if( !ml )
+            return;
+        this->mat = ml->findMaterial( grp->getMaterialId() );
     }
 
     //dtor
@@ -45,6 +63,7 @@ namespace dragonpoop
         delete this->r;
         delete this->grp;
         delete this->m;
+        delete this->mat;
     }
 
     //return core
@@ -124,6 +143,7 @@ namespace dragonpoop
     {
         model_group_instance_readlock *gl;
         shared_obj_guard o;
+        model_material_readlock *mat;
 
         gl = (model_group_instance_readlock *)o.tryReadLock( this->grp, 10 );
         if( !gl )
@@ -131,13 +151,17 @@ namespace dragonpoop
         this->vb.clear();
         gl->getVertexes( &this->vb );
 
-        this->onSync( thd, m, grp, r );
+        if( this->mat )
+            mat = (model_material_readlock *)o.tryReadLock( this->mat, 300 );
+        else
+            mat = 0;
+        this->onSync( thd, m, grp, r, mat );
 
         this->syncGroups( thd, m, r );
     }
 
     //called after sync
-    void renderer_model_group_instance::onSync( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_model_group_instance_writelock *grp, renderer_writelock *r )
+    void renderer_model_group_instance::onSync( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_model_group_instance_writelock *grp, renderer_writelock *r, model_material_readlock *mat )
     {
 
     }

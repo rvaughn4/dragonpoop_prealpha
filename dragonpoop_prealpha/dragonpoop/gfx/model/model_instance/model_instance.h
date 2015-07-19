@@ -14,8 +14,6 @@ namespace dragonpoop
     class model_readlock;
     class model_group_instance_ref;
     class model_triangle_instance_ref;
-    class model_triangle_vertex_instance_ref;
-    class model_vertex_instance_ref;
     class shared_obj_ref;
     class shared_obj_writelock;
 

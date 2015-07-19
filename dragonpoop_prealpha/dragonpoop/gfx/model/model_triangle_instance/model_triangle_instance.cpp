@@ -3,8 +3,6 @@
 #include "model_triangle_instance_readlock.h"
 #include "model_triangle_instance_writelock.h"
 #include "model_triangle_instance_ref.h"
-#include "../model_triangle_vertex_instance/model_triangle_vertex_instance_ref.h"
-#include "../model_triangle_vertex_instance/model_triangle_vertex_instance_readlock.h"
 #include "../model_ref.h"
 #include "../model_writelock.h"
 #include "../model_triangle_vertex/model_triangle_vertex_ref.h"

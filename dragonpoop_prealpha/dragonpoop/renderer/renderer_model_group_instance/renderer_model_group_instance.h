@@ -25,6 +25,8 @@ namespace dragonpoop
     class model_instance_ref;
     class model_instance_readlock;
     class model_instance_writelock;
+    class model_material_ref;
+    class model_material_readlock;
 
     class renderer_model_group_instance : public shared_obj
     {
@@ -37,6 +39,7 @@ namespace dragonpoop
         bool bAlive;
         renderer_ref *r;
         model_group_instance_ref *grp;
+        model_material_ref *mat;
         model_instance_ref *m;
         bool beenAssetSynced;
         std::list<renderer_model_group_instance *> groups;
@@ -61,7 +64,7 @@ namespace dragonpoop
         //sync group
         void sync( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_model_group_instance_writelock *grp, renderer_writelock *r );
         //called after sync
-        virtual void onSync( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_model_group_instance_writelock *grp, renderer_writelock *r );
+        virtual void onSync( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_model_group_instance_writelock *grp, renderer_writelock *r, model_material_readlock *mat );
         //render group
         void render( dpthread_lock *thd, renderer_model_instance_readlock *m, renderer_model_group_instance_readlock *grp, renderer_writelock *r );
         //return instance id
