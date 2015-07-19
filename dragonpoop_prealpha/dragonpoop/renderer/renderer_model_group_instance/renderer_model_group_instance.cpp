@@ -109,6 +109,14 @@ namespace dragonpoop
                 }
             }
         }
+
+        this->onRun( thd, m, grp, r );
+    }
+
+    //called after run
+    void renderer_model_group_instance::onRun( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_model_group_instance_writelock *grp, renderer_writelock *r )
+    {
+
     }
 
     //run group
@@ -123,7 +131,15 @@ namespace dragonpoop
         this->vb.clear();
         gl->getVertexes( &this->vb );
 
+        this->onSync( thd, m, grp, r );
+
         this->syncGroups( thd, m, r );
+    }
+
+    //called after sync
+    void renderer_model_group_instance::onSync( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_model_group_instance_writelock *grp, renderer_writelock *r )
+    {
+
     }
 
     //render group

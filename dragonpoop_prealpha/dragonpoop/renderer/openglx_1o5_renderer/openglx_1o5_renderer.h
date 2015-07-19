@@ -77,6 +77,10 @@ namespace dragonpoop
         virtual void flipBuffer( void );
         //render model group
         virtual void renderGroup( renderer_writelock *r, renderer_model_instance_readlock *ml, renderer_model_group_instance_readlock *gl );
+        //generate model instance
+        virtual renderer_model_instance *genModel( gfx_writelock *g, renderer_writelock *r, model_instance_writelock *m );
+        //generate model group instance
+        virtual renderer_model_group_instance *genGroup( gfx_writelock *g, renderer_writelock *r, model_instance_writelock *m, model_group_instance_writelock *grp );
 
     public:
 

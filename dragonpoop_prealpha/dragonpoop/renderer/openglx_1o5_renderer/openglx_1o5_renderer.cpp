@@ -6,6 +6,7 @@
 #include "../../core/core.h"
 #include "../renderer_model_group_instance/renderer_model_group_instance_readlock.h"
 #include "../renderer_model_instance/renderer_model_instance_readlock.h"
+#include "openglx_1o5_renderer_model_group_instance/openglx_1o5_renderer_model_group_instance.h"
 
 #include <iostream>
 
@@ -330,6 +331,18 @@ namespace dragonpoop
         }
 
         glEnd();
+    }
+
+    //generate model instance
+    renderer_model_instance *openglx_1o5_renderer::genModel( gfx_writelock *g, renderer_writelock *r, model_instance_writelock *m )
+    {
+        return new /*openglx_1o5_*/renderer_model_instance( g, (openglx_1o5_renderer_writelock *)r, m );
+    }
+
+    //generate model group instance
+    renderer_model_group_instance *openglx_1o5_renderer::genGroup( gfx_writelock *g, renderer_writelock *r, model_instance_writelock *m, model_group_instance_writelock *grp )
+    {
+        return new openglx_1o5_renderer_model_group_instance( g, (openglx_1o5_renderer_writelock *)r, m, grp );
     }
 
 };

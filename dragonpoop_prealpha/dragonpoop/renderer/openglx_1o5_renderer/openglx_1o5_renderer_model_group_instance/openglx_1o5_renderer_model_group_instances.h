@@ -1,0 +1,10 @@
+
+#ifndef dragonpoop_openglx_1o5_renderer_model_group_instances_h
+#define dragonpoop_openglx_1o5_renderer_model_group_instances_h
+
+#include "openglx_1o5_renderer_model_group_instance.h"
+#include "openglx_1o5_renderer_model_group_instance_ref.h"
+#include "openglx_1o5_renderer_model_group_instance_readlock.h"
+#include "openglx_1o5_renderer_model_group_instance_writelock.h"
+
+#endif
