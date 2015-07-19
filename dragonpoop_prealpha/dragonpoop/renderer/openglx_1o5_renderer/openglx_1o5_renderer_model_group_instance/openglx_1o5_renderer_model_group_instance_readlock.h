@@ -24,6 +24,11 @@ namespace dragonpoop
 
     public:
 
+        //return diffuse texture
+        unsigned int getDiffuseTex( void );
+        //return alpha texture
+        unsigned int getAlphaTex( void );
+
         friend class openglx_1o5_renderer_model_group_instance;
     };
     

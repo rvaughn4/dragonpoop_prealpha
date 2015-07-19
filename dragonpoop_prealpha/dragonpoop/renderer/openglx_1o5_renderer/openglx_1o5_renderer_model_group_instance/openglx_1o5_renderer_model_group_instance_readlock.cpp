@@ -15,5 +15,17 @@ namespace dragonpoop
     {
 
     }
-    
+
+    //return diffuse texture
+    unsigned int openglx_1o5_renderer_model_group_instance_readlock::getDiffuseTex( void )
+    {
+        return this->t->getDiffuseTex();
+    }
+
+    //return alpha texture
+    unsigned int openglx_1o5_renderer_model_group_instance_readlock::getAlphaTex( void )
+    {
+        return this->t->getAlphaTex();
+    }
+
 };

@@ -528,7 +528,7 @@ namespace dragonpoop
         ext = sname.substr( lext + 1 );
 
         if( ext.compare( "bmp" ) == 0 )
-            return dpbitmap_bitmp_loader::loadFile( this, fname );
+            return dpbitmap_bitmap_loader::loadFile( this, fname );
         
         return 0;
     }
@@ -547,7 +547,7 @@ namespace dragonpoop
         ext = sname.substr( lext + 1 );
         
         if( ext.compare( "bmp" ) == 0 )
-            return dpbitmap_bitmp_loader::saveFile( this, fname );
+            return dpbitmap_bitmap_loader::saveFile( this, fname );
         
         return 0;
     }

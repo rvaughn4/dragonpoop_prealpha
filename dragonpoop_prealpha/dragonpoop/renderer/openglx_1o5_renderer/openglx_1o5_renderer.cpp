@@ -4,7 +4,7 @@
 #include "openglx_1o5_renderer_writelock.h"
 #include "openglx_1o5_renderer_ref.h"
 #include "../../core/core.h"
-#include "../renderer_model_group_instance/renderer_model_group_instance_readlock.h"
+#include "openglx_1o5_renderer_model_group_instance/openglx_1o5_renderer_model_group_instance_readlock.h"
 #include "../renderer_model_instance/renderer_model_instance_readlock.h"
 #include "openglx_1o5_renderer_model_group_instance/openglx_1o5_renderer_model_group_instance.h"
 
@@ -297,11 +297,14 @@ namespace dragonpoop
         dpvertexindex_buffer *vb;
         dpindex *ip, *i;
         dpvertex *vp, *v;
-        unsigned int is, vs, vi, ii;
+        unsigned int is, vs, vi, ii, tex_diff, tex_alpha;
+        openglx_1o5_renderer_model_group_instance_readlock *ogl = (openglx_1o5_renderer_model_group_instance_readlock *)gl;
 
-        vb = gl->getBuffer();
+        vb = ogl->getBuffer();
         ip = vb->getIndexBuffer( &is );
         vp = vb->getVertexBuffer( &vs );
+        tex_diff = ogl->getDiffuseTex();
+        tex_alpha = ogl->getAlphaTex();
 
         glMatrixMode( GL_PROJECTION_MATRIX );
         glLoadIdentity();
@@ -316,6 +319,8 @@ namespace dragonpoop
         glRotatef( rr, 0.25f, 0.5f, 1.0f );
 
         glBegin( GL_TRIANGLES );
+
+        glBindTexture( GL_TEXTURE_2D, tex_diff );
 
         for( ii = 0; ii < is; ii++ )
         {

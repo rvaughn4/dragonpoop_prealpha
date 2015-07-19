@@ -6,18 +6,18 @@ namespace dragonpoop
 {
 
     //ctor
-    dpbitmap_bitmp_loader::dpbitmap_bitmp_loader( dpbitmap *img )
+    dpbitmap_bitmap_loader::dpbitmap_bitmap_loader( dpbitmap *img )
     {
         this->img = img;
     }
 
     //dtor
-    dpbitmap_bitmp_loader::~dpbitmap_bitmp_loader( void )
+    dpbitmap_bitmap_loader::~dpbitmap_bitmap_loader( void )
     {
     }
 
     //open file
-    bool dpbitmap_bitmp_loader::openFile( std::string *fname )
+    bool dpbitmap_bitmap_loader::openFile( std::string *fname )
     {
         std::fstream f;
         std::size_t s;
@@ -49,7 +49,7 @@ namespace dragonpoop
     }
 
     //writes bitmap to file
-    bool dpbitmap_bitmp_loader::writeFile( std::string *fname )
+    bool dpbitmap_bitmap_loader::writeFile( std::string *fname )
     {
         std::fstream f;
         char *b;
@@ -74,7 +74,7 @@ namespace dragonpoop
     }
 
     //parse header
-    bool dpbitmap_bitmp_loader::parseHeader( char *b, unsigned int size )
+    bool dpbitmap_bitmap_loader::parseHeader( char *b, unsigned int size )
     {
         bmp_file_header *fh;
         union
@@ -115,7 +115,7 @@ namespace dragonpoop
     }
 
     //writes header to memory, then rest of image, returns size used/needed
-    unsigned int dpbitmap_bitmp_loader::writeHeader( char *b, unsigned int sizeMax )
+    unsigned int dpbitmap_bitmap_loader::writeHeader( char *b, unsigned int sizeMax )
     {
         const char *bm = "BM0";
         unsigned int szn, scn, bpp;
@@ -167,14 +167,14 @@ namespace dragonpoop
     }
 
     //resize dst image
-    bool dpbitmap_bitmp_loader::resizeDst( unsigned int w, unsigned int h )
+    bool dpbitmap_bitmap_loader::resizeDst( unsigned int w, unsigned int h )
     {
         this->img->reset();
         return this->img->resize( w, h );
     }
 
     //copy pixels
-    bool dpbitmap_bitmp_loader::parsePixels( char *b, unsigned int size, int w, int h, unsigned int bits, uint8_t *red_mask, uint8_t *green_mask, uint8_t *blue_mask, uint8_t *alpha_mask )
+    bool dpbitmap_bitmap_loader::parsePixels( char *b, unsigned int size, int w, int h, unsigned int bits, uint8_t *red_mask, uint8_t *green_mask, uint8_t *blue_mask, uint8_t *alpha_mask )
     {
         unsigned int wu, hu, px, py, sb, scn, pi;
         dprgba clr;
@@ -256,7 +256,7 @@ namespace dragonpoop
     }
 
     //write image pixels to memory
-    unsigned int dpbitmap_bitmp_loader::writePixels( char *b, unsigned int sizeMax, unsigned int bits )
+    unsigned int dpbitmap_bitmap_loader::writePixels( char *b, unsigned int sizeMax, unsigned int bits )
     {
         dpxy pp;
         unsigned int w, h, py, px, pi, scn, sb;
@@ -302,32 +302,32 @@ namespace dragonpoop
     }
 
     //loads a bitmap file
-    bool dpbitmap_bitmp_loader::loadFile( dpbitmap *img, const char *fname )
+    bool dpbitmap_bitmap_loader::loadFile( dpbitmap *img, const char *fname )
     {
-        dpbitmap_bitmp_loader bl( img );
+        dpbitmap_bitmap_loader bl( img );
         std::string s( fname );
         return bl.openFile( &s );
     }
 
     //loads a bitmap from memory
-    bool dpbitmap_bitmp_loader::loadMemory( dpbitmap *img, char *b, unsigned int size )
+    bool dpbitmap_bitmap_loader::loadMemory( dpbitmap *img, char *b, unsigned int size )
     {
-        dpbitmap_bitmp_loader bl( img );
+        dpbitmap_bitmap_loader bl( img );
         return bl.parseHeader( b, size );
     }
 
     //saves a bitmap file
-    bool dpbitmap_bitmp_loader::saveFile( dpbitmap *img, const char *fname )
+    bool dpbitmap_bitmap_loader::saveFile( dpbitmap *img, const char *fname )
     {
-        dpbitmap_bitmp_loader bl( img );
+        dpbitmap_bitmap_loader bl( img );
         std::string s( fname );
         return bl.writeFile( &s );
     }
     
     //saves a bitmap to memory, returns size used/needed when params are null
-    unsigned int dpbitmap_bitmp_loader::saveMemory( dpbitmap *img, char *b, unsigned int sizeMax )
+    unsigned int dpbitmap_bitmap_loader::saveMemory( dpbitmap *img, char *b, unsigned int sizeMax )
     {
-        dpbitmap_bitmp_loader bl( img );
+        dpbitmap_bitmap_loader bl( img );
         return bl.writeHeader( b, sizeMax );
     }
     

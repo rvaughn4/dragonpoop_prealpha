@@ -185,4 +185,16 @@ namespace dragonpoop
         *p_tex = 0;
     }
 
+    //return diffuse texture
+    unsigned int openglx_1o5_renderer_model_group_instance::getDiffuseTex( void )
+    {
+        return this->tex_diffuse;
+    }
+
+    //return alpha texture
+    unsigned int openglx_1o5_renderer_model_group_instance::getAlphaTex( void )
+    {
+        return this->tex_alpha;
+    }
+
 };

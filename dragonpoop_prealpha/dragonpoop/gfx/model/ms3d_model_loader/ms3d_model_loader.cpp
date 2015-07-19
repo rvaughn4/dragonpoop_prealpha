@@ -13,6 +13,7 @@
 #include "../model_frame_joint/model_frame_joints.h"
 #include "../model_vertex_joint/model_vertex_joints.h"
 #include "../model_material/model_materials.h"
+#include "../../dpbitmap/dpbitmaps.h"
 #include <sstream>
 
 namespace dragonpoop
@@ -40,6 +41,7 @@ namespace dragonpoop
         ms3d_model_loader l( ml, thd );
         std::fstream f;
 
+        l.fname.assign( fname );
         f.open( fname, f.binary | f.in );
         if( !f.is_open() )
             return 0;
@@ -81,6 +83,7 @@ namespace dragonpoop
         ms3d_model_loader l( ml, thd );
         std::fstream f;
 
+        l.fname.assign( fname );
         f.open( fname, f.binary | f.out | f.trunc );
         if( !f.is_open() )
             return 0;
@@ -898,7 +901,7 @@ namespace dragonpoop
 
             b.reset();
             s.assign( (char *)v->f.tex_filename, sizeof(v->f.tex_filename) );
-            s.assign( "monster.bmp" );
+            s.assign( "felhound_green.bmp" );
             if( s.length() < 1 )
                 continue;
             if( !b.loadFile( s.c_str() ) )
@@ -918,7 +921,103 @@ namespace dragonpoop
     //convert materials
     void ms3d_model_loader::convertMaterials( void )
     {
+        std::list<model_material_ref *> l;
+        std::list<model_material_ref *>::iterator i;
+        model_material_ref *r;
+        model_material_readlock *rl;
+        shared_obj_guard g;
+        ms3d_model_material_m v;
+        dprgba c;
+        std::string s;
+        dpbitmap b;
 
+        this->m->getMaterials( &l );
+        this->mats.clear();
+
+        for( i = l.begin(); i != l.end(); ++i )
+        {
+            r = *i;
+            rl = (model_material_readlock *)g.readLock( r );
+            if( !rl )
+                continue;
+
+            memset( &v, 0, sizeof( v ) );
+            v.id = rl->getId();
+
+            //diff
+            rl->getDiffuse( &c );
+            v.f.colors.diffuse.r = c.r;
+            v.f.colors.diffuse.g = c.g;
+            v.f.colors.diffuse.b = c.b;
+            v.f.colors.diffuse.a = c.a;
+
+            //spec
+            rl->getSpecular( &c );
+            v.f.colors.specular.r = c.r;
+            v.f.colors.specular.g = c.g;
+            v.f.colors.specular.b = c.b;
+            v.f.colors.specular.a = c.a;
+
+            //emiss
+            rl->getEmmissive( &c );
+            v.f.colors.emissive.r = c.r;
+            v.f.colors.emissive.g = c.g;
+            v.f.colors.emissive.b = c.b;
+            v.f.colors.emissive.a = c.a;
+
+            //ambient
+            rl->getAmbient( &c );
+            v.f.colors.ambient.r = c.r;
+            v.f.colors.ambient.g = c.g;
+            v.f.colors.ambient.b = c.b;
+            v.f.colors.ambient.a = c.a;
+
+            v.f.shininess = rl->getShine();
+            v.f.transparency = rl->getOpacity();
+
+            rl->getName( &s );
+            s.copy( (char *)v.f.name, sizeof(v.f.name) );
+
+            if( rl->getDiffuseTexture( &b ) )
+            {
+                std::stringstream ss;
+                ss << this->fname << "." << (const char *)v.f.name << ".diffuse.bmp";
+                s = ss.str();
+                b.saveFile( s.c_str() );
+                s.copy( (char *)v.f.tex_filename, sizeof( v.f.tex_filename ) );
+            }
+
+            if( rl->getAlphaMapTexture( &b ) )
+            {
+                std::stringstream ss;
+                ss << this->fname << "." << (const char *)v.f.name << ".alphamask.bmp";
+                s = ss.str();
+                b.saveFile( s.c_str() );
+                s.copy( (char *)v.f.tex_filename, sizeof( v.f.tex_filename ) );
+            }
+
+            if( rl->getBumpMapTexture( &b ) )
+            {
+                std::stringstream ss;
+                ss << this->fname << "." << (const char *)v.f.name << ".bumpmap.bmp";
+                s = ss.str();
+                b.saveFile( s.c_str() );
+                s.copy( (char *)v.f.tex_filename, sizeof( v.f.tex_filename ) );
+            }
+
+            if( rl->getSpecularMapTexture( &b ) )
+            {
+                std::stringstream ss;
+                ss << this->fname << "." << (const char *)v.f.name << ".specularmap.bmp";
+                s = ss.str();
+                b.saveFile( s.c_str() );
+                s.copy( (char *)v.f.tex_filename, sizeof( v.f.tex_filename ) );
+            }
+
+            this->mats.push_back( v );
+        }
+        
+        this->m->releaseGetMaterials( &l );
     }
 
     //create vertexes
@@ -1142,11 +1241,29 @@ namespace dragonpoop
             v.id = rl->getId();
             rl->getName( &s );
             s.copy( (char *)v.f.name, sizeof( v.f.name ) );
+            v.e.index = this->findMaterial( rl->getMaterialId() );
 
             this->groups.push_back( v );
         }
 
         this->m->releaseGetGroups( &l );
+    }
+
+    //find material having id
+    int ms3d_model_loader::findMaterial( dpid id )
+    {
+        unsigned int i, e;
+        ms3d_model_material_m *v;
+
+        e = (unsigned int)this->mats.size();
+        for( i = 0; i < e; i++ )
+        {
+            v = &this->mats[ i ];
+            if( dpid_compare( &v->id, &id ) )
+                return i;
+        }
+
+        return -1;
     }
 
     //convert group triangles

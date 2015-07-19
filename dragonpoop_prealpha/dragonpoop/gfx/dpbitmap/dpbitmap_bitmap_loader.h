@@ -135,7 +135,7 @@ namespace dragonpoop
     };
 #pragma pack( )
 
-    class dpbitmap_bitmp_loader
+    class dpbitmap_bitmap_loader
     {
 
     private:
@@ -145,9 +145,9 @@ namespace dragonpoop
     protected:
 
         //ctor
-        dpbitmap_bitmp_loader( dpbitmap *img );
+        dpbitmap_bitmap_loader( dpbitmap *img );
         //dtor
-        virtual ~dpbitmap_bitmp_loader( void );
+        virtual ~dpbitmap_bitmap_loader( void );
         //open file
         bool openFile( std::string *fname );
         //parse header

@@ -43,6 +43,10 @@ namespace dragonpoop
         virtual void onRun( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_model_group_instance_writelock *grp, renderer_writelock *r );
         //called after sync
         virtual void onSync( dpthread_lock *thd, renderer_model_instance_writelock *m, renderer_model_group_instance_writelock *grp, renderer_writelock *r, model_material_readlock *mat );
+        //return diffuse texture
+        unsigned int getDiffuseTex( void );
+        //return alpha texture
+        unsigned int getAlphaTex( void );
 
     public:
 

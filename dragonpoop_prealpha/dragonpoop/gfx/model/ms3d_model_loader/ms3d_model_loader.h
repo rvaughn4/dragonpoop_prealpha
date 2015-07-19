@@ -26,7 +26,7 @@ namespace dragonpoop
 
         model_writelock *m;
         dpthread_lock *thd;
-        std::string cmt;
+        std::string cmt, fname;
         ms3d_model_extra ext;
         dpid anim_id;
 
@@ -141,7 +141,6 @@ namespace dragonpoop
         void createMaterials( void );
         //convert materials
         void convertMaterials( void );
-
         //create vertexes
         void createVertexes( void );
         //convert vertexes for saving
@@ -150,6 +149,8 @@ namespace dragonpoop
         void createGroups( void );
         //convert groups
         void convertGroups( void );
+        //find material having id
+        int findMaterial( dpid id );
         //convert group triangles
         void convertGroupTriangles( void );
         //convert group triangles
