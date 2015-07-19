@@ -12,6 +12,7 @@
 #include "../model_frame/model_frames.h"
 #include "../model_frame_joint/model_frame_joints.h"
 #include "../model_vertex_joint/model_vertex_joints.h"
+#include "../model_material/model_materials.h"
 #include <sstream>
 
 namespace dragonpoop
@@ -831,6 +832,73 @@ namespace dragonpoop
         f->write( (char *)&h, sizeof( h ) );
 
         return 1;
+    }
+
+    //create materials
+    void ms3d_model_loader::createMaterials( void )
+    {
+        model_material_ref *r;
+        model_material_writelock *rl;
+        shared_obj_guard g;
+        unsigned int i, e;
+        ms3d_model_material_m *v;
+        dprgba c;
+        std::string s;
+
+        e = (unsigned int)this->mats.size();
+        for( i = 0; i < e; i++ )
+        {
+            v = &this->mats[ i ];
+
+            r = this->m->createMaterial( this->thd );
+            if( !r )
+                continue;
+            rl = (model_material_writelock *)g.writeLock( r );
+            delete r;
+            if( !rl )
+                continue;
+
+            v->id = rl->getId();
+
+            c.r = v->f.colors.diffuse.r;
+            c.g = v->f.colors.diffuse.g;
+            c.b = v->f.colors.diffuse.b;
+            c.a = v->f.colors.diffuse.a;
+            rl->setDiffuse( &c );
+
+            //spec
+            c.r = v->f.colors.specular.r;
+            c.g = v->f.colors.specular.g;
+            c.b = v->f.colors.specular.b;
+            c.a = v->f.colors.specular.a;
+            rl->setSpecular( &c );
+
+            //emiss
+            c.r = v->f.colors.emissive.r;
+            c.g = v->f.colors.emissive.g;
+            c.b = v->f.colors.emissive.b;
+            c.a = v->f.colors.emissive.a;
+            rl->setEmmissive( &c );
+
+            //ambient
+            c.r = v->f.colors.ambient.r;
+            c.g = v->f.colors.ambient.g;
+            c.b = v->f.colors.ambient.b;
+            c.a = v->f.colors.ambient.a;
+            rl->setAmbient( &c );
+
+            rl->setShine( v->f.shininess );
+            rl->setOpacity( v->f.transparency );
+
+            s.assign( (char *)v->f.name, sizeof(v->f.name) );
+            rl->setName( &s );
+        }
+    }
+
+    //convert materials
+    void ms3d_model_loader::convertMaterials( void )
+    {
+
     }
 
     //create vertexes

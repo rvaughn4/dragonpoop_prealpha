@@ -137,6 +137,11 @@ namespace dragonpoop
         //write model extra
         bool writeModelExtra( std::fstream *f );
 
+        //create materials
+        void createMaterials( void );
+        //convert materials
+        void convertMaterials( void );
+
         //create vertexes
         void createVertexes( void );
         //convert vertexes for saving
@@ -171,7 +176,6 @@ namespace dragonpoop
         void convertFrames( void );
         //create frame
         void createFrame( ms3d_model_frame *f );
-
         //create joints
         void createJoints( void );
         //convert joints
