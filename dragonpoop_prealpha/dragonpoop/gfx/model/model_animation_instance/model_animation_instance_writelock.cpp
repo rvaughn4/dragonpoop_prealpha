@@ -29,4 +29,22 @@ namespace dragonpoop
         return this->t->getAnimationId();
     }
 
+    //sync animation
+    void model_animation_instance_writelock::sync( dpthread_lock *thd, model_writelock *ml )
+    {
+        this->t->sync( thd, ml );
+    }
+
+    //return current frame
+    dpid model_animation_instance_writelock::getCurrentFrameId( void )
+    {
+        return this->t->getCurrentFrameId();
+    }
+
+    //return current frame time
+    uint64_t model_animation_instance_writelock::getCurrentFrameTime( void )
+    {
+        return this->t->getCurrentFrameTime();
+    }
+
 };

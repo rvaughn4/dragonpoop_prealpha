@@ -31,6 +31,10 @@ namespace dragonpoop
 
     public:
 
+        //returns true if has renderer
+        bool hasRenderer( void );
+        //get renderer
+        shared_obj_ref *getRenderer( void );
         //get group instances
         unsigned int getGroups( std::list<model_group_instance_ref *> *l );
         //get group instances by parent
@@ -43,10 +47,6 @@ namespace dragonpoop
         unsigned int getTrianglesByGroup( dpid group_id, std::list<model_triangle_instance_ref *> *l );
         //release list returned by getTriangles()
         void releaseGetTriangles( std::list<model_triangle_instance_ref *> *l );
-        //returns true if has renderer
-        bool hasRenderer( void );
-        //get renderer
-        shared_obj_ref *getRenderer( void );
 
         friend class model_instance;
     };

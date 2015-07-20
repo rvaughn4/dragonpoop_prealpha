@@ -1,22 +1,23 @@
 
 #include "model_instances.h"
 #include "../models.h"
+#include "../../../renderer/renderer_model_instance/renderer_model_instance_ref.h"
+#include "../../../renderer/renderer_model_instance/renderer_model_instance_readlock.h"
 #include "../model_group_instance/model_group_instances.h"
 #include "../model_group/model_groups.h"
 #include "../model_triangle_instance/model_triangle_instances.h"
 #include "../model_triangle/model_triangles.h"
-#include "../model_triangle_vertex/model_triangle_vertexes.h"
-#include "../model_vertex/model_vertexes.h"
-#include "../../../renderer/renderer_model_instance/renderer_model_instance_ref.h"
-#include "../../../renderer/renderer_model_instance/renderer_model_instance_readlock.h"
+#include "../model_animation/model_animations.h"
+#include "../model_animation_instance/model_animation_instances.h"
 
 namespace dragonpoop
 {
 
     //ctor
-    model_instance::model_instance( dpthread_lock *thd, model_writelock *ml, dpid id ) : model_component( ml, id,model_component_type_instance, 1000 )
+    model_instance::model_instance( dpthread_lock *thd, model_writelock *ml, dpid id ) : model_component( ml, id,model_component_type_instance, 30 )
     {
         this->r = 0;
+        this->makeAnimations( thd, ml );
         this->makeGroups( thd, ml );
         this->makeTriangles( thd, ml );
     }
@@ -25,8 +26,9 @@ namespace dragonpoop
     model_instance::~model_instance( void )
     {
         delete this->r;
-        this->killGroups();
         this->killTriangles();
+        this->killGroups();
+        this->killAnimations();
     }
 
     //generate read lock
@@ -53,6 +55,7 @@ namespace dragonpoop
         renderer_model_instance_readlock *rl;
         shared_obj_guard o;
 
+        this->syncAnimations( thd, m );
         this->syncTriangles( m );
         this->syncGroups( m );
 
@@ -62,6 +65,35 @@ namespace dragonpoop
         if( !rl )
             return;
         rl->update();
+    }
+
+    //returns true if has renderer
+    bool model_instance::hasRenderer( void )
+    {
+        if( !this->r || !this->r->isLinked() )
+            return 0;
+        return 1;
+    }
+
+    //set renderer
+    void model_instance::setRenderer( shared_obj_writelock *r )
+    {
+        if( this->r )
+            delete this->r;
+        this->r = r->getRef();
+    }
+
+    //get renderer
+    shared_obj_ref *model_instance::getRenderer( void )
+    {
+        shared_obj_writelock *l;
+        shared_obj_guard o;
+        if( !this->r )
+            return 0;
+        l = o.writeLock( this->r );
+        if( !l )
+            return 0;
+        return l->getRef();
     }
 
     //create group instances
@@ -279,33 +311,93 @@ namespace dragonpoop
         model::releaseGetTriangleInstances( l );
     }
 
-    //returns true if has renderer
-    bool model_instance::hasRenderer( void )
+    //create animation instances
+    void model_instance::makeAnimations( dpthread_lock *thd, model_writelock *ml )
     {
-        if( !this->r || !this->r->isLinked() )
-            return 0;
-        return 1;
-    }
-
-    //set renderer
-    void model_instance::setRenderer( shared_obj_writelock *r )
-    {
-        if( this->r )
-            delete this->r;
-        this->r = r->getRef();
-    }
-
-    //get renderer
-    shared_obj_ref *model_instance::getRenderer( void )
-    {
-        shared_obj_writelock *l;
+        std::list<model_animation_ref *> l;
+        std::list<model_animation_ref *>::iterator i;
+        model_animation_ref *p;
+        model_animation_readlock *pl;
+        model_animation_instance_ref *r;
         shared_obj_guard o;
-        if( !this->r )
+
+        ml->getAnimations( &l );
+
+        for( i = l.begin(); i != l.end(); ++i )
+        {
+            p = *i;
+            pl = (model_animation_readlock *)o.readLock( p );
+            r = ml->createAnimationInstance( thd, this->getId(), pl->getId() );
+            delete r;
+        }
+
+        ml->releaseGetAnimations( &l );
+    }
+
+    //destroy animation instances
+    void model_instance::killAnimations( void )
+    {
+        std::list<model_animation_instance_ref *> l;
+        std::list<model_animation_instance_ref *>::iterator i;
+        model_animation_instance_ref *p;
+        model_animation_instance_writelock *pl;
+        shared_obj_guard o;
+
+        this->getAnimations( &l );
+
+        for( i = l.begin(); i != l.end(); ++i )
+        {
+            p = *i;
+            pl = (model_animation_instance_writelock *)o.writeLock( p );
+            pl->kill();
+        }
+
+        model_instance::releaseGetAnimations( &l );
+    }
+
+    //sync animation instances
+    void model_instance::syncAnimations( dpthread_lock *thd, model_writelock *ml )
+    {
+        std::list<model_animation_instance_ref *> l;
+        std::list<model_animation_instance_ref *>::iterator i;
+        model_animation_instance_ref *p;
+        model_animation_instance_writelock *pl;
+        shared_obj_guard o;
+
+        this->getAnimations( &l );
+
+        for( i = l.begin(); i != l.end(); ++i )
+        {
+            p = *i;
+            pl = (model_animation_instance_writelock *)o.writeLock( p );
+            pl->sync( thd, ml );
+        }
+
+        model_instance::releaseGetAnimations( &l );
+    }
+
+    //get animation instances
+    unsigned int model_instance::getAnimations( std::list<model_animation_instance_ref *> *l )
+    {
+        model_readlock *ml;
+        model_ref *m;
+        shared_obj_guard o;
+
+        m = this->getModel();
+        if( !m )
             return 0;
-        l = o.writeLock( this->r );
-        if( !l )
+        ml = (model_readlock *)o.readLock( m );
+        delete m;
+        if( !ml )
             return 0;
-        return l->getRef();
+
+        return ml->getAnimationInstancesByInstance( this->getId(), l );
+    }
+
+    //release list returned by getAnimations()
+    void model_instance::releaseGetAnimations( std::list<model_animation_instance_ref *> *l )
+    {
+        model::releaseGetAnimationInstances( l );
     }
 
 };

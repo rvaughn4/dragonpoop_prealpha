@@ -11,6 +11,7 @@ namespace dragonpoop
     class model_animation_instance_ref;
     class model_animation_instance_readlock;
     class model_animation_instance_writelock;
+    class model_animation_frame_instance_ref;
 
     class model_animation_instance : public model_component
     {
@@ -19,12 +20,20 @@ namespace dragonpoop
 
         dpid instance_id, animation_id;
         uint64_t t_start, t_max, t_delay;
+        float speed;
         bool bIsPlaying, bIsRepeat;
+        struct
+        {
+            dpid anim_frame_id, frame_id;
+            uint64_t time;
+        } current_frame;
 
         //find last frame time
-        void findMaxTime( void );
+        void findMaxTime( model_writelock *ml );
         //get props from animation
-        void findProps( void );
+        void findProps( model_writelock *ml );
+        //find current frame
+        void findCurrentFrame( dpthread_lock *thd, model_writelock *ml );
 
     protected:
 
@@ -40,11 +49,17 @@ namespace dragonpoop
         dpid getInstanceId( void );
         //return animation id
         dpid getAnimationId( void );
+        //sync animation
+        void sync( dpthread_lock *thd, model_writelock *ml );
+        //return current frame
+        dpid getCurrentFrameId( void );
+        //return current frame time
+        uint64_t getCurrentFrameTime( void );
 
     public:
 
         //ctor
-        model_animation_instance( model_writelock *ml, dpid id, dpid instance_id, dpid animation_id );
+        model_animation_instance( dpthread_lock *thd, model_writelock *ml, dpid id, dpid instance_id, dpid animation_id );
         //dtor
         virtual ~model_animation_instance( void );
 

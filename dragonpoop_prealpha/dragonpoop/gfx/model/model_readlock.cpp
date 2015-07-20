@@ -389,4 +389,22 @@ namespace dragonpoop
         model::releaseGetTriangleInstances( l );
     }
 
+    //find animation instance
+    model_animation_instance_ref *model_readlock::findAnimationInstance( dpid id )
+    {
+        return this->t->findAnimationInstance( id );
+    }
+
+    //get animation instances by model instance id
+    unsigned int model_readlock::getAnimationInstancesByInstance( dpid instance_id, std::list<model_animation_instance_ref *> *l )
+    {
+        return this->t->getAnimationInstancesByInstance( instance_id, l );
+    }
+
+    //release list returned by getAnimationInstances()
+    void model_readlock::releaseGetAnimationInstances( std::list<model_animation_instance_ref *> *l )
+    {
+        model::releaseGetAnimationInstances( l );
+    }
+
 };

@@ -17,6 +17,18 @@ namespace dragonpoop
 
     }
 
+    //returns true if has renderer
+    bool model_instance_readlock::hasRenderer( void )
+    {
+        return this->t->hasRenderer();
+    }
+
+    //get renderer
+    shared_obj_ref *model_instance_readlock::getRenderer( void )
+    {
+        return this->t->getRenderer();
+    }
+
     //get group instances
     unsigned int model_instance_readlock::getGroups( std::list<model_group_instance_ref *> *l )
     {
@@ -51,18 +63,6 @@ namespace dragonpoop
     void model_instance_readlock::releaseGetTriangles( std::list<model_triangle_instance_ref *> *l )
     {
         model_instance::releaseGetTriangles( l );
-    }
-
-    //returns true if has renderer
-    bool model_instance_readlock::hasRenderer( void )
-    {
-        return this->t->hasRenderer();
-    }
-
-    //get renderer
-    shared_obj_ref *model_instance_readlock::getRenderer( void )
-    {
-        return this->t->getRenderer();
     }
 
 };

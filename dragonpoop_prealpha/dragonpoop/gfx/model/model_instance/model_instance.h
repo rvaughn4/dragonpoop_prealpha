@@ -8,14 +8,15 @@
 namespace dragonpoop
 {
 
+    class shared_obj_ref;
+    class shared_obj_writelock;
     class model_instance_ref;
     class model_instance_readlock;
     class model_instance_writelock;
     class model_readlock;
     class model_group_instance_ref;
     class model_triangle_instance_ref;
-    class shared_obj_ref;
-    class shared_obj_writelock;
+    class model_animation_instance_ref;
 
     class model_instance : public model_component
     {
@@ -34,6 +35,12 @@ namespace dragonpoop
         virtual shared_obj_ref *genRef( shared_obj *p, std::shared_ptr<shared_obj_refkernal> *k );
         //do background processing
         virtual void onRun( dpthread_lock *thd, gfx_writelock *g, model_writelock *m, model_component_writelock *l );
+        //returns true if has renderer
+        bool hasRenderer( void );
+        //set renderer
+        void setRenderer( shared_obj_writelock *r );
+        //get renderer
+        shared_obj_ref *getRenderer( void );
         //create group instances
         void makeGroups( dpthread_lock *thd, model_writelock *ml );
         //destroy group instances
@@ -54,12 +61,15 @@ namespace dragonpoop
         unsigned int getTriangles( std::list<model_triangle_instance_ref *> *l );
         //get triangle instances by group
         unsigned int getTrianglesByGroup( dpid group_id, std::list<model_triangle_instance_ref *> *l );
-        //returns true if has renderer
-        bool hasRenderer( void );
-        //set renderer
-        void setRenderer( shared_obj_writelock *r );
-        //get renderer
-        shared_obj_ref *getRenderer( void );
+
+        //create animation instances
+        void makeAnimations( dpthread_lock *thd, model_writelock *ml );
+        //destroy animation instances
+        void killAnimations( void );
+        //sync animation instances
+        void syncAnimations( dpthread_lock *thd, model_writelock *ml );
+        //get animation instances
+        unsigned int getAnimations( std::list<model_animation_instance_ref *> *l );
 
     public:
 
@@ -71,6 +81,8 @@ namespace dragonpoop
         static void releaseGetGroups( std::list<model_group_instance_ref *> *l );
         //release list returned by getTriangles()
         static void releaseGetTriangles( std::list<model_triangle_instance_ref *> *l );
+        //release list returned by getAnimations()
+        static void releaseGetAnimations( std::list<model_animation_instance_ref *> *l );
 
         friend class model_instance_readlock;
         friend class model_instance_writelock;

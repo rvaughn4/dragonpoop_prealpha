@@ -23,6 +23,7 @@
 #include "model_instance/model_instances.h"
 #include "model_group_instance/model_group_instances.h"
 #include "model_triangle_instance/model_triangle_instances.h"
+#include "model_animation_instance/model_animation_instances.h"
 
 namespace dragonpoop
 {
@@ -989,6 +990,42 @@ namespace dragonpoop
 
     //release list returned by getTriangleInstances()
     void model::releaseGetTriangleInstances( std::list<model_triangle_instance_ref *> *l )
+    {
+        model::releaseGetComponents( (std::list<model_component_ref *> *)l );
+    }
+
+    //create animation instance
+    model_animation_instance_ref *model::createAnimationInstance( dpthread_lock *thd, model_writelock *m, dpid instance_id, dpid animation_id )
+    {
+        model_animation_instance *o;
+        dpid id;
+        shared_obj_guard g;
+        model_animation_instance_writelock *ol;
+
+        id = thd->genId();
+        o = new model_animation_instance( thd, m, id, instance_id, animation_id );
+        this->addComp( o, id, model_component_type_animation_instance, instance_id, animation_id );
+
+        ol = (model_animation_instance_writelock *)g.writeLock( o );
+        if( !ol )
+            return 0;
+        return (model_animation_instance_ref *)ol->getRef();
+    }
+
+    //find animation instance
+    model_animation_instance_ref *model::findAnimationInstance( dpid id )
+    {
+        return (model_animation_instance_ref *)this->find( id, model_component_type_animation_instance );
+    }
+
+    //get animation instances by model instance id
+    unsigned int model::getAnimationInstancesByInstance( dpid instance_id, std::list<model_animation_instance_ref *> *l )
+    {
+        return this->getComponentsByOwnerAndType( (std::list<model_component_ref *> *)l, instance_id, model_component_type_animation_instance );
+    }
+
+    //release list returned by getAnimationInstances()
+    void model::releaseGetAnimationInstances( std::list<model_animation_instance_ref *> *l )
     {
         model::releaseGetComponents( (std::list<model_component_ref *> *)l );
     }

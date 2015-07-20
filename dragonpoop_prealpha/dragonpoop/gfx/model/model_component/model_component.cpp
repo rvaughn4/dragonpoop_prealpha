@@ -9,8 +9,6 @@
 #include "../../../core/dpthread/dpthread_lock.h"
 #include "../../../core/shared_obj/shared_obj_guard.h"
 
-#include <iostream>
-
 namespace dragonpoop
 {
 
@@ -99,7 +97,6 @@ namespace dragonpoop
         td = t - this->last_run;
         if( td < this->run_wait )
             return;
-        std::cout << td << "\r\n";
 
         this->last_run = t;
         this->onRun( thd, g, m, l );

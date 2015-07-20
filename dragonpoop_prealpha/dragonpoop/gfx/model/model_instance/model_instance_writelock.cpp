@@ -17,6 +17,24 @@ namespace dragonpoop
 
     }
 
+    //returns true if has renderer
+    bool model_instance_writelock::hasRenderer( void )
+    {
+        return this->t->hasRenderer();
+    }
+
+    //set renderer
+    void model_instance_writelock::setRenderer( shared_obj_writelock *r )
+    {
+        this->t->setRenderer( r );
+    }
+
+    //get renderer
+    shared_obj_ref *model_instance_writelock::getRenderer( void )
+    {
+        return this->t->getRenderer();
+    }
+
     //get group instances
     unsigned int model_instance_writelock::getGroups( std::list<model_group_instance_ref *> *l )
     {
@@ -51,24 +69,6 @@ namespace dragonpoop
     void model_instance_writelock::releaseGetTriangles( std::list<model_triangle_instance_ref *> *l )
     {
         model_instance::releaseGetTriangles( l );
-    }
-
-    //returns true if has renderer
-    bool model_instance_writelock::hasRenderer( void )
-    {
-        return this->t->hasRenderer();
-    }
-
-    //set renderer
-    void model_instance_writelock::setRenderer( shared_obj_writelock *r )
-    {
-        this->t->setRenderer( r );
-    }
-
-    //get renderer
-    shared_obj_ref *model_instance_writelock::getRenderer( void )
-    {
-        return this->t->getRenderer();
     }
 
 };
