@@ -28,5 +28,29 @@ namespace dragonpoop
     {
         return this->t->getJointId();
     }
-    
+
+    //sync joint
+    void model_joint_instance_writelock::sync( dpthread_lock *thd, model_writelock *ml )
+    {
+        this->t->sync( thd, ml );
+    }
+
+    //get translation for this joint
+    void model_joint_instance_writelock::getTranslation( dpxyzw *x )
+    {
+        this->t->getTranslation( x );
+    }
+
+    //get rotation for this joint
+    void model_joint_instance_writelock::getRotation( dpxyzw *x )
+    {
+        this->t->getRotation( x );
+    }
+
+    //get animation time for this joint
+    uint64_t model_joint_instance_writelock::getTime( void )
+    {
+        return this->t->getTime();
+    }
+
 };

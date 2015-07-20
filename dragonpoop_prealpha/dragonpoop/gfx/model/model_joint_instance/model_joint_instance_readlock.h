@@ -9,6 +9,7 @@ namespace dragonpoop
 
     class model_joint_instance;
     class model_joint_instance_ref;
+    struct dpxyzw;
 
     class model_joint_instance_readlock : public model_component_readlock
     {
@@ -30,6 +31,12 @@ namespace dragonpoop
         dpid getInstanceId( void );
         //return joint id
         dpid getJointId( void );
+        //get translation for this joint
+        void getTranslation( dpxyzw *x );
+        //get rotation for this joint
+        void getRotation( dpxyzw *x );
+        //get animation time for this joint
+        uint64_t getTime( void );
 
         friend class model_joint_instance;
     };

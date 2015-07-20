@@ -28,5 +28,23 @@ namespace dragonpoop
     {
         return this->t->getJointId();
     }
-    
+
+    //get translation for this joint
+    void model_joint_instance_readlock::getTranslation( dpxyzw *x )
+    {
+        this->t->getTranslation( x );
+    }
+
+    //get rotation for this joint
+    void model_joint_instance_readlock::getRotation( dpxyzw *x )
+    {
+        this->t->getRotation( x );
+    }
+
+    //get animation time for this joint
+    uint64_t model_joint_instance_readlock::getTime( void )
+    {
+        return this->t->getTime();
+    }
+
 };

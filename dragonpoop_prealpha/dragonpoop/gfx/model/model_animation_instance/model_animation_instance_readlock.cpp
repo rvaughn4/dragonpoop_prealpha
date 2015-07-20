@@ -28,5 +28,17 @@ namespace dragonpoop
     {
         return this->t->getAnimationId();
     }
-    
+
+    //return current frame
+    dpid model_animation_instance_readlock::getCurrentFrameId( void )
+    {
+        return this->t->getCurrentFrameId();
+    }
+
+    //return current frame time
+    uint64_t model_animation_instance_readlock::getCurrentFrameTime( void )
+    {
+        return this->t->getCurrentFrameTime();
+    }
+
 };

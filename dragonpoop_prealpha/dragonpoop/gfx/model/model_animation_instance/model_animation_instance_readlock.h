@@ -30,6 +30,10 @@ namespace dragonpoop
         dpid getInstanceId( void );
         //return animation id
         dpid getAnimationId( void );
+        //return current frame
+        dpid getCurrentFrameId( void );
+        //return current frame time
+        uint64_t getCurrentFrameTime( void );
 
         friend class model_animation_instance;
     };

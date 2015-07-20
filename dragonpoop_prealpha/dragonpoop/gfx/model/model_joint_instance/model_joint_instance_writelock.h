@@ -9,6 +9,9 @@ namespace dragonpoop
 
     class model_joint_instance;
     class model_joint_instance_ref;
+    struct dpxyzw;
+    class dpthread_lock;
+    class model_writelock;
 
     class model_joint_instance_writelock : public model_component_writelock
     {
@@ -30,6 +33,14 @@ namespace dragonpoop
         dpid getInstanceId( void );
         //return joint id
         dpid getJointId( void );
+        //sync joint
+        void sync( dpthread_lock *thd, model_writelock *ml );
+        //get translation for this joint
+        void getTranslation( dpxyzw *x );
+        //get rotation for this joint
+        void getRotation( dpxyzw *x );
+        //get animation time for this joint
+        uint64_t getTime( void );
 
         friend class model_joint_instance;
     };
