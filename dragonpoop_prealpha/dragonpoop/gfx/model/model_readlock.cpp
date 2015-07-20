@@ -407,4 +407,22 @@ namespace dragonpoop
         model::releaseGetAnimationInstances( l );
     }
 
+    //find joint instance
+    model_joint_instance_ref *model_readlock::findJointInstance( dpid id )
+    {
+        return this->t->findJointInstance( id );
+    }
+
+    //get joint instances by model instance id
+    unsigned int model_readlock::getJointInstancesByInstance( dpid instance_id, std::list<model_animation_instance_ref *> *l )
+    {
+        return this->t->getJointInstancesByInstance( instance_id, l );
+    }
+
+    //release list returned by getJointInstances()
+    void model_readlock::releaseGetJointInstances( std::list<model_joint_instance_ref *> *l )
+    {
+        model::releaseGetJointInstances( l );
+    }
+
 };

@@ -28,6 +28,7 @@ namespace dragonpoop
     class model_group_instance_ref;
     class model_triangle_instance_ref;
     class model_animation_instance_ref;
+    class model_joint_instance_ref;
 
     class model_writelock : public shared_obj_writelock
     {
@@ -221,6 +222,14 @@ namespace dragonpoop
         unsigned int getAnimationInstancesByInstance( dpid instance_id, std::list<model_animation_instance_ref *> *l );
         //release list returned by getAnimationInstances()
         void releaseGetAnimationInstances( std::list<model_animation_instance_ref *> *l );
+        //create joint instance
+        model_joint_instance_ref *createJointInstance( dpthread_lock *thd, dpid instance_id, dpid joint_id );
+        //find joint instance
+        model_joint_instance_ref *findJointInstance( dpid id );
+        //get joint instances by model instance id
+        unsigned int getJointInstancesByInstance( dpid instance_id, std::list<model_animation_instance_ref *> *l );
+        //release list returned by getJointInstances()
+        void releaseGetJointInstances( std::list<model_joint_instance_ref *> *l );
 
         friend class model;
     };

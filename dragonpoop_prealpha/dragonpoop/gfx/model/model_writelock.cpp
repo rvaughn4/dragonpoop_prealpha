@@ -545,4 +545,28 @@ namespace dragonpoop
         model::releaseGetAnimationInstances( l );
     }
 
+    //create joint instance
+    model_joint_instance_ref *model_writelock::createJointInstance( dpthread_lock *thd, dpid instance_id, dpid joint_id )
+    {
+        return this->t->createJointInstance( thd, this, instance_id, joint_id );
+    }
+
+    //find joint instance
+    model_joint_instance_ref *model_writelock::findJointInstance( dpid id )
+    {
+        return this->t->findJointInstance( id );
+    }
+
+    //get joint instances by model instance id
+    unsigned int model_writelock::getJointInstancesByInstance( dpid instance_id, std::list<model_animation_instance_ref *> *l )
+    {
+        return this->t->getJointInstancesByInstance( instance_id, l );
+    }
+
+    //release list returned by getJointInstances()
+    void model_writelock::releaseGetJointInstances( std::list<model_joint_instance_ref *> *l )
+    {
+        model::releaseGetJointInstances( l );
+    }
+
 };

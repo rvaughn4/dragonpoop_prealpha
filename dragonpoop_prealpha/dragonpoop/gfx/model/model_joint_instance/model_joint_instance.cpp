@@ -88,6 +88,8 @@ namespace dragonpoop
         }
 
         ml->releaseGetAnimationInstances( &l );
+
+        this->findFinal( thd );
     }
 
     //get translation for this joint
@@ -188,6 +190,81 @@ namespace dragonpoop
         }
 
         ml->releaseGetFrameJoints( &l );
+    }
+
+    //calc final stage
+    void model_joint_instance::findFinal( dpthread_lock *thd )
+    {
+        float dr, dr1;
+        uint64_t t;
+        model_joint_instance_anim *dat, *fdat;
+        unsigned int i;
+
+        dat = fdat = &this->final;
+        t = thd->getTicks();
+        if( dat->start.time != dat->end.time )
+            dr = (float)( t - dat->start.time ) / (float)( dat->end.time - dat->start.time );
+        else
+            dr = 0;
+        if( dr > 1.0f )
+            dr = 1.0f;
+        dr1 = 1.0f - dr;
+
+        fdat->start.trans.x = dat->start.trans.x * dr1 + dat->end.trans.x * dr;
+        fdat->start.trans.y = dat->start.trans.y * dr1 + dat->end.trans.y * dr;
+        fdat->start.trans.z = dat->start.trans.z * dr1 + dat->end.trans.z * dr;
+        fdat->start.trans.w = dat->start.trans.w * dr1 + dat->end.trans.w * dr;
+
+        fdat->start.rot.x = dat->start.rot.x * dr1 + dat->end.rot.x * dr;
+        fdat->start.rot.y = dat->start.rot.y * dr1 + dat->end.rot.y * dr;
+        fdat->start.rot.z = dat->start.rot.z * dr1 + dat->end.rot.z * dr;
+        fdat->start.rot.w = dat->start.rot.w * dr1 + dat->end.rot.w * dr;
+
+        memset( &fdat->end, 0, sizeof( fdat->end ) );
+        fdat->start.time = t;
+        fdat->end.time = t;
+
+        for( i = 0; i < model_joint_instance_anim_max; i++ )
+        {
+            dat = &this->perAnims[ i ];
+
+            if( dpid_isZero( &dat->anim_id ) )
+                continue;
+            if( dat->end.time <= t )
+                continue;
+
+            if( dat->end.time != t && dat->end.time > fdat->end.time )
+                continue;
+            fdat->end.time = dat->end.time;
+        }
+
+        for( i = 0; i < model_joint_instance_anim_max; i++ )
+        {
+            dat = &this->perAnims[ i ];
+
+            if( dpid_isZero( &dat->anim_id ) )
+                continue;
+            if( dat->end.time <= t )
+                continue;
+
+            if( dat->start.time != dat->end.time )
+                dr = (float)( fdat->end.time - dat->start.time ) / (float)( dat->end.time - dat->start.time );
+            else
+                dr = 0;
+            if( dr > 1.0f )
+                dr = 1.0f;
+            dr1 = 1.0f - dr;
+
+            fdat->end.trans.x = dat->start.trans.x * dr1 + dat->end.trans.x * dr;
+            fdat->end.trans.y = dat->start.trans.y * dr1 + dat->end.trans.y * dr;
+            fdat->end.trans.z = dat->start.trans.z * dr1 + dat->end.trans.z * dr;
+            fdat->end.trans.w = dat->start.trans.w * dr1 + dat->end.trans.w * dr;
+
+            fdat->end.rot.x = dat->start.rot.x * dr1 + dat->end.rot.x * dr;
+            fdat->end.rot.y = dat->start.rot.y * dr1 + dat->end.rot.y * dr;
+            fdat->end.rot.z = dat->start.rot.z * dr1 + dat->end.rot.z * dr;
+            fdat->end.rot.w = dat->start.rot.w * dr1 + dat->end.rot.w * dr;
+        }
     }
 
 };

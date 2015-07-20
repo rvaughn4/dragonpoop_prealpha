@@ -39,6 +39,8 @@ namespace dragonpoop
         model_joint_instance_anim *findAnim( dpid anim_id );
         //process animation
         void processAnim( dpthread_lock *thd, model_writelock *ml, model_animation_instance_readlock *a );
+        //calc final stage
+        void findFinal( dpthread_lock *thd );
 
     protected:
 

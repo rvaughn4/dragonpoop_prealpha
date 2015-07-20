@@ -24,6 +24,7 @@
 #include "model_group_instance/model_group_instances.h"
 #include "model_triangle_instance/model_triangle_instances.h"
 #include "model_animation_instance/model_animation_instances.h"
+#include "model_joint_instance/model_joint_instances.h"
 
 namespace dragonpoop
 {
@@ -1026,6 +1027,42 @@ namespace dragonpoop
 
     //release list returned by getAnimationInstances()
     void model::releaseGetAnimationInstances( std::list<model_animation_instance_ref *> *l )
+    {
+        model::releaseGetComponents( (std::list<model_component_ref *> *)l );
+    }
+
+    //create joint instance
+    model_joint_instance_ref *model::createJointInstance( dpthread_lock *thd, model_writelock *m, dpid instance_id, dpid joint_id )
+    {
+        model_joint_instance *o;
+        dpid id;
+        shared_obj_guard g;
+        model_joint_instance_writelock *ol;
+
+        id = thd->genId();
+        o = new model_joint_instance( thd, m, id, instance_id, joint_id );
+        this->addComp( o, id, model_component_type_joint_instance, instance_id, joint_id );
+
+        ol = (model_joint_instance_writelock *)g.writeLock( o );
+        if( !ol )
+            return 0;
+        return (model_joint_instance_ref *)ol->getRef();
+    }
+
+    //find joint instance
+    model_joint_instance_ref *model::findJointInstance( dpid id )
+    {
+        return (model_joint_instance_ref *)this->find( id, model_component_type_joint_instance );
+    }
+
+    //get joint instances by model instance id
+    unsigned int model::getJointInstancesByInstance( dpid instance_id, std::list<model_animation_instance_ref *> *l )
+    {
+        return this->getComponentsByOwnerAndType( (std::list<model_component_ref *> *)l, instance_id, model_component_type_joint_instance );
+    }
+
+    //release list returned by getJointInstances()
+    void model::releaseGetJointInstances( std::list<model_joint_instance_ref *> *l )
     {
         model::releaseGetComponents( (std::list<model_component_ref *> *)l );
     }
