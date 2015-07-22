@@ -9,6 +9,8 @@
 #include "../model_triangle/model_triangles.h"
 #include "../model_animation/model_animations.h"
 #include "../model_animation_instance/model_animation_instances.h"
+#include "../model_joint/model_joints.h"
+#include "../model_joint_instance/model_joint_instances.h"
 
 namespace dragonpoop
 {
@@ -18,6 +20,7 @@ namespace dragonpoop
     {
         this->r = 0;
         this->makeAnimations( thd, ml );
+        this->makeJoints( thd, ml );
         this->makeGroups( thd, ml );
         this->makeTriangles( thd, ml );
     }
@@ -28,6 +31,7 @@ namespace dragonpoop
         delete this->r;
         this->killTriangles();
         this->killGroups();
+        this->killJoints();
         this->killAnimations();
     }
 
@@ -56,6 +60,7 @@ namespace dragonpoop
         shared_obj_guard o;
 
         this->syncAnimations( thd, m );
+        this->syncJoints( thd, m );
         this->syncTriangles( m );
         this->syncGroups( m );
 
@@ -398,6 +403,95 @@ namespace dragonpoop
     void model_instance::releaseGetAnimations( std::list<model_animation_instance_ref *> *l )
     {
         model::releaseGetAnimationInstances( l );
+    }
+
+    //create joint instances
+    void model_instance::makeJoints( dpthread_lock *thd, model_writelock *ml )
+    {
+        std::list<model_joint_ref *> l;
+        std::list<model_joint_ref *>::iterator i;
+        model_joint_ref *p;
+        model_joint_readlock *pl;
+        model_joint_instance_ref *r;
+        shared_obj_guard o;
+
+        ml->getJoints( &l );
+
+        for( i = l.begin(); i != l.end(); ++i )
+        {
+            p = *i;
+            pl = (model_joint_readlock *)o.readLock( p );
+            r = ml->createJointInstance( thd, this->getId(), pl->getId() );
+            delete r;
+        }
+
+        ml->releaseGetJoints( &l );
+    }
+
+    //destroy joint instances
+    void model_instance::killJoints( void )
+    {
+        std::list<model_joint_instance_ref *> l;
+        std::list<model_joint_instance_ref *>::iterator i;
+        model_joint_instance_ref *p;
+        model_joint_instance_writelock *pl;
+        shared_obj_guard o;
+
+        this->getJoints( &l );
+
+        for( i = l.begin(); i != l.end(); ++i )
+        {
+            p = *i;
+            pl = (model_joint_instance_writelock *)o.writeLock( p );
+            pl->kill();
+        }
+
+        model_instance::releaseGetJoints( &l );
+    }
+
+    //sync joint instances
+    void model_instance::syncJoints( dpthread_lock *thd, model_writelock *ml )
+    {
+        std::list<model_joint_instance_ref *> l;
+        std::list<model_joint_instance_ref *>::iterator i;
+        model_joint_instance_ref *p;
+        model_joint_instance_writelock *pl;
+        shared_obj_guard o;
+
+        this->getJoints( &l );
+
+        for( i = l.begin(); i != l.end(); ++i )
+        {
+            p = *i;
+            pl = (model_joint_instance_writelock *)o.writeLock( p );
+            pl->sync( thd, ml );
+        }
+
+        model_instance::releaseGetJoints( &l );
+    }
+
+    //get joint instances
+    unsigned int model_instance::getJoints( std::list<model_joint_instance_ref *> *l )
+    {
+        model_readlock *ml;
+        model_ref *m;
+        shared_obj_guard o;
+
+        m = this->getModel();
+        if( !m )
+            return 0;
+        ml = (model_readlock *)o.readLock( m );
+        delete m;
+        if( !ml )
+            return 0;
+
+        return ml->getJointInstancesByInstance( this->getId(), l );
+    }
+
+    //release list returned by getJoints()
+    void model_instance::releaseGetJoints( std::list<model_joint_instance_ref *> *l )
+    {
+        model::releaseGetJointInstances( l );
     }
 
 };

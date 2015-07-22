@@ -558,7 +558,7 @@ namespace dragonpoop
     }
 
     //get joint instances by model instance id
-    unsigned int model_writelock::getJointInstancesByInstance( dpid instance_id, std::list<model_animation_instance_ref *> *l )
+    unsigned int model_writelock::getJointInstancesByInstance( dpid instance_id, std::list<model_joint_instance_ref *> *l )
     {
         return this->t->getJointInstancesByInstance( instance_id, l );
     }

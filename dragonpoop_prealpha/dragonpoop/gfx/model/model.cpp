@@ -1056,7 +1056,7 @@ namespace dragonpoop
     }
 
     //get joint instances by model instance id
-    unsigned int model::getJointInstancesByInstance( dpid instance_id, std::list<model_animation_instance_ref *> *l )
+    unsigned int model::getJointInstancesByInstance( dpid instance_id, std::list<model_joint_instance_ref *> *l )
     {
         return this->getComponentsByOwnerAndType( (std::list<model_component_ref *> *)l, instance_id, model_component_type_joint_instance );
     }

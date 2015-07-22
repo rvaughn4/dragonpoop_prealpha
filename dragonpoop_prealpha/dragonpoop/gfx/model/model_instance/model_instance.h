@@ -17,6 +17,7 @@ namespace dragonpoop
     class model_group_instance_ref;
     class model_triangle_instance_ref;
     class model_animation_instance_ref;
+    class model_joint_instance_ref;
 
     class model_instance : public model_component
     {
@@ -61,7 +62,6 @@ namespace dragonpoop
         unsigned int getTriangles( std::list<model_triangle_instance_ref *> *l );
         //get triangle instances by group
         unsigned int getTrianglesByGroup( dpid group_id, std::list<model_triangle_instance_ref *> *l );
-
         //create animation instances
         void makeAnimations( dpthread_lock *thd, model_writelock *ml );
         //destroy animation instances
@@ -70,6 +70,15 @@ namespace dragonpoop
         void syncAnimations( dpthread_lock *thd, model_writelock *ml );
         //get animation instances
         unsigned int getAnimations( std::list<model_animation_instance_ref *> *l );
+
+        //create joint instances
+        void makeJoints( dpthread_lock *thd, model_writelock *ml );
+        //destroy joint instances
+        void killJoints( void );
+        //sync joint instances
+        void syncJoints( dpthread_lock *thd, model_writelock *ml );
+        //get joint instances
+        unsigned int getJoints( std::list<model_joint_instance_ref *> *l );
 
     public:
 
@@ -83,6 +92,8 @@ namespace dragonpoop
         static void releaseGetTriangles( std::list<model_triangle_instance_ref *> *l );
         //release list returned by getAnimations()
         static void releaseGetAnimations( std::list<model_animation_instance_ref *> *l );
+        //release list returned by getJoints()
+        static void releaseGetJoints( std::list<model_joint_instance_ref *> *l );
 
         friend class model_instance_readlock;
         friend class model_instance_writelock;

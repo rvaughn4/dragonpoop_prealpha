@@ -272,7 +272,7 @@ namespace dragonpoop
         //find joint instance
         model_joint_instance_ref *findJointInstance( dpid id );
         //get joint instances by model instance id
-        unsigned int getJointInstancesByInstance( dpid instance_id, std::list<model_animation_instance_ref *> *l );
+        unsigned int getJointInstancesByInstance( dpid instance_id, std::list<model_joint_instance_ref *> *l );
 
     public:
 
