@@ -14,6 +14,7 @@ namespace dragonpoop
     class model_triangle_instance_writelock;
     class dpvertexindex_buffer;
     class model_writelock;
+    class model_vertex_joint_readlock;
 
     struct model_triangle_instance_vert
     {
@@ -29,6 +30,11 @@ namespace dragonpoop
         dpid instance_id, triangle_id, group_id;
         model_triangle_instance_vert vert[ 3 ];
         bool isLoaded;
+
+        //apply joints to vertex
+        void applyJoints( model_writelock *ml, model_triangle_instance_vert *p );
+        //accumulate joint transforms
+        void accumJoint( model_writelock *ml, model_vertex_joint_readlock *j, dpxyzw *ptrans, dpxyzw *prot, float *pw );
 
     protected:
 

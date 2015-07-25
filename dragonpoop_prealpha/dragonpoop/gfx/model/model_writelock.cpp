@@ -563,6 +563,12 @@ namespace dragonpoop
         return this->t->getJointInstancesByInstance( instance_id, l );
     }
 
+    //get joint instances by model instance id and joint id
+    unsigned int model_writelock::getJointInstancesByInstanceAndJoint( dpid instance_id, dpid joint_id, std::list<model_joint_instance_ref *> *l )
+    {
+        return this->t->getJointInstancesByInstanceAndJoint( instance_id, joint_id, l );
+    }
+
     //release list returned by getJointInstances()
     void model_writelock::releaseGetJointInstances( std::list<model_joint_instance_ref *> *l )
     {

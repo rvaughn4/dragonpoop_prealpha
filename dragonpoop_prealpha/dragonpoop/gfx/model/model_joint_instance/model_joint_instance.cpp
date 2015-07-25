@@ -230,10 +230,7 @@ namespace dragonpoop
 
             if( dpid_isZero( &dat->anim_id ) )
                 continue;
-            if( dat->end.time <= t )
-                continue;
-
-            if( dat->end.time != t && dat->end.time > fdat->end.time )
+            if( dat->end.time > fdat->end.time )
                 continue;
             fdat->end.time = dat->end.time;
         }
@@ -243,8 +240,6 @@ namespace dragonpoop
             dat = &this->perAnims[ i ];
 
             if( dpid_isZero( &dat->anim_id ) )
-                continue;
-            if( dat->end.time <= t )
                 continue;
 
             if( dat->start.time != dat->end.time )

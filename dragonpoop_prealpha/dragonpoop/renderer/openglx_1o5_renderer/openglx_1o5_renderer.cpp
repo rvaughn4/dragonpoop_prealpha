@@ -325,9 +325,9 @@ namespace dragonpoop
                 continue;
             v = &vp[ vi ];
 
-            glTexCoord2f( v->start.texcoords[ 0 ].s, v->start.texcoords[ 0 ].t );
-            glNormal3f( v->start.normal.x, v->start.normal.y, v->start.normal.z );
-            glVertex3f( v->start.pos.x, v->start.pos.y, v->start.pos.z );
+            glTexCoord2f( v->end.texcoords[ 0 ].s, v->end.texcoords[ 0 ].t );
+            glNormal3f( v->end.normal.x, v->end.normal.y, v->end.normal.z );
+            glVertex3f( v->end.pos.x, v->end.pos.y, v->end.pos.z );
         }
 
         glEnd();

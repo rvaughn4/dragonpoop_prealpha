@@ -1061,6 +1061,12 @@ namespace dragonpoop
         return this->getComponentsByOwnerAndType( (std::list<model_component_ref *> *)l, instance_id, model_component_type_joint_instance );
     }
 
+    //get joint instances by model instance id and joint id
+    unsigned int model::getJointInstancesByInstanceAndJoint( dpid instance_id, dpid joint_id, std::list<model_joint_instance_ref *> *l )
+    {
+        return this->getComponentsByTwoOwnersAndType( (std::list<model_component_ref *> *)l, instance_id, joint_id, model_component_type_joint_instance );
+    }
+
     //release list returned by getJointInstances()
     void model::releaseGetJointInstances( std::list<model_joint_instance_ref *> *l )
     {
